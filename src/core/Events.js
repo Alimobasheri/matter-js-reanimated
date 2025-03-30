@@ -1,18 +1,29 @@
-/**
-* The `Matter.Events` module contains methods to fire and listen to events on other objects.
-*
-* See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
-*
-* @class Events
-*/
-
-var Events = {};
-
-module.exports = Events;
-
 var Common = require('./Common');
 
-(function() {
+/**
+ * The `Matter.Events` module contains methods to fire and listen to events on other objects.
+ *
+ * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
+ *
+ * @class Events
+ */
+
+var init = function () {
+    'worklet';
+
+    if (global.Matter && global.Matter.Events) {
+        return;
+    }
+
+    if (!global.Matter) {
+        global.Matter = {};
+    }
+
+    global.Matter.Events = {};
+
+    var Events = global.Matter.Events;
+
+    Common();
 
     /**
      * Subscribes a callback function to the given object's `eventName`.
@@ -21,7 +32,7 @@ var Common = require('./Common');
      * @param {string} eventNames
      * @param {function} callback
      */
-    Events.on = function(object, eventNames, callback) {
+    Events.on = function (object, eventNames, callback) {
         var names = eventNames.split(' '),
             name;
 
@@ -42,7 +53,7 @@ var Common = require('./Common');
      * @param {string} eventNames
      * @param {function} callback
      */
-    Events.off = function(object, eventNames, callback) {
+    Events.off = function (object, eventNames, callback) {
         if (!eventNames) {
             object.events = {};
             return;
@@ -51,7 +62,7 @@ var Common = require('./Common');
         // handle Events.off(object, callback)
         if (typeof eventNames === 'function') {
             callback = eventNames;
-            eventNames = Common.keys(object.events).join(' ');
+            eventNames = global.Matter.Common.keys(object.events).join(' ');
         }
 
         var names = eventNames.split(' ');
@@ -78,17 +89,13 @@ var Common = require('./Common');
      * @param {string} eventNames
      * @param {} event
      */
-    Events.trigger = function(object, eventNames, event) {
-        var names,
-            name,
-            callbacks,
-            eventClone;
+    Events.trigger = function (object, eventNames, event) {
+        var names, name, callbacks, eventClone;
 
         var events = object.events;
-        
-        if (events && Common.keys(events).length > 0) {
-            if (!event)
-                event = {};
+
+        if (events && global.Matter.Common.keys(events).length > 0) {
+            if (!event) event = {};
 
             names = eventNames.split(' ');
 
@@ -97,7 +104,7 @@ var Common = require('./Common');
                 callbacks = events[name];
 
                 if (callbacks) {
-                    eventClone = Common.clone(event, false);
+                    eventClone = global.Matter.Common.clone(event, false);
                     eventClone.name = name;
                     eventClone.source = object;
 
@@ -108,5 +115,6 @@ var Common = require('./Common');
             }
         }
     };
+};
 
-})();
+module.exports = init;

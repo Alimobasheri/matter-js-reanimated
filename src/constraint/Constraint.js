@@ -1,17 +1,3 @@
-/**
-* The `Matter.Constraint` module contains methods for creating and manipulating constraints.
-* Constraints are used for specifying that a fixed distance must be maintained between two bodies (or a body and a fixed world-space position).
-* The stiffness of constraints can be modified to create springs or elastic.
-*
-* See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
-*
-* @class Constraint
-*/
-
-var Constraint = {};
-
-module.exports = Constraint;
-
 var Vertices = require('../geometry/Vertices');
 var Vector = require('../geometry/Vector');
 var Sleeping = require('../core/Sleeping');
@@ -19,7 +5,37 @@ var Bounds = require('../geometry/Bounds');
 var Axes = require('../geometry/Axes');
 var Common = require('../core/Common');
 
-(function() {
+/**
+ * The `Matter.Constraint` module contains methods for creating and manipulating constraints.
+ * Constraints are used for specifying that a fixed distance must be maintained between two bodies (or a body and a fixed world-space position).
+ * The stiffness of constraints can be modified to create springs or elastic.
+ *
+ * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
+ *
+ * @class Constraint
+ */
+
+var init = function () {
+    'worklet';
+
+    if (global.Matter && global.Matter.Constraint) {
+        return;
+    }
+
+    if (!global.Matter) {
+        global.Matter = {};
+    }
+
+    global.Matter.Constraint = {};
+
+    var Constraint = global.Matter.Constraint;
+
+    Vertices();
+    Vector();
+    Sleeping();
+    Bounds();
+    Axes();
+    Common();
 
     Constraint._warming = 0.4;
     Constraint._torqueDampen = 1;
@@ -36,7 +52,7 @@ var Common = require('../core/Common');
      * @param {} options
      * @return {constraint} constraint
      */
-    Constraint.create = function(options) {
+    Constraint.create = function (options) {
         var constraint = options;
 
         // if bodies defined but no points, use body centre
@@ -46,21 +62,41 @@ var Common = require('../core/Common');
             constraint.pointB = { x: 0, y: 0 };
 
         // calculate static length using initial world space points
-        var initialPointA = constraint.bodyA ? Vector.add(constraint.bodyA.position, constraint.pointA) : constraint.pointA,
-            initialPointB = constraint.bodyB ? Vector.add(constraint.bodyB.position, constraint.pointB) : constraint.pointB,
-            length = Vector.magnitude(Vector.sub(initialPointA, initialPointB));
-    
-        constraint.length = typeof constraint.length !== 'undefined' ? constraint.length : length;
+        var initialPointA = constraint.bodyA
+                ? global.Matter.Vector.add(
+                      constraint.bodyA.position,
+                      constraint.pointA
+                  )
+                : constraint.pointA,
+            initialPointB = constraint.bodyB
+                ? global.Matter.Vector.add(
+                      constraint.bodyB.position,
+                      constraint.pointB
+                  )
+                : constraint.pointB,
+            length = global.Matter.Vector.magnitude(
+                global.Matter.Vector.sub(initialPointA, initialPointB)
+            );
+
+        constraint.length =
+            typeof constraint.length !== 'undefined'
+                ? constraint.length
+                : length;
 
         // option defaults
-        constraint.id = constraint.id || Common.nextId();
+        constraint.id = constraint.id || global.Matter.Common.nextId();
         constraint.label = constraint.label || 'Constraint';
         constraint.type = 'constraint';
-        constraint.stiffness = constraint.stiffness || (constraint.length > 0 ? 1 : 0.7);
+        constraint.stiffness =
+            constraint.stiffness || (constraint.length > 0 ? 1 : 0.7);
         constraint.damping = constraint.damping || 0;
         constraint.angularStiffness = constraint.angularStiffness || 0;
-        constraint.angleA = constraint.bodyA ? constraint.bodyA.angle : constraint.angleA;
-        constraint.angleB = constraint.bodyB ? constraint.bodyB.angle : constraint.angleB;
+        constraint.angleA = constraint.bodyA
+            ? constraint.bodyA.angle
+            : constraint.angleA;
+        constraint.angleB = constraint.bodyB
+            ? constraint.bodyB.angle
+            : constraint.angleB;
         constraint.plugin = {};
 
         // render
@@ -69,7 +105,7 @@ var Common = require('../core/Common');
             lineWidth: 2,
             strokeStyle: '#ffffff',
             type: 'line',
-            anchors: true
+            anchors: true,
         };
 
         if (constraint.length === 0 && constraint.stiffness > 0.1) {
@@ -79,7 +115,10 @@ var Common = require('../core/Common');
             render.type = 'spring';
         }
 
-        constraint.render = Common.extend(render, constraint.render);
+        constraint.render = global.Matter.Common.extend(
+            render,
+            constraint.render
+        );
 
         return constraint;
     };
@@ -90,12 +129,15 @@ var Common = require('../core/Common');
      * @method preSolveAll
      * @param {body[]} bodies
      */
-    Constraint.preSolveAll = function(bodies) {
+    Constraint.preSolveAll = function (bodies) {
         for (var i = 0; i < bodies.length; i += 1) {
             var body = bodies[i],
                 impulse = body.constraintImpulse;
 
-            if (body.isStatic || (impulse.x === 0 && impulse.y === 0 && impulse.angle === 0)) {
+            if (
+                body.isStatic ||
+                (impulse.x === 0 && impulse.y === 0 && impulse.angle === 0)
+            ) {
                 continue;
             }
 
@@ -112,14 +154,22 @@ var Common = require('../core/Common');
      * @param {constraint[]} constraints
      * @param {number} delta
      */
-    Constraint.solveAll = function(constraints, delta) {
-        var timeScale = Common.clamp(delta / Common._baseDelta, 0, 1);
+    Constraint.solveAll = function (constraints, delta) {
+        var timeScale = global.Matter.Common.clamp(
+            delta / global.Matter.Common._baseDelta,
+            0,
+            1
+        );
 
         // Solve fixed constraints first.
         for (var i = 0; i < constraints.length; i += 1) {
             var constraint = constraints[i],
-                fixedA = !constraint.bodyA || (constraint.bodyA && constraint.bodyA.isStatic),
-                fixedB = !constraint.bodyB || (constraint.bodyB && constraint.bodyB.isStatic);
+                fixedA =
+                    !constraint.bodyA ||
+                    (constraint.bodyA && constraint.bodyA.isStatic),
+                fixedB =
+                    !constraint.bodyB ||
+                    (constraint.bodyB && constraint.bodyB.isStatic);
 
             if (fixedA || fixedB) {
                 Constraint.solve(constraints[i], timeScale);
@@ -129,8 +179,12 @@ var Common = require('../core/Common');
         // Solve free constraints last.
         for (i = 0; i < constraints.length; i += 1) {
             constraint = constraints[i];
-            fixedA = !constraint.bodyA || (constraint.bodyA && constraint.bodyA.isStatic);
-            fixedB = !constraint.bodyB || (constraint.bodyB && constraint.bodyB.isStatic);
+            fixedA =
+                !constraint.bodyA ||
+                (constraint.bodyA && constraint.bodyA.isStatic);
+            fixedB =
+                !constraint.bodyB ||
+                (constraint.bodyB && constraint.bodyB.isStatic);
 
             if (!fixedA && !fixedB) {
                 Constraint.solve(constraints[i], timeScale);
@@ -145,38 +199,46 @@ var Common = require('../core/Common');
      * @param {constraint} constraint
      * @param {number} timeScale
      */
-    Constraint.solve = function(constraint, timeScale) {
+    Constraint.solve = function (constraint, timeScale) {
         var bodyA = constraint.bodyA,
             bodyB = constraint.bodyB,
             pointA = constraint.pointA,
             pointB = constraint.pointB;
 
-        if (!bodyA && !bodyB)
-            return;
+        if (!bodyA && !bodyB) return;
 
         // update reference angle
         if (bodyA && !bodyA.isStatic) {
-            Vector.rotate(pointA, bodyA.angle - constraint.angleA, pointA);
+            global.Matter.Vector.rotate(
+                pointA,
+                bodyA.angle - constraint.angleA,
+                pointA
+            );
             constraint.angleA = bodyA.angle;
         }
-        
+
         // update reference angle
         if (bodyB && !bodyB.isStatic) {
-            Vector.rotate(pointB, bodyB.angle - constraint.angleB, pointB);
+            global.Matter.Vector.rotate(
+                pointB,
+                bodyB.angle - constraint.angleB,
+                pointB
+            );
             constraint.angleB = bodyB.angle;
         }
 
         var pointAWorld = pointA,
             pointBWorld = pointB;
 
-        if (bodyA) pointAWorld = Vector.add(bodyA.position, pointA);
-        if (bodyB) pointBWorld = Vector.add(bodyB.position, pointB);
+        if (bodyA)
+            pointAWorld = global.Matter.Vector.add(bodyA.position, pointA);
+        if (bodyB)
+            pointBWorld = global.Matter.Vector.add(bodyB.position, pointB);
 
-        if (!pointAWorld || !pointBWorld)
-            return;
+        if (!pointAWorld || !pointBWorld) return;
 
-        var delta = Vector.sub(pointAWorld, pointBWorld),
-            currentLength = Vector.magnitude(delta);
+        var delta = global.Matter.Vector.sub(pointAWorld, pointBWorld),
+            currentLength = global.Matter.Vector.magnitude(delta);
 
         // prevent singularity
         if (currentLength < Constraint._minLength) {
@@ -186,29 +248,44 @@ var Common = require('../core/Common');
         // solve distance constraint with Gauss-Siedel method
         var difference = (currentLength - constraint.length) / currentLength,
             isRigid = constraint.stiffness >= 1 || constraint.length === 0,
-            stiffness = isRigid ? constraint.stiffness * timeScale 
+            stiffness = isRigid
+                ? constraint.stiffness * timeScale
                 : constraint.stiffness * timeScale * timeScale,
             damping = constraint.damping * timeScale,
-            force = Vector.mult(delta, difference * stiffness),
-            massTotal = (bodyA ? bodyA.inverseMass : 0) + (bodyB ? bodyB.inverseMass : 0),
-            inertiaTotal = (bodyA ? bodyA.inverseInertia : 0) + (bodyB ? bodyB.inverseInertia : 0),
+            force = global.Matter.Vector.mult(delta, difference * stiffness),
+            massTotal =
+                (bodyA ? bodyA.inverseMass : 0) +
+                (bodyB ? bodyB.inverseMass : 0),
+            inertiaTotal =
+                (bodyA ? bodyA.inverseInertia : 0) +
+                (bodyB ? bodyB.inverseInertia : 0),
             resistanceTotal = massTotal + inertiaTotal,
             torque,
             share,
             normal,
             normalVelocity,
             relativeVelocity;
-    
-        if (damping > 0) {
-            var zero = Vector.create();
-            normal = Vector.div(delta, currentLength);
 
-            relativeVelocity = Vector.sub(
-                bodyB && Vector.sub(bodyB.position, bodyB.positionPrev) || zero,
-                bodyA && Vector.sub(bodyA.position, bodyA.positionPrev) || zero
+        if (damping > 0) {
+            var zero = global.Matter.Vector.create();
+            normal = global.Matter.Vector.div(delta, currentLength);
+
+            relativeVelocity = global.Matter.Vector.sub(
+                (bodyB &&
+                    global.Matter.Vector.sub(
+                        bodyB.position,
+                        bodyB.positionPrev
+                    )) ||
+                    zero,
+                (bodyA &&
+                    global.Matter.Vector.sub(
+                        bodyA.position,
+                        bodyA.positionPrev
+                    )) ||
+                    zero
             );
 
-            normalVelocity = Vector.dot(normal, relativeVelocity);
+            normalVelocity = global.Matter.Vector.dot(normal, relativeVelocity);
         }
 
         if (bodyA && !bodyA.isStatic) {
@@ -224,12 +301,18 @@ var Common = require('../core/Common');
 
             // apply damping
             if (damping > 0) {
-                bodyA.positionPrev.x -= damping * normal.x * normalVelocity * share;
-                bodyA.positionPrev.y -= damping * normal.y * normalVelocity * share;
+                bodyA.positionPrev.x -=
+                    damping * normal.x * normalVelocity * share;
+                bodyA.positionPrev.y -=
+                    damping * normal.y * normalVelocity * share;
             }
 
             // apply torque
-            torque = (Vector.cross(pointA, force) / resistanceTotal) * Constraint._torqueDampen * bodyA.inverseInertia * (1 - constraint.angularStiffness);
+            torque =
+                (global.Matter.Vector.cross(pointA, force) / resistanceTotal) *
+                Constraint._torqueDampen *
+                bodyA.inverseInertia *
+                (1 - constraint.angularStiffness);
             bodyA.constraintImpulse.angle -= torque;
             bodyA.angle -= torque;
         }
@@ -240,23 +323,28 @@ var Common = require('../core/Common');
             // keep track of applied impulses for post solving
             bodyB.constraintImpulse.x += force.x * share;
             bodyB.constraintImpulse.y += force.y * share;
-            
+
             // apply forces
             bodyB.position.x += force.x * share;
             bodyB.position.y += force.y * share;
 
             // apply damping
             if (damping > 0) {
-                bodyB.positionPrev.x += damping * normal.x * normalVelocity * share;
-                bodyB.positionPrev.y += damping * normal.y * normalVelocity * share;
+                bodyB.positionPrev.x +=
+                    damping * normal.x * normalVelocity * share;
+                bodyB.positionPrev.y +=
+                    damping * normal.y * normalVelocity * share;
             }
 
             // apply torque
-            torque = (Vector.cross(pointB, force) / resistanceTotal) * Constraint._torqueDampen * bodyB.inverseInertia * (1 - constraint.angularStiffness);
+            torque =
+                (global.Matter.Vector.cross(pointB, force) / resistanceTotal) *
+                Constraint._torqueDampen *
+                bodyB.inverseInertia *
+                (1 - constraint.angularStiffness);
             bodyB.constraintImpulse.angle += torque;
             bodyB.angle += torque;
         }
-
     };
 
     /**
@@ -265,22 +353,25 @@ var Common = require('../core/Common');
      * @method postSolveAll
      * @param {body[]} bodies
      */
-    Constraint.postSolveAll = function(bodies) {
+    Constraint.postSolveAll = function (bodies) {
         for (var i = 0; i < bodies.length; i++) {
             var body = bodies[i],
                 impulse = body.constraintImpulse;
 
-            if (body.isStatic || (impulse.x === 0 && impulse.y === 0 && impulse.angle === 0)) {
+            if (
+                body.isStatic ||
+                (impulse.x === 0 && impulse.y === 0 && impulse.angle === 0)
+            ) {
                 continue;
             }
 
-            Sleeping.set(body, false);
+            global.Matter.Sleeping.set(body, false);
 
             // update geometry and reset
             for (var j = 0; j < body.parts.length; j++) {
                 var part = body.parts[j];
-                
-                Vertices.translate(part.vertices, impulse);
+
+                global.Matter.Vertices.translate(part.vertices, impulse);
 
                 if (j > 0) {
                     part.position.x += impulse.x;
@@ -288,14 +379,27 @@ var Common = require('../core/Common');
                 }
 
                 if (impulse.angle !== 0) {
-                    Vertices.rotate(part.vertices, impulse.angle, body.position);
-                    Axes.rotate(part.axes, impulse.angle);
+                    global.Matter.Vertices.rotate(
+                        part.vertices,
+                        impulse.angle,
+                        body.position
+                    );
+                    global.Matter.Axes.rotate(part.axes, impulse.angle);
                     if (j > 0) {
-                        Vector.rotateAbout(part.position, impulse.angle, body.position, part.position);
+                        global.Matter.Vector.rotateAbout(
+                            part.position,
+                            impulse.angle,
+                            body.position,
+                            part.position
+                        );
                     }
                 }
 
-                Bounds.update(part.bounds, part.vertices, body.velocity);
+                global.Matter.Bounds.update(
+                    part.bounds,
+                    part.vertices,
+                    body.velocity
+                );
             }
 
             // dampen the cached impulse for warming next step
@@ -311,12 +415,14 @@ var Common = require('../core/Common');
      * @param {constraint} constraint
      * @returns {vector} the world-space position
      */
-    Constraint.pointAWorld = function(constraint) {
+    Constraint.pointAWorld = function (constraint) {
         return {
-            x: (constraint.bodyA ? constraint.bodyA.position.x : 0) 
-                + (constraint.pointA ? constraint.pointA.x : 0),
-            y: (constraint.bodyA ? constraint.bodyA.position.y : 0) 
-                + (constraint.pointA ? constraint.pointA.y : 0)
+            x:
+                (constraint.bodyA ? constraint.bodyA.position.x : 0) +
+                (constraint.pointA ? constraint.pointA.x : 0),
+            y:
+                (constraint.bodyA ? constraint.bodyA.position.y : 0) +
+                (constraint.pointA ? constraint.pointA.y : 0),
         };
     };
 
@@ -326,35 +432,41 @@ var Common = require('../core/Common');
      * @param {constraint} constraint
      * @returns {vector} the world-space position
      */
-    Constraint.pointBWorld = function(constraint) {
+    Constraint.pointBWorld = function (constraint) {
         return {
-            x: (constraint.bodyB ? constraint.bodyB.position.x : 0) 
-                + (constraint.pointB ? constraint.pointB.x : 0),
-            y: (constraint.bodyB ? constraint.bodyB.position.y : 0) 
-                + (constraint.pointB ? constraint.pointB.y : 0)
+            x:
+                (constraint.bodyB ? constraint.bodyB.position.x : 0) +
+                (constraint.pointB ? constraint.pointB.x : 0),
+            y:
+                (constraint.bodyB ? constraint.bodyB.position.y : 0) +
+                (constraint.pointB ? constraint.pointB.y : 0),
         };
     };
 
     /**
-     * Returns the current length of the constraint. 
+     * Returns the current length of the constraint.
      * This is the distance between both of the constraint's end points.
      * See `constraint.length` for the target rest length.
      * @method currentLength
      * @param {constraint} constraint
      * @returns {number} the current length
      */
-    Constraint.currentLength = function(constraint) {
-        var pointAX = (constraint.bodyA ? constraint.bodyA.position.x : 0) 
-            + (constraint.pointA ? constraint.pointA.x : 0);
+    Constraint.currentLength = function (constraint) {
+        var pointAX =
+            (constraint.bodyA ? constraint.bodyA.position.x : 0) +
+            (constraint.pointA ? constraint.pointA.x : 0);
 
-        var pointAY = (constraint.bodyA ? constraint.bodyA.position.y : 0) 
-            + (constraint.pointA ? constraint.pointA.y : 0);
+        var pointAY =
+            (constraint.bodyA ? constraint.bodyA.position.y : 0) +
+            (constraint.pointA ? constraint.pointA.y : 0);
 
-        var pointBX = (constraint.bodyB ? constraint.bodyB.position.x : 0) 
-            + (constraint.pointB ? constraint.pointB.x : 0);
-            
-        var pointBY = (constraint.bodyB ? constraint.bodyB.position.y : 0) 
-            + (constraint.pointB ? constraint.pointB.y : 0);
+        var pointBX =
+            (constraint.bodyB ? constraint.bodyB.position.x : 0) +
+            (constraint.pointB ? constraint.pointB.x : 0);
+
+        var pointBY =
+            (constraint.bodyB ? constraint.bodyB.position.y : 0) +
+            (constraint.pointB ? constraint.pointB.y : 0);
 
         var deltaX = pointAX - pointBX;
         var deltaY = pointAY - pointBY;
@@ -363,10 +475,10 @@ var Common = require('../core/Common');
     };
 
     /*
-    *
-    *  Properties Documentation
-    *
-    */
+     *
+     *  Properties Documentation
+     *
+     */
 
     /**
      * An integer `Number` uniquely identifying number generated in `Composite.create` by `Common.nextId`.
@@ -426,7 +538,7 @@ var Common = require('../core/Common');
      */
 
     /**
-     * A `String` that defines the constraint rendering type. 
+     * A `String` that defines the constraint rendering type.
      * The possible values are 'line', 'pin', 'spring'.
      * An appropriate render type will be automatically chosen unless one is given in options.
      *
@@ -486,7 +598,7 @@ var Common = require('../core/Common');
      */
 
     /**
-     * A `Number` that specifies the damping of the constraint, 
+     * A `Number` that specifies the damping of the constraint,
      * i.e. the amount of resistance applied to each body based on their velocities to limit the amount of oscillation.
      * Damping will only be apparent when the constraint also has a very low `stiffness`.
      * A value of `0.1` means the constraint will apply heavy damping, resulting in little to no oscillation.
@@ -498,7 +610,7 @@ var Common = require('../core/Common');
      */
 
     /**
-     * A `Number` that specifies the target resting length of the constraint. 
+     * A `Number` that specifies the target resting length of the constraint.
      * It is calculated automatically in `Constraint.create` from initial positions of the `constraint.bodyA` and `constraint.bodyB`.
      *
      * @property length
@@ -511,5 +623,6 @@ var Common = require('../core/Common');
      * @property plugin
      * @type {}
      */
+};
 
-})();
+module.exports = init;
