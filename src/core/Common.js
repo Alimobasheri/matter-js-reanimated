@@ -65,7 +65,7 @@ var init = function () {
     };
 
     Common.values = function (obj) {
-        return Common.keys(obj).map((key) => obj[key]);
+        return global.Matter.Common.keys(obj).map((key) => obj[key]);
     };
 
     Common.get = function (obj, path, begin, end) {

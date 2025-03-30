@@ -113,10 +113,10 @@ var init = function () {
             i;
 
         // warn if high delta
-        if (delta > Engine._deltaMax) {
+        if (delta > global.Matter.Engine._deltaMax) {
             global.Matter.Common.warnOnce(
                 'Matter.Engine.update: delta argument is recommended to be less than or equal to',
-                Engine._deltaMax.toFixed(3),
+                global.Matter.Engine._deltaMax.toFixed(3),
                 'ms.'
             );
         }
@@ -146,7 +146,7 @@ var init = function () {
         // if the world has changed
         if (world.isModified) {
             // update the detector bodies
-            Detector.setBodies(detector, allBodies);
+            global.Matter.Detector.setBodies(detector, allBodies);
 
             // reset all composite modified flags
             global.Matter.Composite.setModified(world, false, false, true);
@@ -157,11 +157,11 @@ var init = function () {
             global.Matter.Sleeping.update(allBodies, delta);
 
         // apply gravity to all bodies
-        Engine._bodiesApplyGravity(allBodies, engine.gravity);
+        global.Matter.Engine._bodiesApplyGravity(allBodies, engine.gravity);
 
         // update all body position and rotation by integration
         if (delta > 0) {
-            Engine._bodiesUpdate(allBodies, delta);
+            global.Matter.Engine._bodiesUpdate(allBodies, delta);
         }
 
         global.Matter.Events.trigger(engine, 'beforeSolve', event);
@@ -174,7 +174,7 @@ var init = function () {
         global.Matter.Constraint.postSolveAll(allBodies);
 
         // find all collisions
-        var collisions = Detector.collisions(detector);
+        var collisions = global.Matter.Detector.collisions(detector);
 
         // update collision pairs
         global.Matter.Pairs.update(pairs, collisions, timestamp);
@@ -199,11 +199,15 @@ var init = function () {
             1
         );
 
-        Resolver.preSolvePosition(pairs.list);
+        global.Matter.Resolver.preSolvePosition(pairs.list);
         for (i = 0; i < engine.positionIterations; i++) {
-            Resolver.solvePosition(pairs.list, delta, positionDamping);
+            global.Matter.Resolver.solvePosition(
+                pairs.list,
+                delta,
+                positionDamping
+            );
         }
-        Resolver.postSolvePosition(allBodies);
+        global.Matter.Resolver.postSolvePosition(allBodies);
 
         // update all constraints (second pass)
         global.Matter.Constraint.preSolveAll(allBodies);
@@ -213,13 +217,13 @@ var init = function () {
         global.Matter.Constraint.postSolveAll(allBodies);
 
         // iteratively resolve velocity between collisions
-        Resolver.preSolveVelocity(pairs.list);
+        global.Matter.Resolver.preSolveVelocity(pairs.list);
         for (i = 0; i < engine.velocityIterations; i++) {
-            Resolver.solveVelocity(pairs.list, delta);
+            global.Matter.Resolver.solveVelocity(pairs.list, delta);
         }
 
         // update body speed and velocity properties
-        Engine._bodiesUpdateVelocities(allBodies);
+        global.Matter.Engine._bodiesUpdateVelocities(allBodies);
 
         // trigger collision events
         if (pairs.collisionActive.length > 0) {
@@ -239,7 +243,7 @@ var init = function () {
         }
 
         // clear force buffers
-        Engine._bodiesClearForces(allBodies);
+        global.Matter.Engine._bodiesClearForces(allBodies);
 
         global.Matter.Events.trigger(engine, 'afterUpdate', event);
 

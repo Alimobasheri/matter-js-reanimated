@@ -192,7 +192,7 @@ var init = function () {
     };
 
     Common.values = function (obj) {
-        return Common.keys(obj).map((key) => obj[key]);
+        return global.Matter.Common.keys(obj).map((key) => obj[key]);
     };
 
     Common.get = function (obj, path, begin, end) {
@@ -1416,7 +1416,7 @@ var init = function () {
             _original: null,
         };
 
-        var body = global.Matter.Common.extend(defaults, options);
+        var body = { ...defaults, ...options };
 
         _initProperties(body, options);
 
@@ -1459,7 +1459,7 @@ var init = function () {
         options = options || {};
 
         // init required properties (order is important)
-        Body.set(body, {
+        global.Matter.Body.set(body, {
             bounds: body.bounds || global.Matter.Bounds.create(body.vertices),
             positionPrev:
                 body.positionPrev || global.Matter.Vector.clone(body.position),
@@ -1476,7 +1476,7 @@ var init = function () {
         global.Matter.Bounds.update(body.bounds, body.vertices, body.velocity);
 
         // allow options to override the automatically calculated properties
-        Body.set(body, {
+        global.Matter.Body.set(body, {
             axes: options.axes || body.axes,
             area: options.area || body.area,
             mass: options.mass || body.mass,
@@ -1525,52 +1525,49 @@ var init = function () {
         }
 
         for (property in settings) {
-            if (!Object.prototype.hasOwnProperty.call(settings, property))
-                continue;
-
             value = settings[property];
             switch (property) {
                 case 'isStatic':
-                    Body.setStatic(body, value);
+                    global.Matter.Body.setStatic(body, value);
                     break;
                 case 'isSleeping':
                     global.Matter.Sleeping.set(body, value);
                     break;
                 case 'mass':
-                    Body.setMass(body, value);
+                    global.Matter.Body.setMass(body, value);
                     break;
                 case 'density':
-                    Body.setDensity(body, value);
+                    global.Matter.Body.setDensity(body, value);
                     break;
                 case 'inertia':
-                    Body.setInertia(body, value);
+                    global.Matter.Body.setInertia(body, value);
                     break;
                 case 'vertices':
-                    Body.setVertices(body, value);
+                    global.Matter.Body.setVertices(body, value);
                     break;
                 case 'position':
-                    Body.setPosition(body, value);
+                    global.Matter.Body.setPosition(body, value);
                     break;
                 case 'angle':
-                    Body.setAngle(body, value);
+                    global.Matter.Body.setAngle(body, value);
                     break;
                 case 'velocity':
-                    Body.setVelocity(body, value);
+                    global.Matter.Body.setVelocity(body, value);
                     break;
                 case 'angularVelocity':
-                    Body.setAngularVelocity(body, value);
+                    global.Matter.Body.setAngularVelocity(body, value);
                     break;
                 case 'speed':
-                    Body.setSpeed(body, value);
+                    global.Matter.Body.setSpeed(body, value);
                     break;
                 case 'angularSpeed':
-                    Body.setAngularSpeed(body, value);
+                    global.Matter.Body.setAngularSpeed(body, value);
                     break;
                 case 'parts':
-                    Body.setParts(body, value);
+                    global.Matter.Body.setParts(body, value);
                     break;
                 case 'centre':
-                    Body.setCentre(body, value);
+                    global.Matter.Body.setCentre(body, value);
                     break;
                 default:
                     body[property] = value;
@@ -1691,16 +1688,16 @@ var init = function () {
         // update properties
         body.axes = global.Matter.Axes.fromVertices(body.vertices);
         body.area = global.Matter.Vertices.area(body.vertices);
-        Body.setMass(body, body.density * body.area);
+        global.Matter.Body.setMass(body, body.density * body.area);
 
         // orient vertices around the centre of mass at origin (0, 0)
         var centre = global.Matter.Vertices.centre(body.vertices);
         global.Matter.Vertices.translate(body.vertices, centre, -1);
 
         // update inertia while vertices are at origin (0, 0)
-        Body.setInertia(
+        global.Matter.Body.setInertia(
             body,
-            Body._inertiaScale *
+            global.Matter.Body._inertiaScale *
                 global.Matter.Vertices.inertia(body.vertices, body.mass)
         );
 
@@ -4024,7 +4021,7 @@ var init = function () {
         // find the unique axes, using edge normal gradients
         for (var i = 0; i < vertices.length; i++) {
             var j = (i + 1) % vertices.length,
-                normal = Vector.normalise({
+                normal = global.Matter.Vector.normalise({
                     x: vertices[j].y - vertices[i].y,
                     y: vertices[i].x - vertices[j].x,
                 }),
@@ -4035,7 +4032,7 @@ var init = function () {
             axes[gradient] = normal;
         }
 
-        return Common.values(axes);
+        return global.Matter.Common.values(axes);
     };
 
     /**
@@ -4145,9 +4142,7 @@ var init = function () {
             delete options.chamfer;
         }
 
-        return global.Matter.Body.create(
-            global.Matter.Common.extend({}, rectangle, options)
-        );
+        return global.Matter.Body.create({ ...rectangle, ...options });
     };
 
     /**
@@ -7750,10 +7745,10 @@ var init = function () {
             i;
 
         // warn if high delta
-        if (delta > Engine._deltaMax) {
+        if (delta > global.Matter.Engine._deltaMax) {
             global.Matter.Common.warnOnce(
                 'Matter.Engine.update: delta argument is recommended to be less than or equal to',
-                Engine._deltaMax.toFixed(3),
+                global.Matter.Engine._deltaMax.toFixed(3),
                 'ms.'
             );
         }
@@ -7783,7 +7778,7 @@ var init = function () {
         // if the world has changed
         if (world.isModified) {
             // update the detector bodies
-            Detector.setBodies(detector, allBodies);
+            global.Matter.Detector.setBodies(detector, allBodies);
 
             // reset all composite modified flags
             global.Matter.Composite.setModified(world, false, false, true);
@@ -7794,11 +7789,11 @@ var init = function () {
             global.Matter.Sleeping.update(allBodies, delta);
 
         // apply gravity to all bodies
-        Engine._bodiesApplyGravity(allBodies, engine.gravity);
+        global.Matter.Engine._bodiesApplyGravity(allBodies, engine.gravity);
 
         // update all body position and rotation by integration
         if (delta > 0) {
-            Engine._bodiesUpdate(allBodies, delta);
+            global.Matter.Engine._bodiesUpdate(allBodies, delta);
         }
 
         global.Matter.Events.trigger(engine, 'beforeSolve', event);
@@ -7811,7 +7806,7 @@ var init = function () {
         global.Matter.Constraint.postSolveAll(allBodies);
 
         // find all collisions
-        var collisions = Detector.collisions(detector);
+        var collisions = global.Matter.Detector.collisions(detector);
 
         // update collision pairs
         global.Matter.Pairs.update(pairs, collisions, timestamp);
@@ -7836,11 +7831,15 @@ var init = function () {
             1
         );
 
-        Resolver.preSolvePosition(pairs.list);
+        global.Matter.Resolver.preSolvePosition(pairs.list);
         for (i = 0; i < engine.positionIterations; i++) {
-            Resolver.solvePosition(pairs.list, delta, positionDamping);
+            global.Matter.Resolver.solvePosition(
+                pairs.list,
+                delta,
+                positionDamping
+            );
         }
-        Resolver.postSolvePosition(allBodies);
+        global.Matter.Resolver.postSolvePosition(allBodies);
 
         // update all constraints (second pass)
         global.Matter.Constraint.preSolveAll(allBodies);
@@ -7850,13 +7849,13 @@ var init = function () {
         global.Matter.Constraint.postSolveAll(allBodies);
 
         // iteratively resolve velocity between collisions
-        Resolver.preSolveVelocity(pairs.list);
+        global.Matter.Resolver.preSolveVelocity(pairs.list);
         for (i = 0; i < engine.velocityIterations; i++) {
-            Resolver.solveVelocity(pairs.list, delta);
+            global.Matter.Resolver.solveVelocity(pairs.list, delta);
         }
 
         // update body speed and velocity properties
-        Engine._bodiesUpdateVelocities(allBodies);
+        global.Matter.Engine._bodiesUpdateVelocities(allBodies);
 
         // trigger collision events
         if (pairs.collisionActive.length > 0) {
@@ -7876,7 +7875,7 @@ var init = function () {
         }
 
         // clear force buffers
-        Engine._bodiesClearForces(allBodies);
+        global.Matter.Engine._bodiesClearForces(allBodies);
 
         global.Matter.Events.trigger(engine, 'afterUpdate', event);
 

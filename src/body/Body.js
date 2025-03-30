@@ -118,7 +118,7 @@ var init = function () {
             _original: null,
         };
 
-        var body = global.Matter.Common.extend(defaults, options);
+        var body = { ...defaults, ...options };
 
         _initProperties(body, options);
 
@@ -161,7 +161,7 @@ var init = function () {
         options = options || {};
 
         // init required properties (order is important)
-        Body.set(body, {
+        global.Matter.Body.set(body, {
             bounds: body.bounds || global.Matter.Bounds.create(body.vertices),
             positionPrev:
                 body.positionPrev || global.Matter.Vector.clone(body.position),
@@ -178,7 +178,7 @@ var init = function () {
         global.Matter.Bounds.update(body.bounds, body.vertices, body.velocity);
 
         // allow options to override the automatically calculated properties
-        Body.set(body, {
+        global.Matter.Body.set(body, {
             axes: options.axes || body.axes,
             area: options.area || body.area,
             mass: options.mass || body.mass,
@@ -227,52 +227,49 @@ var init = function () {
         }
 
         for (property in settings) {
-            if (!Object.prototype.hasOwnProperty.call(settings, property))
-                continue;
-
             value = settings[property];
             switch (property) {
                 case 'isStatic':
-                    Body.setStatic(body, value);
+                    global.Matter.Body.setStatic(body, value);
                     break;
                 case 'isSleeping':
                     global.Matter.Sleeping.set(body, value);
                     break;
                 case 'mass':
-                    Body.setMass(body, value);
+                    global.Matter.Body.setMass(body, value);
                     break;
                 case 'density':
-                    Body.setDensity(body, value);
+                    global.Matter.Body.setDensity(body, value);
                     break;
                 case 'inertia':
-                    Body.setInertia(body, value);
+                    global.Matter.Body.setInertia(body, value);
                     break;
                 case 'vertices':
-                    Body.setVertices(body, value);
+                    global.Matter.Body.setVertices(body, value);
                     break;
                 case 'position':
-                    Body.setPosition(body, value);
+                    global.Matter.Body.setPosition(body, value);
                     break;
                 case 'angle':
-                    Body.setAngle(body, value);
+                    global.Matter.Body.setAngle(body, value);
                     break;
                 case 'velocity':
-                    Body.setVelocity(body, value);
+                    global.Matter.Body.setVelocity(body, value);
                     break;
                 case 'angularVelocity':
-                    Body.setAngularVelocity(body, value);
+                    global.Matter.Body.setAngularVelocity(body, value);
                     break;
                 case 'speed':
-                    Body.setSpeed(body, value);
+                    global.Matter.Body.setSpeed(body, value);
                     break;
                 case 'angularSpeed':
-                    Body.setAngularSpeed(body, value);
+                    global.Matter.Body.setAngularSpeed(body, value);
                     break;
                 case 'parts':
-                    Body.setParts(body, value);
+                    global.Matter.Body.setParts(body, value);
                     break;
                 case 'centre':
-                    Body.setCentre(body, value);
+                    global.Matter.Body.setCentre(body, value);
                     break;
                 default:
                     body[property] = value;
@@ -393,16 +390,16 @@ var init = function () {
         // update properties
         body.axes = global.Matter.Axes.fromVertices(body.vertices);
         body.area = global.Matter.Vertices.area(body.vertices);
-        Body.setMass(body, body.density * body.area);
+        global.Matter.Body.setMass(body, body.density * body.area);
 
         // orient vertices around the centre of mass at origin (0, 0)
         var centre = global.Matter.Vertices.centre(body.vertices);
         global.Matter.Vertices.translate(body.vertices, centre, -1);
 
         // update inertia while vertices are at origin (0, 0)
-        Body.setInertia(
+        global.Matter.Body.setInertia(
             body,
-            Body._inertiaScale *
+            global.Matter.Body._inertiaScale *
                 global.Matter.Vertices.inertia(body.vertices, body.mass)
         );
 

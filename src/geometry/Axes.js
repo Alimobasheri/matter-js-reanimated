@@ -28,7 +28,7 @@ var init = function () {
         // find the unique axes, using edge normal gradients
         for (var i = 0; i < vertices.length; i++) {
             var j = (i + 1) % vertices.length,
-                normal = Vector.normalise({
+                normal = global.Matter.Vector.normalise({
                     x: vertices[j].y - vertices[i].y,
                     y: vertices[i].x - vertices[j].x,
                 }),
@@ -39,7 +39,7 @@ var init = function () {
             axes[gradient] = normal;
         }
 
-        return Common.values(axes);
+        return global.Matter.Common.values(axes);
     };
 
     /**
