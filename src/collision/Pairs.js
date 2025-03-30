@@ -1,17 +1,29 @@
-/**
-* The `Matter.Pairs` module contains methods for creating and manipulating collision pair sets.
-*
-* @class Pairs
-*/
-
-var Pairs = {};
-
-module.exports = Pairs;
-
 var Pair = require('./Pair');
 var Common = require('../core/Common');
 
-(function() {
+/**
+ * The `Matter.Pairs` module contains methods for creating and manipulating collision pair sets.
+ *
+ * @class Pairs
+ */
+
+var init = function () {
+    'worklet';
+
+    if (global.Matter && global.Matter.Pairs) {
+        return;
+    }
+
+    if (!global.Matter) {
+        global.Matter = {};
+    }
+
+    global.Matter.Pairs = {};
+
+    var Pairs = global.Matter.Pairs;
+
+    Pair();
+    Common();
 
     /**
      * Creates a new pairs structure.
@@ -19,14 +31,17 @@ var Common = require('../core/Common');
      * @param {object} options
      * @return {pairs} A new pairs structure
      */
-    Pairs.create = function(options) {
-        return Common.extend({ 
-            table: {},
-            list: [],
-            collisionStart: [],
-            collisionActive: [],
-            collisionEnd: []
-        }, options);
+    Pairs.create = function (options) {
+        return global.Matter.Common.extend(
+            {
+                table: {},
+                list: [],
+                collisionStart: [],
+                collisionActive: [],
+                collisionEnd: [],
+            },
+            options
+        );
     };
 
     /**
@@ -36,10 +51,10 @@ var Common = require('../core/Common');
      * @param {collision[]} collisions
      * @param {number} timestamp
      */
-    Pairs.update = function(pairs, collisions, timestamp) {
-        var pairUpdate = Pair.update,
-            pairCreate = Pair.create,
-            pairSetActive = Pair.setActive,
+    Pairs.update = function (pairs, collisions, timestamp) {
+        var pairUpdate = global.Matter.Pair.update,
+            pairCreate = global.Matter.Pair.create,
+            pairSetActive = global.Matter.Pair.setActive,
             pairsTable = pairs.table,
             pairsList = pairs.list,
             pairsListLength = pairsList.length,
@@ -85,7 +100,7 @@ var Common = require('../core/Common');
 
         for (i = 0; i < pairsListLength; i++) {
             pair = pairsList[i];
-            
+
             // pair is active if updated this timestep
             if (pair.timeUpdated >= timestamp) {
                 // keep active pairs
@@ -94,7 +109,10 @@ var Common = require('../core/Common');
                 pairSetActive(pair, false, timestamp);
 
                 // keep inactive pairs if both bodies may be sleeping
-                if (pair.collision.bodyA.sleepCounter > 0 && pair.collision.bodyB.sleepCounter > 0) {
+                if (
+                    pair.collision.bodyA.sleepCounter > 0 &&
+                    pair.collision.bodyB.sleepCounter > 0
+                ) {
                     pairsList[pairsListIndex++] = pair;
                 } else {
                     // remove inactive pairs if either body awake
@@ -128,7 +146,7 @@ var Common = require('../core/Common');
      * @param {pairs} pairs
      * @return {pairs} pairs
      */
-    Pairs.clear = function(pairs) {
+    Pairs.clear = function (pairs) {
         pairs.table = {};
         pairs.list.length = 0;
         pairs.collisionStart.length = 0;
@@ -136,5 +154,6 @@ var Common = require('../core/Common');
         pairs.collisionEnd.length = 0;
         return pairs;
     };
+};
 
-})();
+module.exports = init;

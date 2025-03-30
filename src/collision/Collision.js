@@ -1,31 +1,44 @@
-/**
-* The `Matter.Collision` module contains methods for detecting collisions between a given pair of bodies.
-*
-* For efficient detection between a list of bodies, see `Matter.Detector` and `Matter.Query`.
-*
-* See `Matter.Engine` for collision events.
-*
-* @class Collision
-*/
-
-var Collision = {};
-
-module.exports = Collision;
-
 var Vertices = require('../geometry/Vertices');
 var Pair = require('./Pair');
 
-(function() {
+/**
+ * The `Matter.Collision` module contains methods for detecting collisions between a given pair of bodies.
+ *
+ * For efficient detection between a list of bodies, see `Matter.Detector` and `Matter.Query`.
+ *
+ * See `Matter.Engine` for collision events.
+ *
+ * @class Collision
+ */
+
+var init = function () {
+    'worklet';
+
+    if (global.Matter && global.Matter.Collision) {
+        return;
+    }
+
+    if (!global.Matter) {
+        global.Matter = {};
+    }
+
+    global.Matter.Collision = {};
+
+    var Collision = global.Matter.Collision;
+
+    Vertices();
+    Pair();
+
     var _supports = [];
 
     var _overlapAB = {
         overlap: 0,
-        axis: null
+        axis: null,
     };
 
     var _overlapBA = {
         overlap: 0,
-        axis: null
+        axis: null,
     };
 
     /**
@@ -35,8 +48,8 @@ var Pair = require('./Pair');
      * @param {body} bodyB The second body part represented by the collision record
      * @return {collision} A new collision record
      */
-    Collision.create = function(bodyA, bodyB) {
-        return { 
+    Collision.create = function (bodyA, bodyB) {
+        return {
             pair: null,
             collided: false,
             bodyA: bodyA,
@@ -48,7 +61,7 @@ var Pair = require('./Pair');
             tangent: { x: 0, y: 0 },
             penetration: { x: 0, y: 0 },
             supports: [null, null],
-            supportCount: 0
+            supportCount: 0,
         };
     };
 
@@ -60,21 +73,31 @@ var Pair = require('./Pair');
      * @param {pairs} [pairs] Optionally reuse collision records from existing pairs.
      * @return {collision|null} A collision record if detected, otherwise null
      */
-    Collision.collides = function(bodyA, bodyB, pairs) {
-        Collision._overlapAxes(_overlapAB, bodyA.vertices, bodyB.vertices, bodyA.axes);
+    Collision.collides = function (bodyA, bodyB, pairs) {
+        Collision._overlapAxes(
+            _overlapAB,
+            bodyA.vertices,
+            bodyB.vertices,
+            bodyA.axes
+        );
 
         if (_overlapAB.overlap <= 0) {
             return null;
         }
 
-        Collision._overlapAxes(_overlapBA, bodyB.vertices, bodyA.vertices, bodyB.axes);
+        Collision._overlapAxes(
+            _overlapBA,
+            bodyB.vertices,
+            bodyA.vertices,
+            bodyB.axes
+        );
 
         if (_overlapBA.overlap <= 0) {
             return null;
         }
 
         // reuse collision records for gc efficiency
-        var pair = pairs && pairs.table[Pair.id(bodyA, bodyB)],
+        var pair = pairs && pairs.table[global.Matter.Pair.id(bodyA, bodyB)],
             collision;
 
         if (!pair) {
@@ -118,7 +141,7 @@ var Pair = require('./Pair');
 
         normal.x = normalX;
         normal.y = normalY;
-        
+
         tangent.x = -normalY;
         tangent.y = normalX;
 
@@ -132,11 +155,11 @@ var Pair = require('./Pair');
             supportCount = 0;
 
         // find the supports from bodyB that are inside bodyA
-        if (Vertices.contains(bodyA.vertices, supportsB[0])) {
+        if (global.Matter.Vertices.contains(bodyA.vertices, supportsB[0])) {
             supports[supportCount++] = supportsB[0];
         }
 
-        if (Vertices.contains(bodyA.vertices, supportsB[1])) {
+        if (global.Matter.Vertices.contains(bodyA.vertices, supportsB[1])) {
             supports[supportCount++] = supportsB[1];
         }
 
@@ -144,11 +167,14 @@ var Pair = require('./Pair');
         if (supportCount < 2) {
             var supportsA = Collision._findSupports(bodyB, bodyA, normal, -1);
 
-            if (Vertices.contains(bodyB.vertices, supportsA[0])) {
+            if (global.Matter.Vertices.contains(bodyB.vertices, supportsA[0])) {
                 supports[supportCount++] = supportsA[0];
             }
 
-            if (supportCount < 2 && Vertices.contains(bodyB.vertices, supportsA[1])) {
+            if (
+                supportCount < 2 &&
+                global.Matter.Vertices.contains(bodyB.vertices, supportsA[1])
+            ) {
                 supports[supportCount++] = supportsA[1];
             }
         }
@@ -173,7 +199,7 @@ var Pair = require('./Pair');
      * @param {vertices} verticesB
      * @param {axes} axes
      */
-    Collision._overlapAxes = function(result, verticesA, verticesB, axes) {
+    Collision._overlapAxes = function (result, verticesA, verticesB, axes) {
         var verticesALength = verticesA.length,
             verticesBLength = verticesB.length,
             verticesAX = verticesA[0].x,
@@ -198,13 +224,13 @@ var Pair = require('./Pair');
                 minB = verticesBX * axisX + verticesBY * axisY,
                 maxA = minA,
                 maxB = minB;
-            
+
             for (j = 1; j < verticesALength; j += 1) {
                 dot = verticesA[j].x * axisX + verticesA[j].y * axisY;
 
-                if (dot > maxA) { 
+                if (dot > maxA) {
                     maxA = dot;
-                } else if (dot < minA) { 
+                } else if (dot < minA) {
                     minA = dot;
                 }
             }
@@ -212,9 +238,9 @@ var Pair = require('./Pair');
             for (j = 1; j < verticesBLength; j += 1) {
                 dot = verticesB[j].x * axisX + verticesB[j].y * axisY;
 
-                if (dot > maxB) { 
+                if (dot > maxB) {
                     maxB = dot;
-                } else if (dot < minB) { 
+                } else if (dot < minB) {
                     minB = dot;
                 }
             }
@@ -231,7 +257,7 @@ var Pair = require('./Pair');
                     // can not be intersecting
                     break;
                 }
-            } 
+            }
         }
 
         result.axis = axes[overlapAxisNumber];
@@ -248,7 +274,7 @@ var Pair = require('./Pair');
      * @param {number} direction
      * @return [vector]
      */
-    Collision._findSupports = function(bodyA, bodyB, normal, direction) {
+    Collision._findSupports = function (bodyA, bodyB, normal, direction) {
         var vertices = bodyB.vertices,
             verticesLength = vertices.length,
             bodyAPositionX = bodyA.position.x,
@@ -257,7 +283,9 @@ var Pair = require('./Pair');
             normalY = normal.y * direction,
             vertexA = vertices[0],
             vertexB = vertexA,
-            nearestDistance = normalX * (bodyAPositionX - vertexB.x) + normalY * (bodyAPositionY - vertexB.y),
+            nearestDistance =
+                normalX * (bodyAPositionX - vertexB.x) +
+                normalY * (bodyAPositionY - vertexB.y),
             vertexC,
             distance,
             j;
@@ -265,7 +293,9 @@ var Pair = require('./Pair');
         // find deepest vertex relative to the axis
         for (j = 1; j < verticesLength; j += 1) {
             vertexB = vertices[j];
-            distance = normalX * (bodyAPositionX - vertexB.x) + normalY * (bodyAPositionY - vertexB.y);
+            distance =
+                normalX * (bodyAPositionX - vertexB.x) +
+                normalY * (bodyAPositionY - vertexB.y);
 
             // convex hill-climbing
             if (distance < nearestDistance) {
@@ -275,12 +305,19 @@ var Pair = require('./Pair');
         }
 
         // measure next vertex
-        vertexC = vertices[(verticesLength + vertexA.index - 1) % verticesLength];
-        nearestDistance = normalX * (bodyAPositionX - vertexC.x) + normalY * (bodyAPositionY - vertexC.y);
+        vertexC =
+            vertices[(verticesLength + vertexA.index - 1) % verticesLength];
+        nearestDistance =
+            normalX * (bodyAPositionX - vertexC.x) +
+            normalY * (bodyAPositionY - vertexC.y);
 
         // compare with previous vertex
         vertexB = vertices[(vertexA.index + 1) % verticesLength];
-        if (normalX * (bodyAPositionX - vertexB.x) + normalY * (bodyAPositionY - vertexB.y) < nearestDistance) {
+        if (
+            normalX * (bodyAPositionX - vertexB.x) +
+                normalY * (bodyAPositionY - vertexB.y) <
+            nearestDistance
+        ) {
             _supports[0] = vertexA;
             _supports[1] = vertexB;
 
@@ -294,10 +331,10 @@ var Pair = require('./Pair');
     };
 
     /*
-    *
-    *  Properties Documentation
-    *
-    */
+     *
+     *  Properties Documentation
+     *
+     */
 
     /**
      * A reference to the pair using this collision record, if there is one.
@@ -309,7 +346,7 @@ var Pair = require('./Pair');
 
     /**
      * A flag that indicates if the bodies were colliding when the collision was last updated.
-     * 
+     *
      * @property collided
      * @type boolean
      * @default false
@@ -317,28 +354,28 @@ var Pair = require('./Pair');
 
     /**
      * The first body part represented by the collision (see also `collision.parentA`).
-     * 
+     *
      * @property bodyA
      * @type body
      */
 
     /**
      * The second body part represented by the collision (see also `collision.parentB`).
-     * 
+     *
      * @property bodyB
      * @type body
      */
 
     /**
      * The first body represented by the collision (i.e. `collision.bodyA.parent`).
-     * 
+     *
      * @property parentA
      * @type body
      */
 
     /**
      * The second body represented by the collision (i.e. `collision.bodyB.parent`).
-     * 
+     *
      * @property parentB
      * @type body
      */
@@ -378,10 +415,10 @@ var Pair = require('./Pair');
 
     /**
      * An array of body vertices that represent the support points in the collision.
-     * 
+     *
      * _Note:_ Only the first `collision.supportCount` items of `collision.supports` are active.
      * Therefore use `collision.supportCount` instead of `collision.supports.length` when iterating the active supports.
-     * 
+     *
      * These are the deepest vertices (along the collision normal) of each body that are contained by the other body's vertices.
      *
      * @property supports
@@ -391,7 +428,7 @@ var Pair = require('./Pair');
 
     /**
      * The number of active supports for this collision found in `collision.supports`.
-     * 
+     *
      * _Note:_ Only the first `collision.supportCount` items of `collision.supports` are active.
      * Therefore use `collision.supportCount` instead of `collision.supports.length` when iterating the active supports.
      *
@@ -399,5 +436,6 @@ var Pair = require('./Pair');
      * @type number
      * @default 0
      */
+};
 
-})();
+module.exports = init;

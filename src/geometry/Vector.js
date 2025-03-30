@@ -1,20 +1,27 @@
 /**
-* The `Matter.Vector` module contains methods for creating and manipulating vectors.
-* Vectors are the basis of all the geometry related operations in the engine.
-* A `Matter.Vector` object is of the form `{ x: 0, y: 0 }`.
-*
-* See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
-*
-* @class Vector
-*/
+ * The `Matter.Vector` module contains methods for creating and manipulating vectors.
+ * Vectors are the basis of all the geometry related operations in the engine.
+ * A `Matter.Vector` object is of the form `{ x: 0, y: 0 }`.
+ *
+ * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
+ *
+ * @class Vector
+ */
 
-// TODO: consider params for reusing vector objects
+var init = function () {
+    'worklet';
 
-var Vector = {};
+    if (global.Matter && global.Matter.Vector) {
+        return;
+    }
 
-module.exports = Vector;
+    if (!global.Matter) {
+        global.Matter = {};
+    }
 
-(function() {
+    global.Matter.Vector = {};
+
+    var Vector = global.Matter.Vector;
 
     /**
      * Creates a new vector.
@@ -23,7 +30,7 @@ module.exports = Vector;
      * @param {number} y
      * @return {vector} A new vector
      */
-    Vector.create = function(x, y) {
+    Vector.create = function (x, y) {
         return { x: x || 0, y: y || 0 };
     };
 
@@ -33,7 +40,7 @@ module.exports = Vector;
      * @param {vector} vector
      * @return {vector} A new cloned vector
      */
-    Vector.clone = function(vector) {
+    Vector.clone = function (vector) {
         return { x: vector.x, y: vector.y };
     };
 
@@ -43,8 +50,8 @@ module.exports = Vector;
      * @param {vector} vector
      * @return {number} The magnitude of the vector
      */
-    Vector.magnitude = function(vector) {
-        return Math.sqrt((vector.x * vector.x) + (vector.y * vector.y));
+    Vector.magnitude = function (vector) {
+        return Math.sqrt(vector.x * vector.x + vector.y * vector.y);
     };
 
     /**
@@ -53,8 +60,8 @@ module.exports = Vector;
      * @param {vector} vector
      * @return {number} The squared magnitude of the vector
      */
-    Vector.magnitudeSquared = function(vector) {
-        return (vector.x * vector.x) + (vector.y * vector.y);
+    Vector.magnitudeSquared = function (vector) {
+        return vector.x * vector.x + vector.y * vector.y;
     };
 
     /**
@@ -65,8 +72,9 @@ module.exports = Vector;
      * @param {vector} [output]
      * @return {vector} The vector rotated about (0, 0)
      */
-    Vector.rotate = function(vector, angle, output) {
-        var cos = Math.cos(angle), sin = Math.sin(angle);
+    Vector.rotate = function (vector, angle, output) {
+        var cos = Math.cos(angle),
+            sin = Math.sin(angle);
         if (!output) output = {};
         var x = vector.x * cos - vector.y * sin;
         output.y = vector.x * sin + vector.y * cos;
@@ -83,11 +91,14 @@ module.exports = Vector;
      * @param {vector} [output]
      * @return {vector} A new vector rotated about the point
      */
-    Vector.rotateAbout = function(vector, angle, point, output) {
-        var cos = Math.cos(angle), sin = Math.sin(angle);
+    Vector.rotateAbout = function (vector, angle, point, output) {
+        var cos = Math.cos(angle),
+            sin = Math.sin(angle);
         if (!output) output = {};
-        var x = point.x + ((vector.x - point.x) * cos - (vector.y - point.y) * sin);
-        output.y = point.y + ((vector.x - point.x) * sin + (vector.y - point.y) * cos);
+        var x =
+            point.x + (vector.x - point.x) * cos - (vector.y - point.y) * sin;
+        output.y =
+            point.y + (vector.x - point.x) * sin + (vector.y - point.y) * cos;
         output.x = x;
         return output;
     };
@@ -98,10 +109,9 @@ module.exports = Vector;
      * @param {vector} vector
      * @return {vector} A new vector normalised
      */
-    Vector.normalise = function(vector) {
+    Vector.normalise = function (vector) {
         var magnitude = Vector.magnitude(vector);
-        if (magnitude === 0)
-            return { x: 0, y: 0 };
+        if (magnitude === 0) return { x: 0, y: 0 };
         return { x: vector.x / magnitude, y: vector.y / magnitude };
     };
 
@@ -112,8 +122,8 @@ module.exports = Vector;
      * @param {vector} vectorB
      * @return {number} The dot product of the two vectors
      */
-    Vector.dot = function(vectorA, vectorB) {
-        return (vectorA.x * vectorB.x) + (vectorA.y * vectorB.y);
+    Vector.dot = function (vectorA, vectorB) {
+        return vectorA.x * vectorB.x + vectorA.y * vectorB.y;
     };
 
     /**
@@ -123,8 +133,8 @@ module.exports = Vector;
      * @param {vector} vectorB
      * @return {number} The cross product of the two vectors
      */
-    Vector.cross = function(vectorA, vectorB) {
-        return (vectorA.x * vectorB.y) - (vectorA.y * vectorB.x);
+    Vector.cross = function (vectorA, vectorB) {
+        return vectorA.x * vectorB.y - vectorA.y * vectorB.x;
     };
 
     /**
@@ -135,8 +145,11 @@ module.exports = Vector;
      * @param {vector} vectorC
      * @return {number} The cross product of the three vectors
      */
-    Vector.cross3 = function(vectorA, vectorB, vectorC) {
-        return (vectorB.x - vectorA.x) * (vectorC.y - vectorA.y) - (vectorB.y - vectorA.y) * (vectorC.x - vectorA.x);
+    Vector.cross3 = function (vectorA, vectorB, vectorC) {
+        return (
+            (vectorB.x - vectorA.x) * (vectorC.y - vectorA.y) -
+            (vectorB.y - vectorA.y) * (vectorC.x - vectorA.x)
+        );
     };
 
     /**
@@ -147,7 +160,7 @@ module.exports = Vector;
      * @param {vector} [output]
      * @return {vector} A new vector of vectorA and vectorB added
      */
-    Vector.add = function(vectorA, vectorB, output) {
+    Vector.add = function (vectorA, vectorB, output) {
         if (!output) output = {};
         output.x = vectorA.x + vectorB.x;
         output.y = vectorA.y + vectorB.y;
@@ -162,7 +175,7 @@ module.exports = Vector;
      * @param {vector} [output]
      * @return {vector} A new vector of vectorA and vectorB subtracted
      */
-    Vector.sub = function(vectorA, vectorB, output) {
+    Vector.sub = function (vectorA, vectorB, output) {
         if (!output) output = {};
         output.x = vectorA.x - vectorB.x;
         output.y = vectorA.y - vectorB.y;
@@ -176,7 +189,7 @@ module.exports = Vector;
      * @param {number} scalar
      * @return {vector} A new vector multiplied by scalar
      */
-    Vector.mult = function(vector, scalar) {
+    Vector.mult = function (vector, scalar) {
         return { x: vector.x * scalar, y: vector.y * scalar };
     };
 
@@ -187,7 +200,7 @@ module.exports = Vector;
      * @param {number} scalar
      * @return {vector} A new vector divided by scalar
      */
-    Vector.div = function(vector, scalar) {
+    Vector.div = function (vector, scalar) {
         return { x: vector.x / scalar, y: vector.y / scalar };
     };
 
@@ -198,7 +211,7 @@ module.exports = Vector;
      * @param {bool} [negate=false]
      * @return {vector} The perpendicular vector
      */
-    Vector.perp = function(vector, negate) {
+    Vector.perp = function (vector, negate) {
         negate = negate === true ? -1 : 1;
         return { x: negate * -vector.y, y: negate * vector.x };
     };
@@ -209,7 +222,7 @@ module.exports = Vector;
      * @param {vector} vector
      * @return {vector} The negated vector
      */
-    Vector.neg = function(vector) {
+    Vector.neg = function (vector) {
         return { x: -vector.x, y: -vector.y };
     };
 
@@ -220,7 +233,7 @@ module.exports = Vector;
      * @param {vector} vectorB
      * @return {number} The angle in radians
      */
-    Vector.angle = function(vectorA, vectorB) {
+    Vector.angle = function (vectorA, vectorB) {
         return Math.atan2(vectorB.y - vectorA.y, vectorB.x - vectorA.x);
     };
 
@@ -231,9 +244,13 @@ module.exports = Vector;
      * @private
      */
     Vector._temp = [
-        Vector.create(), Vector.create(), 
-        Vector.create(), Vector.create(), 
-        Vector.create(), Vector.create()
+        Vector.create(),
+        Vector.create(),
+        Vector.create(),
+        Vector.create(),
+        Vector.create(),
+        Vector.create(),
     ];
+};
 
-})();
+module.exports = init;
