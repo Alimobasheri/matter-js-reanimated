@@ -1,6 +1,6 @@
 /*!
- * matter-js-workletized 0.20.0 by @liabru
- * http://brm.io/matter-js/
+ * matter-js-reanimated 0.1.0 by @liabru
+ * undefined
  * License MIT
  * 
  * The MIT License (MIT)
@@ -7058,7 +7058,7 @@ var init = function () {
      * @type {String}
      */
     global.Matter.version =
-         true ? "0.20.0" : undefined;
+         true ? "0.1.0" : undefined;
 
     /**
      * A list of plugin dependencies to be installed.
