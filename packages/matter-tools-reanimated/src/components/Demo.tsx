@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { useFrameCallback, runOnUI } from 'react-native-reanimated';
 import { withMatter } from '../hoc/withMatter';
 import { Render } from './Render';
-import { Touch } from './Touch';
+// import { Touch } from './Touch';
 
 interface DemoProps {
     example: string;
@@ -72,9 +72,9 @@ const DemoComponent: React.FC<DemoProps> = ({ example, options = {} }) => {
 
     return (
         <View style={styles.container}>
-            <Touch engineId="demoEngine" options={options.touch}>
-                <Render engineId="demoEngine" options={options.render} />
-            </Touch>
+            {/* <Touch engineId="demoEngine" options={options.touch}> */}
+            <Render engineId="demoEngine" options={options.render} />
+            {/* </Touch> */}
         </View>
     );
 };
