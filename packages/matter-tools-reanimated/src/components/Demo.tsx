@@ -44,7 +44,7 @@ const DemoComponent: React.FC<DemoProps> = ({ example, options = {} }) => {
             global.demoEngine = engine;
 
             if (example in global) {
-                (global as any)[example]?.(engine);
+                global.demoes[example]?.(engine);
             }
             console.log(`Demo example "${example}" initialized".`);
         })();
@@ -53,7 +53,11 @@ const DemoComponent: React.FC<DemoProps> = ({ example, options = {} }) => {
             runOnUI(() => {
                 'worklet';
                 if (global.demoEngine) {
-                    global.Matter.Composite.clear(global.demoEngine.world);
+                    global.Matter.Composite.clear(
+                        global.demoEngine.world,
+                        false,
+                        true
+                    );
                     global.demoEngine = undefined;
                 }
             })();

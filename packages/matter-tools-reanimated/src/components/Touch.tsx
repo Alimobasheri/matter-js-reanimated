@@ -42,7 +42,6 @@ export const Touch: React.FC<TouchProps> = ({
                     stiffness: options.constraint?.stiffness ?? 0.2,
                     damping: options.constraint?.damping ?? 0.3,
                     length: 0,
-                    angularStiffness: 1,
                     label: 'Mouse Constraint',
                 });
 

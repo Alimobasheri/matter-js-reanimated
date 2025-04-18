@@ -17,7 +17,7 @@ export default function TestScreen() {
             global.windowWidth = width;
             global.windowHeight = height;
 
-            global.bouncingBallsDemo = initBouncingBalls;
+            global.demoes.bouncingBallsDemo = initBouncingBalls;
         })();
     }, [width, height]);
 
@@ -30,8 +30,6 @@ export default function TestScreen() {
                         wireframes: true,
                         showBounds: true,
                         showPositions: true,
-                        width: width,
-                        height: height,
                     },
                     touch: {
                         constraint: {

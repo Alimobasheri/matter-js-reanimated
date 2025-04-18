@@ -5,6 +5,7 @@ import {
     useFrameCallback,
     useSharedValue,
 } from 'react-native-reanimated';
+//@ts-ignore
 import Svg from 'react-native-svg';
 import { BodyShape, RenderBody } from './RenderBody';
 
@@ -41,7 +42,7 @@ export const Render: React.FC<RenderProps> = ({
         const bodies = engine.world.bodies;
 
         // Generate SVG elements for each body - this runs in the UI thread
-        svgContent.value = bodies.map((body) => ({
+        svgContent.value = bodies.map((body: Matter.Body) => ({
             id: body.id,
             type: body.circleRadius ? 'circle' : 'polygon',
             position: { ...body.position },

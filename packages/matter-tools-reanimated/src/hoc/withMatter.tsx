@@ -20,6 +20,7 @@ export function withMatter<P extends object>(
                 'worklet';
                 // Only initialize if not already done
                 if (!global.Matter) {
+                    //@ts-ignore
                     initMatter();
                 }
                 runOnJS(setIsInitialized)(true);

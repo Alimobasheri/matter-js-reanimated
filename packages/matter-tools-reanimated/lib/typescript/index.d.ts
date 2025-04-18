@@ -1,9 +1,6 @@
 export { Render } from './components/Render';
-// export { Touch } from './components/Touch';
 export { Demo } from './components/Demo';
-// export { useMatterBody } from './hooks/useMatterBody';
 export { withMatter } from './hoc/withMatter';
-
 export interface MatterToolsOptions {
     render?: {
         width?: number;
@@ -25,8 +22,8 @@ export interface MatterToolsOptions {
         enableRotate?: boolean;
     };
 }
-
 export interface MatterExample {
     name: string;
     init: (engine: any) => void;
 }
+//# sourceMappingURL=index.d.ts.map

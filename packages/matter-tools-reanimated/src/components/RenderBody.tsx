@@ -1,9 +1,10 @@
 import React from 'react';
+//@ts-ignore
 import { Path, Circle, G } from 'react-native-svg';
 import Animated, {
+    AnimatedProps,
     DerivedValue,
     useAnimatedProps,
-    useDerivedValue,
     useFrameCallback,
     useSharedValue,
 } from 'react-native-reanimated';
@@ -69,16 +70,14 @@ export const RenderBody: React.FC<RenderBodyProps> = ({
     const animatedProps = useAnimatedProps(() => {
         return {
             d: pathD.value,
+            fill: options.wireframes ? 'none' : 'black',
+            stroke: options.wireframes ? '#2E3440' : 'none',
+            strokeWidth: 1,
         };
-    });
+    }, [pathD, options.wireframes]) as Partial<AnimatedProps<typeof Path>>;
     return (
         <AnimatedG>
-            <AnimatedPath
-                animatedProps={animatedProps}
-                fill={options.wireframes ? 'none' : 'black'}
-                stroke={options.wireframes ? '#2E3440' : 'none'}
-                strokeWidth={1}
-            />
+            <AnimatedPath animatedProps={animatedProps} />
         </AnimatedG>
     );
 };

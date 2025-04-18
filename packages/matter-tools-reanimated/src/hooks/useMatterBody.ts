@@ -24,7 +24,8 @@ export function useMatterBody(bodyId: string): DerivedValue<MatterBodyState> {
             return defaultState;
         }
 
-        const body = (global as unknown as Global)[bodyId];
+        //@ts-ignore
+        const body: Matter.Body = (global as unknown as Global)[bodyId];
         return {
             position: { ...body.position },
             angle: body.angle,
