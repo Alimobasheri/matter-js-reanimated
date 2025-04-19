@@ -10,6 +10,12 @@ const DEMOS = [
         title: 'Air Friction',
         description: 'Demonstrates air friction effects on falling blocks',
     },
+    {
+        id: 'avalanche',
+        title: 'Avalanche',
+        description:
+            'Simulates an avalanche of small particles cascading down slopes',
+    },
 ];
 
 export default function IndexScreen() {
