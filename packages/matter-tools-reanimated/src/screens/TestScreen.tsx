@@ -8,23 +8,18 @@ export default function TestScreen() {
     const { width, height } = useWindowDimensions();
 
     React.useEffect(() => {
-        // Initialize Matter.js on the UI thread
+        // Make dimensions available to worklets
         runOnUI(() => {
             'worklet';
-            if (!global.Matter) return;
-
-            // Make dimensions available to worklets
             global.windowWidth = width;
             global.windowHeight = height;
-
-            global.demoes.bouncingBallsDemo = initBouncingBalls;
         })();
     }, [width, height]);
 
     return (
         <View style={styles.container}>
             <Demo
-                example="bouncingBallsDemo"
+                exampleWorklet={initBouncingBalls}
                 options={{
                     render: {
                         wireframes: true,

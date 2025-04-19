@@ -16,22 +16,18 @@ function TestScreen() {
     height
   } = (0, _reactNative.useWindowDimensions)();
   _react.default.useEffect(() => {
-    // Initialize Matter.js on the UI thread
+    // Make dimensions available to worklets
     (0, _reactNativeReanimated.runOnUI)(() => {
       'worklet';
 
-      if (!global.Matter) return;
-
-      // Make dimensions available to worklets
       global.windowWidth = width;
       global.windowHeight = height;
-      global.demoes.bouncingBallsDemo = _BouncingBalls.initBouncingBalls;
     })();
   }, [width, height]);
   return /*#__PURE__*/_react.default.createElement(_reactNative.View, {
     style: styles.container
   }, /*#__PURE__*/_react.default.createElement(_Demo.Demo, {
-    example: "bouncingBallsDemo",
+    exampleWorklet: _BouncingBalls.initBouncingBalls,
     options: {
       render: {
         wireframes: true,

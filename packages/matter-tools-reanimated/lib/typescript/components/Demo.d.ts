@@ -1,6 +1,6 @@
 import React from 'react';
 interface DemoProps {
-    example: string;
+    exampleWorklet: (engine: any) => void;
     options?: {
         render?: {
             wireframes?: boolean;

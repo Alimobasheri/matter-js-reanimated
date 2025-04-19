@@ -13,7 +13,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 // import { Touch } from './Touch';
 
 const DemoComponent = ({
-  example,
+  exampleWorklet,
   options = {}
 }) => {
   _react.default.useEffect(() => {
@@ -33,10 +33,8 @@ const DemoComponent = ({
         }
       });
       global.demoEngine = engine;
-      if (example in global) {
-        global.demoes[example]?.(engine);
-      }
-      console.log(`Demo example "${example}" initialized".`);
+      exampleWorklet(engine);
+      console.log('Demo example initialized');
     })();
     return () => {
       (0, _reactNativeReanimated.runOnUI)(() => {
@@ -48,7 +46,7 @@ const DemoComponent = ({
         }
       })();
     };
-  }, [example]);
+  }, [exampleWorklet]);
   (0, _reactNativeReanimated.useFrameCallback)(() => {
     'worklet';
 

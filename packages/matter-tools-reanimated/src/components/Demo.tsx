@@ -6,7 +6,7 @@ import { Render } from './Render';
 // import { Touch } from './Touch';
 
 interface DemoProps {
-    example: string;
+    exampleWorklet: (engine: any) => void;
     options?: {
         render?: {
             wireframes?: boolean;
@@ -24,7 +24,10 @@ interface DemoProps {
     };
 }
 
-const DemoComponent: React.FC<DemoProps> = ({ example, options = {} }) => {
+const DemoComponent: React.FC<DemoProps> = ({
+    exampleWorklet,
+    options = {},
+}) => {
     React.useEffect(() => {
         runOnUI(() => {
             'worklet';
@@ -42,11 +45,9 @@ const DemoComponent: React.FC<DemoProps> = ({ example, options = {} }) => {
             });
 
             global.demoEngine = engine;
+            exampleWorklet(engine);
 
-            if (example in global) {
-                global.demoes[example]?.(engine);
-            }
-            console.log(`Demo example "${example}" initialized".`);
+            console.log('Demo example initialized');
         })();
 
         return () => {
@@ -62,7 +63,7 @@ const DemoComponent: React.FC<DemoProps> = ({ example, options = {} }) => {
                 }
             })();
         };
-    }, [example]);
+    }, [exampleWorklet]);
 
     useFrameCallback(() => {
         'worklet';
