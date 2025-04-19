@@ -17,3 +17,5 @@ test/node/diffs
 test/node/refs
 __snapshots__
 __compare__
+
+.DS_Store
