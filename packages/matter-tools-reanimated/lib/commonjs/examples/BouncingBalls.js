@@ -24,7 +24,7 @@ const initBouncingBalls = engine => {
     isStatic: true
   });
 
-  // Add 200 random balls
+  // Add 100 random balls
   const balls = Array(100).fill(0).map((_, i) => {
     const radius = 15 + Math.random() * 15;
     return global.Matter.Bodies.circle(100 + Math.random() * (width - 200),

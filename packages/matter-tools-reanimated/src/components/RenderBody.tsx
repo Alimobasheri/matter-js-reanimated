@@ -46,10 +46,8 @@ export const RenderBody: React.FC<RenderBodyProps> = ({
     useFrameCallback(() => {
         'worklet';
         let completePath = '';
-
         for (let i = 0; i < bodies.value.length; i++) {
             const body = bodies.value[i];
-
             if (body.type === 'circle' && body.circleRadius !== undefined) {
                 const x = body.position.x;
                 const y = body.position.y;

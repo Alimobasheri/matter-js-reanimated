@@ -3,6 +3,7 @@ import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { runOnUI } from 'react-native-reanimated';
 import { Demo } from '../components/Demo';
 import { initBouncingBalls } from '../examples/BouncingBalls';
+import { initAvalanche } from '../examples/avalanche';
 
 export default function TestScreen() {
     const { width, height } = useWindowDimensions();
@@ -19,7 +20,7 @@ export default function TestScreen() {
     return (
         <View style={styles.container}>
             <Demo
-                exampleWorklet={initBouncingBalls}
+                exampleWorklet={initAvalanche}
                 options={{
                     render: {
                         wireframes: true,

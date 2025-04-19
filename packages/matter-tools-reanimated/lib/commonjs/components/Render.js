@@ -30,7 +30,8 @@ const Render = ({
 
     if (!global.Matter || !(engineId in global)) return [];
     const engine = global[engineId];
-    const bodies = engine.world.bodies;
+    // Use Composite.allBodies to get all bodies including those in nested composites
+    const bodies = global.Matter.Composite.allBodies(engine.world);
 
     // Generate SVG elements for each body - this runs in the UI thread
     svgContent.value = bodies.map(body => ({
