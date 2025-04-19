@@ -4,12 +4,14 @@ import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { initAirFriction } from '@/examples/worklets/airFriction';
 import { initAvalanche } from '@/examples/worklets/avalanche';
+import { initBallPool } from '@/examples/worklets/ballPool';
 import { useEffect } from 'react';
 import { runOnUI } from 'react-native-reanimated';
 
 const examples = {
     'air-friction': initAirFriction,
     avalanche: initAvalanche,
+    'ball-pool': initBallPool,
 };
 
 export default function DemoScreen() {
@@ -20,12 +22,12 @@ export default function DemoScreen() {
     useEffect(() => {
         runOnUI(() => {
             'worklet';
-            global.windowWidth = width;
-            global.windowHeight = height;
+            global.windowWidth = width - insets.left - insets.right;
+            global.windowHeight = height - insets.top - insets.bottom;
         })();
-    }, [width, height]);
+    }, [width, height, insets]);
     return (
-        <View style={[styles.container, { paddingTop: insets.top }]}>
+        <View style={[styles.container, { paddingBottom: insets.bottom }]}>
             <Demo
                 exampleWorklet={exampleWorklet}
                 options={{

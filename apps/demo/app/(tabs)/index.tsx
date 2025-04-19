@@ -16,6 +16,11 @@ const DEMOS = [
         description:
             'Simulates an avalanche of small particles cascading down slopes',
     },
+    {
+        id: 'ball-pool',
+        title: 'Ball Pool',
+        description: 'A pool of bouncing circles with polygonal obstacles',
+    },
 ];
 
 export default function IndexScreen() {
@@ -23,11 +28,7 @@ export default function IndexScreen() {
     return (
         <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
             {DEMOS.map((demo) => (
-                <Link
-                    key={demo.id}
-                    href={`/(tabs)/demo?example=${demo.id}`}
-                    asChild
-                >
+                <Link key={demo.id} href={`/demo?example=${demo.id}`} asChild>
                     <TouchableOpacity>
                         <View style={styles.demoItem}>
                             <ThemedText style={styles.title}>
