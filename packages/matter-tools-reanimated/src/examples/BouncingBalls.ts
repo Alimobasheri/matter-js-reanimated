@@ -31,7 +31,7 @@ export const initBouncingBalls = (engine: any) => {
         }
     );
 
-    // Add 200 random balls
+    // Add 100 random balls
     const balls = Array(100)
         .fill(0)
         .map((_, i) => {
