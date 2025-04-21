@@ -25,7 +25,6 @@ const initAvalanche = engine => {
       density: 0.001
     });
   });
-  console.log('🚀 ~ initAvalanche ~ stack:', stack.type);
   World.add(engine.world, stack);
 
   // Add inclined platforms

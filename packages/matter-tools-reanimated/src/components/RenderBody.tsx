@@ -23,7 +23,7 @@ export interface BodyShape {
 }
 
 interface RenderBodyProps {
-    bodies: DerivedValue<BodyShape[]>;
+    bodies: DerivedValue<BodyShape[] | undefined>;
     options?: {
         wireframes?: boolean;
         showBounds?: boolean;
@@ -45,9 +45,10 @@ export const RenderBody: React.FC<RenderBodyProps> = ({
 
     useFrameCallback(() => {
         'worklet';
+        if (!Array.isArray(global.svgContent)) return;
         let completePath = '';
-        for (let i = 0; i < bodies.value.length; i++) {
-            const body = bodies.value[i];
+        for (let i = 0; i < global.svgContent.length; i++) {
+            const body = global.svgContent[i];
             if (body.type === 'circle' && body.circleRadius !== undefined) {
                 const x = body.position.x;
                 const y = body.position.y;

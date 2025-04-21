@@ -29,7 +29,6 @@ export const initAvalanche = (engine: any) => {
             });
         }
     );
-    console.log('🚀 ~ initAvalanche ~ stack:', stack.type);
 
     World.add(engine.world, stack);
 

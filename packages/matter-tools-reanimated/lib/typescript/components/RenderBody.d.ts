@@ -25,7 +25,7 @@ export interface BodyShape {
     circleRadius?: number;
 }
 interface RenderBodyProps {
-    bodies: DerivedValue<BodyShape[]>;
+    bodies: DerivedValue<BodyShape[] | undefined>;
     options?: {
         wireframes?: boolean;
         showBounds?: boolean;

@@ -1,4 +1,5 @@
 import { Matter } from 'matter-js';
+import { BodyShape } from '../components/RenderBody';
 declare global {
     // UI thread engine instance
     var demoEngine: any;
@@ -8,6 +9,8 @@ declare global {
     // Window dimensions available in worklets
     var windowWidth: number;
     var windowHeight: number;
+
+    var svgContent: BodyShape[];
 
     // Dynamic body instances
     interface MatterBody {

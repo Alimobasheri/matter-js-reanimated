@@ -1,12 +1,17 @@
 import { Demo } from 'matter-tools-reanimated';
-import { useLocalSearchParams } from 'expo-router';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { useLocalSearchParams, router } from 'expo-router';
+import {
+    StyleSheet,
+    useWindowDimensions,
+    View,
+    BackHandler,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { initAirFriction } from '@/examples/worklets/airFriction';
 import { initAvalanche } from '@/examples/worklets/avalanche';
 import { initBallPool } from '@/examples/worklets/ballPool';
-import { useEffect } from 'react';
-import { runOnUI } from 'react-native-reanimated';
+import { useEffect, useCallback } from 'react';
+import { runOnUI, runOnJS } from 'react-native-reanimated';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -19,6 +24,7 @@ export default function DemoScreen() {
     const insets = useSafeAreaInsets();
     const exampleWorklet = examples[example as keyof typeof examples];
     const { width, height } = useWindowDimensions();
+
     useEffect(() => {
         runOnUI(() => {
             'worklet';
@@ -26,6 +32,7 @@ export default function DemoScreen() {
             global.windowHeight = height - insets.top - insets.bottom;
         })();
     }, [width, height, insets]);
+
     return (
         <View style={[styles.container, { paddingBottom: insets.bottom }]}>
             <Demo
