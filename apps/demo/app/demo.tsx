@@ -15,6 +15,7 @@ import { useEffect, useCallback } from 'react';
 import { runOnUI, runOnJS } from 'react-native-reanimated';
 import { initCar } from '@/examples/worklets/car';
 import { useHeaderHeight } from '@react-navigation/elements';
+import { initCatapult } from '@/examples/worklets/catapult';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -22,6 +23,7 @@ const examples = {
     'ball-pool': initBallPool,
     bridge: initBridge,
     car: initCar,
+    catapult: initCatapult,
 };
 
 export default function DemoScreen() {

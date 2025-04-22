@@ -31,6 +31,11 @@ const DEMOS = [
         title: 'Car',
         description: 'A composite car with wheels and constraints.',
     },
+    {
+        id: 'catapult',
+        title: 'Catapult',
+        description: 'A catapult with blocks and a ball',
+    },
 ];
 
 export default function IndexScreen() {
