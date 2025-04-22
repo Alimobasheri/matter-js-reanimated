@@ -36,6 +36,11 @@ const DEMOS = [
         title: 'Catapult',
         description: 'A catapult with blocks and a ball',
     },
+    {
+        id: 'chains',
+        title: 'Chains',
+        description: 'Demonstrates different types of chains and constraints',
+    },
 ];
 
 export default function IndexScreen() {

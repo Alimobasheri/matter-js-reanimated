@@ -16,6 +16,7 @@ import { runOnUI, runOnJS } from 'react-native-reanimated';
 import { initCar } from '@/examples/worklets/car';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { initCatapult } from '@/examples/worklets/catapult';
+import { initChains } from '@/examples/worklets/chains';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -24,6 +25,7 @@ const examples = {
     bridge: initBridge,
     car: initCar,
     catapult: initCatapult,
+    chains: initChains,
 };
 
 export default function DemoScreen() {
