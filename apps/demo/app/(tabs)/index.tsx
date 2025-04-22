@@ -21,6 +21,11 @@ const DEMOS = [
         title: 'Ball Pool',
         description: 'A pool of bouncing circles with polygonal obstacles',
     },
+    {
+        id: 'bridge',
+        title: 'Bridge',
+        description: 'A swaying bridge construction with falling blocks',
+    },
 ];
 
 export default function IndexScreen() {

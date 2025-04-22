@@ -10,6 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { initAirFriction } from '@/examples/worklets/airFriction';
 import { initAvalanche } from '@/examples/worklets/avalanche';
 import { initBallPool } from '@/examples/worklets/ballPool';
+import { initBridge } from '@/examples/worklets/bridge';
 import { useEffect, useCallback } from 'react';
 import { runOnUI, runOnJS } from 'react-native-reanimated';
 
@@ -17,6 +18,7 @@ const examples = {
     'air-friction': initAirFriction,
     avalanche: initAvalanche,
     'ball-pool': initBallPool,
+    bridge: initBridge,
 };
 
 export default function DemoScreen() {
