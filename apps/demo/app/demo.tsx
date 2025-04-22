@@ -19,6 +19,8 @@ import { initCatapult } from '@/examples/worklets/catapult';
 import { initChains } from '@/examples/worklets/chains';
 import { initCircleStack } from '@/examples/worklets/circleStack';
 import { initCloth } from '@/examples/worklets/cloth';
+import { initCollisionFiltering } from '@/examples/worklets/collisionFiltering';
+import { initCompositeManipulation } from '@/examples/worklets/compositeManipulation';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -30,6 +32,8 @@ const examples = {
     chains: initChains,
     circleStack: initCircleStack,
     cloth: initCloth,
+    'collision-filtering': initCollisionFiltering,
+    'composite-manipulation': initCompositeManipulation,
 };
 
 export default function DemoScreen() {

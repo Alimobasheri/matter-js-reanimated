@@ -22,8 +22,8 @@ function createCloth(
             friction: 0.00001,
             collisionFilter: { group },
             render: { visible: false },
-            //@ts-ignore
         },
+        //@ts-ignore
         particleOptions
     );
 

@@ -51,6 +51,16 @@ const DEMOS = [
         title: 'Cloth',
         description: 'A hanging cloth simulation with physics',
     },
+    {
+        id: 'collision-filtering',
+        title: 'Collision Filtering',
+        description: 'Demonstrates collision filtering using category bitmasks',
+    },
+    {
+        id: 'composite-manipulation',
+        title: 'Composite Manipulation',
+        description: 'Demonstrates composite translation, rotation and scaling',
+    },
 ];
 
 export default function IndexScreen() {
