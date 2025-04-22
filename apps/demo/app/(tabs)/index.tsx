@@ -46,6 +46,11 @@ const DEMOS = [
         title: 'Circle Stack',
         description: 'A stack of circles that interact with each other',
     },
+    {
+        id: 'cloth',
+        title: 'Cloth',
+        description: 'A hanging cloth simulation with physics',
+    },
 ];
 
 export default function IndexScreen() {

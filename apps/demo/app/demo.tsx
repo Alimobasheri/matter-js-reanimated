@@ -18,6 +18,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { initCatapult } from '@/examples/worklets/catapult';
 import { initChains } from '@/examples/worklets/chains';
 import { initCircleStack } from '@/examples/worklets/circleStack';
+import { initCloth } from '@/examples/worklets/cloth';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -28,6 +29,7 @@ const examples = {
     catapult: initCatapult,
     chains: initChains,
     circleStack: initCircleStack,
+    cloth: initCloth,
 };
 
 export default function DemoScreen() {
