@@ -10,6 +10,10 @@ export const initAvalanche = (engine: any) => {
     const width = global.windowWidth || 800;
     const height = global.windowHeight || 600;
 
+    const scaleX = width / 800;
+    const scaleY = height / 600;
+    const scale = Math.min(scaleX, scaleY);
+
     const { Bodies, Composites, World } = global.Matter;
 
     // Add bodies
@@ -22,11 +26,16 @@ export const initAvalanche = (engine: any) => {
         0,
         0,
         (x: number, y: number) => {
-            return Bodies.circle(x, y, global.Matter.Common.random(10, 20), {
-                friction: 0.00001,
-                restitution: 0.5,
-                density: 0.001,
-            });
+            return Bodies.circle(
+                x,
+                y,
+                global.Matter.Common.random(10, 20) * scale,
+                {
+                    friction: 0.00001,
+                    restitution: 0.5,
+                    density: 0.001,
+                }
+            );
         }
     );
 
@@ -34,15 +43,15 @@ export const initAvalanche = (engine: any) => {
 
     // Add inclined platforms
     World.add(engine.world, [
-        Bodies.rectangle(width * 0.25, height * 0.25, width * 0.875, 20, {
+        Bodies.rectangle(200 * scale, 150 * scale, 700 * scale, 20 * scale, {
             isStatic: true,
             angle: Math.PI * 0.06,
         }),
-        Bodies.rectangle(width * 0.625, height * 0.58, width * 0.875, 20, {
+        Bodies.rectangle(500 * scale, 350 * scale, 700 * scale, 20 * scale, {
             isStatic: true,
             angle: -Math.PI * 0.06,
         }),
-        Bodies.rectangle(width * 0.425, height * 0.97, width * 0.875, 20, {
+        Bodies.rectangle(340 * scale, 580 * scale, 700 * scale, 20 * scale, {
             isStatic: true,
             angle: Math.PI * 0.04,
         }),

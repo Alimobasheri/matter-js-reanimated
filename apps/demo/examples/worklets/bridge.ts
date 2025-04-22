@@ -10,6 +10,10 @@ export const initBridge = (engine: any) => {
     const width = global.windowWidth || 800;
     const height = global.windowHeight || 600;
 
+    const scaleX = width / 800;
+    const scaleY = height / 600;
+    const scale = Math.min(scaleX, scaleY);
+
     const { Bodies, Composites, Composite, Body, Constraint, World } =
         global.Matter;
 
@@ -18,14 +22,14 @@ export const initBridge = (engine: any) => {
 
     // Create bridge segments
     const bridge = Composites.stack(
-        width * 0.2,
-        height * 0.5,
+        160 * scale,
+        290 * scale,
         15,
         1,
         0,
         0,
         (x: number, y: number) => {
-            return Bodies.rectangle(x - 20, y, 53, 20, {
+            return Bodies.rectangle(x - 20 * scale, y, 53 * scale, 20 * scale, {
                 collisionFilter: {
                     group,
                 },
@@ -37,21 +41,21 @@ export const initBridge = (engine: any) => {
     );
 
     // Chain bridge segments together
-    Composites.chain(bridge, 0.3, 0, -0.3, 0, {
+    Composites.chain(bridge, 0.3 * scale, 0, -0.3 * scale, 0, {
         stiffness: 0.99,
         length: 0.0001,
     });
 
     // Create a stack of blocks to fall onto the bridge
     const stack = Composites.stack(
-        width * 0.3,
-        height * 0.1,
+        250 * scale,
+        50 * scale,
         6,
         3,
         0,
         0,
         (x: number, y: number) => {
-            return Bodies.rectangle(x, y, 50, 50);
+            return Bodies.rectangle(x, y, 50 * scale, 50 * scale);
         }
     );
 
@@ -60,40 +64,25 @@ export const initBridge = (engine: any) => {
         bridge,
         stack,
         // Left wall
-        Bodies.rectangle(
-            width * 0.05,
-            height * 0.8,
-            width * 0.25,
-            height * 0.6,
-            {
-                isStatic: true,
-                chamfer: { radius: 20 },
-            }
-        ),
-        // Right wall
-        Bodies.rectangle(
-            width * 0.95,
-            height * 0.8,
-            width * 0.25,
-            height * 0.6,
-            {
-                isStatic: true,
-                chamfer: { radius: 20 },
-            }
-        ),
-        // Left bridge support
+        Bodies.rectangle(30 * scale, 490 * scale, 220 * scale, 380 * scale, {
+            isStatic: true,
+            chamfer: { radius: 20 * scale },
+        }),
+        Bodies.rectangle(770 * scale, 490 * scale, 220 * scale, 380 * scale, {
+            isStatic: true,
+            chamfer: { radius: 20 * scale },
+        }),
         Constraint.create({
-            pointA: { x: width * 0.2, y: height * 0.5 },
+            pointA: { x: 140 * scale, y: 300 * scale },
             bodyB: bridge.bodies[0],
-            pointB: { x: -25, y: 0 },
+            pointB: { x: -25 * scale, y: 0 },
             length: 2,
             stiffness: 0.9,
         }),
-        // Right bridge support
         Constraint.create({
-            pointA: { x: width * 0.8, y: height * 0.5 },
+            pointA: { x: 660 * scale, y: 300 * scale },
             bodyB: bridge.bodies[bridge.bodies.length - 1],
-            pointB: { x: 25, y: 0 },
+            pointB: { x: 25 * scale, y: 0 },
             length: 2,
             stiffness: 0.9,
         }),

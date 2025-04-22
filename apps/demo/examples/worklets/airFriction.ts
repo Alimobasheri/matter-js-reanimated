@@ -5,14 +5,24 @@ export const initAirFriction = (engine: any) => {
     const width = global.windowWidth || 800;
     const height = global.windowHeight || 600;
 
+    const scaleX = width / 800;
+    const scaleY = height / 600;
+    const scale = Math.min(scaleX, scaleY);
+
     const { Bodies, World } = global.Matter;
 
     // add bodies
     World.add(engine.world, [
         // falling blocks with different air friction
-        Bodies.rectangle(200, 100, 60, 60, { frictionAir: 0.001 }),
-        Bodies.rectangle(400, 100, 60, 60, { frictionAir: 0.05 }),
-        Bodies.rectangle(600, 100, 60, 60, { frictionAir: 0.1 }),
+        Bodies.rectangle(200 * scale, 100 * scale, 60 * scale, 60 * scale, {
+            frictionAir: 0.001,
+        }),
+        Bodies.rectangle(400 * scale, 100 * scale, 60 * scale, 60 * scale, {
+            frictionAir: 0.05,
+        }),
+        Bodies.rectangle(600 * scale, 100 * scale, 60 * scale, 60 * scale, {
+            frictionAir: 0.1,
+        }),
 
         // walls
         Bodies.rectangle(width / 2, 0, width, 50, { isStatic: true }),

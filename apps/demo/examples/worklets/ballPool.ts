@@ -10,6 +10,10 @@ export const initBallPool = (engine: any) => {
     const width = global.windowWidth || 800;
     const height = global.windowHeight || 600;
 
+    const scaleX = width / 800;
+    const scaleY = height / 600;
+    const scale = Math.min(scaleX, scaleY);
+
     const { Bodies, Composites, World } = global.Matter;
 
     // Add bottom wall and side walls to contain the balls
@@ -40,7 +44,7 @@ export const initBallPool = (engine: any) => {
             return Bodies.circle(
                 x,
                 y,
-                global.Matter.Common.random(15, 25), // slightly smaller balls
+                global.Matter.Common.random(15, 30) * scale, // slightly smaller balls
                 {
                     restitution: 0.6,
                     friction: 0.1,
@@ -53,9 +57,9 @@ export const initBallPool = (engine: any) => {
     // Add stack and some polygons positioned relative to screen size
     World.add(engine.world, [
         stack,
-        Bodies.polygon(width * 0.25, height * 0.7, 3, 50), // triangle
-        Bodies.polygon(width * 0.5, height * 0.7, 5, 50), // pentagon
-        Bodies.rectangle(width * 0.75, height * 0.7, 70, 70), // square
+        Bodies.polygon(200 * scale, 460 * scale, 3, 60 * scale),
+        Bodies.polygon(400 * scale, 460 * scale, 5, 60 * scale),
+        Bodies.rectangle(600 * scale, 460 * scale, 80, 80 * scale),
     ]);
 
     // Set gravity
