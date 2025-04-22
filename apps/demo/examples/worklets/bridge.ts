@@ -103,8 +103,4 @@ export const initBridge = (engine: any) => {
     engine.gravity.y = 1;
 
     const bodies = global.Matter.Composite.allBodies(engine.world);
-    console.log(
-        '🚀 ~ initBridge ~ bodies:',
-        bodies.map((b) => b.collisionFilter)
-    );
 };
