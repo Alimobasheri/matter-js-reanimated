@@ -1416,7 +1416,7 @@ var init = function () {
             _original: null,
         };
 
-        var body = { ...defaults, ...options };
+        var body = global.Matter.Common.extend(defaults, options);
 
         _initProperties(body, options);
 
@@ -4142,7 +4142,7 @@ var init = function () {
             delete options.chamfer;
         }
 
-        return global.Matter.Body.create({ ...rectangle, ...options });
+        return global.Matter.Body.create(Object.assign(rectangle, options));
     };
 
     /**
