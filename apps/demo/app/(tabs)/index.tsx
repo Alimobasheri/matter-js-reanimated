@@ -41,6 +41,11 @@ const DEMOS = [
         title: 'Chains',
         description: 'Demonstrates different types of chains and constraints',
     },
+    {
+        id: 'circleStack',
+        title: 'Circle Stack',
+        description: 'A stack of circles that interact with each other',
+    },
 ];
 
 export default function IndexScreen() {

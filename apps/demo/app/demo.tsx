@@ -17,6 +17,7 @@ import { initCar } from '@/examples/worklets/car';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { initCatapult } from '@/examples/worklets/catapult';
 import { initChains } from '@/examples/worklets/chains';
+import { initCircleStack } from '@/examples/worklets/circleStack';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -26,6 +27,7 @@ const examples = {
     car: initCar,
     catapult: initCatapult,
     chains: initChains,
+    circleStack: initCircleStack,
 };
 
 export default function DemoScreen() {
