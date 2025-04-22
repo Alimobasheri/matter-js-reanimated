@@ -13,12 +13,14 @@ import { initBallPool } from '@/examples/worklets/ballPool';
 import { initBridge } from '@/examples/worklets/bridge';
 import { useEffect, useCallback } from 'react';
 import { runOnUI, runOnJS } from 'react-native-reanimated';
+import { initCar } from '@/examples/worklets/car';
 
 const examples = {
     'air-friction': initAirFriction,
     avalanche: initAvalanche,
     'ball-pool': initBallPool,
     bridge: initBridge,
+    car: initCar,
 };
 
 export default function DemoScreen() {

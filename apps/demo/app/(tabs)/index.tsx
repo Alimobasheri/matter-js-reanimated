@@ -1,5 +1,5 @@
 import { Link } from 'expo-router';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -26,26 +26,42 @@ const DEMOS = [
         title: 'Bridge',
         description: 'A swaying bridge construction with falling blocks',
     },
+    {
+        id: 'car',
+        title: 'Car',
+        description: 'A composite car with wheels and constraints.',
+    },
 ];
 
 export default function IndexScreen() {
     const insets = useSafeAreaInsets();
     return (
         <ThemedView style={[styles.container, { paddingTop: insets.top }]}>
-            {DEMOS.map((demo) => (
-                <Link key={demo.id} href={`/demo?example=${demo.id}`} asChild>
-                    <TouchableOpacity>
-                        <View style={styles.demoItem}>
-                            <ThemedText style={styles.title}>
-                                {demo.title}
-                            </ThemedText>
-                            <ThemedText style={styles.description}>
-                                {demo.description}
-                            </ThemedText>
-                        </View>
-                    </TouchableOpacity>
-                </Link>
-            ))}
+            <FlatList<(typeof DEMOS)[0]>
+                renderItem={({ item: demo }) => (
+                    <Link
+                        key={demo.id}
+                        href={`/demo?example=${demo.id}`}
+                        asChild
+                    >
+                        <TouchableOpacity>
+                            <View style={styles.demoItem}>
+                                <ThemedText style={styles.title}>
+                                    {demo.title}
+                                </ThemedText>
+                                <ThemedText style={styles.description}>
+                                    {demo.description}
+                                </ThemedText>
+                            </View>
+                        </TouchableOpacity>
+                    </Link>
+                )}
+                data={DEMOS}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={{ paddingBottom: insets.bottom }}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+            />
         </ThemedView>
     );
 }
