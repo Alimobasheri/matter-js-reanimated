@@ -61,6 +61,11 @@ const DEMOS = [
         title: 'Composite Manipulation',
         description: 'Demonstrates composite translation, rotation and scaling',
     },
+    {
+        id: 'compound-bodies',
+        title: 'Compound Bodies',
+        description: 'Demonstrates compound bodies made of multiple parts',
+    },
 ];
 
 export default function IndexScreen() {
