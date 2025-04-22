@@ -14,6 +14,7 @@ import { initBridge } from '@/examples/worklets/bridge';
 import { useEffect, useCallback } from 'react';
 import { runOnUI, runOnJS } from 'react-native-reanimated';
 import { initCar } from '@/examples/worklets/car';
+import { useHeaderHeight } from '@react-navigation/elements';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -27,15 +28,17 @@ export default function DemoScreen() {
     const { example } = useLocalSearchParams();
     const insets = useSafeAreaInsets();
     const exampleWorklet = examples[example as keyof typeof examples];
+    const headerHeight = useHeaderHeight();
     const { width, height } = useWindowDimensions();
 
     useEffect(() => {
         runOnUI(() => {
             'worklet';
             global.windowWidth = width - insets.left - insets.right;
-            global.windowHeight = height - insets.top - insets.bottom;
+            global.windowHeight =
+                height - insets.top - insets.bottom - headerHeight;
         })();
-    }, [width, height, insets]);
+    }, [width, height, insets, headerHeight]);
 
     return (
         <View style={[styles.container, { paddingBottom: insets.bottom }]}>
