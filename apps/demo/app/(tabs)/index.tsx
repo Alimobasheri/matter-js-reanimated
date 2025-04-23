@@ -76,6 +76,11 @@ const DEMOS = [
         title: 'Constraints',
         description: 'Demonstrates various types of constraints between bodies',
     },
+    {
+        id: 'double-pendulum',
+        title: 'Double Pendulum',
+        description: 'A chaotic double pendulum system',
+    },
 ];
 
 export default function IndexScreen() {

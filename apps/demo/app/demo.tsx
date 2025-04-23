@@ -24,6 +24,7 @@ import { initCompositeManipulation } from '@/examples/worklets/compositeManipula
 import { initCompoundBodies } from '@/examples/worklets/compound';
 import { initCompoundStack } from '@/examples/worklets/compoundStack';
 import { initConstraints } from '@/examples/worklets/constraints';
+import { initDoublePendulum } from '@/examples/worklets/doublePendulum';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -40,6 +41,7 @@ const examples = {
     'compound-bodies': initCompoundBodies,
     'compound-stack': initCompoundStack,
     constraints: initConstraints,
+    'double-pendulum': initDoublePendulum,
 };
 
 export default function DemoScreen() {
