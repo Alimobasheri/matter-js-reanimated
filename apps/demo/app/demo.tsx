@@ -28,6 +28,7 @@ import { initDoublePendulum } from '@/examples/worklets/doublePendulum';
 import { initEvents } from '@/examples/worklets/events';
 import { initFriction } from '@/examples/worklets/friction';
 import { initGravity } from '@/examples/worklets/gravity';
+import { initGyro } from '@/examples/worklets/gyro';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -48,6 +49,7 @@ const examples = {
     events: initEvents,
     friction: initFriction,
     gravity: initGravity,
+    gyro: initGyro,
 };
 
 export default function DemoScreen() {

@@ -96,6 +96,11 @@ const DEMOS = [
         title: 'Gravity',
         description: 'Objects fall upwards with reversed gravity',
     },
+    {
+        id: 'gyro',
+        title: 'Gyroscope',
+        description: 'Control gravity with device orientation',
+    },
 ];
 
 export default function IndexScreen() {
