@@ -32,6 +32,7 @@ import { initGyro } from '@/examples/worklets/gyro';
 import { initManipulation } from '@/examples/worklets/manipulation';
 import { initMixedShapes } from '@/examples/worklets/mixed';
 import { initNewtonsCradle } from '@/examples/worklets/newtonsCradle';
+import { initPyramid } from '@/examples/worklets/pyramid';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -56,6 +57,7 @@ const examples = {
     manipulation: initManipulation,
     'mixed-shapes': initMixedShapes,
     newtonsCradle: initNewtonsCradle,
+    pyramid: initPyramid,
 };
 
 export default function DemoScreen() {

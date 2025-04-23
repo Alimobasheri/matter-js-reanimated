@@ -116,6 +116,12 @@ const DEMOS = [
         title: "Newton's Cradle",
         description: 'A classic physics demonstration with swinging balls',
     },
+    {
+        id: 'pyramid',
+        title: 'Pyramid',
+        description:
+            'A stack of rectangular bodies arranged in a pyramid shape',
+    },
 ];
 
 export default function IndexScreen() {
