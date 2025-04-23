@@ -36,6 +36,8 @@ import { initPyramid } from '@/examples/worklets/pyramid';
 import { initRagdoll } from '@/examples/worklets/ragdoll';
 import { initRestitution } from '@/examples/worklets/restitution';
 import { initRoundedCorners } from '@/examples/worklets/rounded';
+import { initSoftBody } from '@/examples/worklets/softBody';
+import { initStaticFriction } from '@/examples/worklets/staticFriction';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -64,6 +66,8 @@ const examples = {
     ragdoll: initRagdoll,
     restitution: initRestitution,
     'rounded-corners': initRoundedCorners,
+    'soft-body': initSoftBody,
+    'static-friction': initStaticFriction,
 };
 
 export default function DemoScreen() {

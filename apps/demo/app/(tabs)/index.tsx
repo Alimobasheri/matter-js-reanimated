@@ -137,6 +137,17 @@ const DEMOS = [
         title: 'Rounded Corners',
         description: 'Demonstrates different chamfering options for bodies',
     },
+    {
+        id: 'soft-body',
+        title: 'Soft Body',
+        description: 'Interactive soft body physics simulation',
+    },
+    {
+        id: 'static-friction',
+        title: 'Static Friction',
+        description:
+            'Demonstrates infinite static friction between stacked bodies',
+    },
 ];
 
 export default function IndexScreen() {
