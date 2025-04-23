@@ -111,6 +111,11 @@ const DEMOS = [
         title: 'Mixed Shapes',
         description: 'A mix of different polygon shapes with random chamfering',
     },
+    {
+        id: 'newtonsCradle',
+        title: "Newton's Cradle",
+        description: 'A classic physics demonstration with swinging balls',
+    },
 ];
 
 export default function IndexScreen() {
