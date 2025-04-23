@@ -66,6 +66,11 @@ const DEMOS = [
         title: 'Compound Bodies',
         description: 'Demonstrates compound bodies made of multiple parts',
     },
+    {
+        id: 'compound-stack',
+        title: 'Compound Stack',
+        description: 'A stack of compound bodies with cross shapes',
+    },
 ];
 
 export default function IndexScreen() {
