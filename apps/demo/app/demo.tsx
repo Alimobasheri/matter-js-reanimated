@@ -38,6 +38,10 @@ import { initRestitution } from '@/examples/worklets/restitution';
 import { initRoundedCorners } from '@/examples/worklets/rounded';
 import { initSoftBody } from '@/examples/worklets/softBody';
 import { initStaticFriction } from '@/examples/worklets/staticFriction';
+import { initStress } from '@/examples/worklets/stress';
+import { initStress2 } from '@/examples/worklets/stress2';
+import { initStress3 } from '@/examples/worklets/stress3';
+import { initStress4 } from '@/examples/worklets/stress4';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -68,6 +72,10 @@ const examples = {
     'rounded-corners': initRoundedCorners,
     'soft-body': initSoftBody,
     'static-friction': initStaticFriction,
+    stress: initStress,
+    stress2: initStress2,
+    stress3: initStress3,
+    stress4: initStress4,
 };
 
 export default function DemoScreen() {

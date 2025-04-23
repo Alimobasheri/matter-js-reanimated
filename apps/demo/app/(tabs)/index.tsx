@@ -148,6 +148,27 @@ const DEMOS = [
         description:
             'Demonstrates infinite static friction between stacked bodies',
     },
+    {
+        id: 'stress',
+        title: 'Stress Test',
+        description: 'Tests engine performance with many bodies',
+    },
+    {
+        id: 'stress2',
+        title: 'Stress Test 2',
+        description: 'More intensive stress test with smaller bodies',
+    },
+    {
+        id: 'stress3',
+        title: 'Stress Test 3',
+        description: 'Randomized shapes stress test',
+    },
+    {
+        id: 'stress4',
+        title: 'Stress Test 4',
+        description:
+            'Advanced stress test with multiple stacks and gravity effects',
+    },
 ];
 
 export default function IndexScreen() {
