@@ -27,6 +27,7 @@ import { initConstraints } from '@/examples/worklets/constraints';
 import { initDoublePendulum } from '@/examples/worklets/doublePendulum';
 import { initEvents } from '@/examples/worklets/events';
 import { initFriction } from '@/examples/worklets/friction';
+import { initGravity } from '@/examples/worklets/gravity';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -46,6 +47,7 @@ const examples = {
     'double-pendulum': initDoublePendulum,
     events: initEvents,
     friction: initFriction,
+    gravity: initGravity,
 };
 
 export default function DemoScreen() {

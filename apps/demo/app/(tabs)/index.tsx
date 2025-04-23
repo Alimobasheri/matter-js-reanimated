@@ -91,6 +91,11 @@ const DEMOS = [
         title: 'Friction',
         description: 'Demonstrates different friction coefficients',
     },
+    {
+        id: 'gravity',
+        title: 'Gravity',
+        description: 'Objects fall upwards with reversed gravity',
+    },
 ];
 
 export default function IndexScreen() {
