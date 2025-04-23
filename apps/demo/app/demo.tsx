@@ -33,6 +33,7 @@ import { initManipulation } from '@/examples/worklets/manipulation';
 import { initMixedShapes } from '@/examples/worklets/mixed';
 import { initNewtonsCradle } from '@/examples/worklets/newtonsCradle';
 import { initPyramid } from '@/examples/worklets/pyramid';
+import { initRagdoll } from '@/examples/worklets/ragdoll';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -58,6 +59,7 @@ const examples = {
     'mixed-shapes': initMixedShapes,
     newtonsCradle: initNewtonsCradle,
     pyramid: initPyramid,
+    ragdoll: initRagdoll,
 };
 
 export default function DemoScreen() {

@@ -122,6 +122,11 @@ const DEMOS = [
         description:
             'A stack of rectangular bodies arranged in a pyramid shape',
     },
+    {
+        id: 'ragdoll',
+        title: 'Ragdoll',
+        description: 'A physics-based ragdoll simulation',
+    },
 ];
 
 export default function IndexScreen() {
