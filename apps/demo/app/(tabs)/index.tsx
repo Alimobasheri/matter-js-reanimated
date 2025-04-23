@@ -106,6 +106,11 @@ const DEMOS = [
         title: 'Manipulation',
         description: 'Demonstrates various body manipulation techniques',
     },
+    {
+        id: 'mixed-shapes',
+        title: 'Mixed Shapes',
+        description: 'A mix of different polygon shapes with random chamfering',
+    },
 ];
 
 export default function IndexScreen() {
