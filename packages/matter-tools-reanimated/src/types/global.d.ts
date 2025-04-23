@@ -1,5 +1,5 @@
 import { Matter } from 'matter-js';
-import { BodyShape } from '../components/RenderBody';
+import { BodyShape, ConstraintShape } from '../components/RenderBody';
 declare global {
     // UI thread engine instance
     var demoEngine: any;
@@ -11,6 +11,7 @@ declare global {
     var windowHeight: number;
 
     var svgContent: BodyShape[];
+    var svgConstraints: ConstraintShape[];
 
     // Dynamic body instances
     interface MatterBody {

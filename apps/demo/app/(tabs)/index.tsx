@@ -71,6 +71,11 @@ const DEMOS = [
         title: 'Compound Stack',
         description: 'A stack of compound bodies with cross shapes',
     },
+    {
+        id: 'constraints',
+        title: 'Constraints',
+        description: 'Demonstrates various types of constraints between bodies',
+    },
 ];
 
 export default function IndexScreen() {

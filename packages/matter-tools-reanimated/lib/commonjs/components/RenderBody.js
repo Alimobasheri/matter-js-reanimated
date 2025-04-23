@@ -16,38 +16,98 @@ const AnimatedPath = _reactNativeReanimated.default.createAnimatedComponent(_rea
 const AnimatedCircle = _reactNativeReanimated.default.createAnimatedComponent(_reactNativeSvg.Circle);
 const AnimatedG = _reactNativeReanimated.default.createAnimatedComponent(_reactNativeSvg.G);
 const RenderBody = ({
-  bodies,
   options = {}
 }) => {
-  const pathD = (0, _reactNativeReanimated.useSharedValue)('');
+  const bodyPathD = (0, _reactNativeReanimated.useSharedValue)('');
+  const constraintPathD = (0, _reactNativeReanimated.useSharedValue)('');
   (0, _reactNativeReanimated.useFrameCallback)(() => {
     'worklet';
 
-    if (!Array.isArray(global.svgContent)) return;
-    let completePath = '';
-    for (let i = 0; i < global.svgContent.length; i++) {
-      const body = global.svgContent[i];
-      if (body.type === 'circle' && body.circleRadius !== undefined) {
-        const x = body.position.x;
-        const y = body.position.y;
-        const r = body.circleRadius;
-        completePath += `M ${x - r},${y} a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0 `;
-      } else {
-        completePath += body.vertices.map((v, j) => `${j === 0 ? 'M' : 'L'} ${v.x} ${v.y}`).join(' ') + 'Z ';
+    let bodyPath = '';
+    if (Array.isArray(global.svgContent)) {
+      for (const body of global.svgContent) {
+        if (body.type === 'circle' && body.circleRadius !== undefined) {
+          const x = body.position.x;
+          const y = body.position.y;
+          const r = body.circleRadius;
+          bodyPath += `M ${x - r},${y} a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0 `;
+        } else {
+          bodyPath += body.vertices.map((v, j) => `${j === 0 ? 'M' : 'L'} ${v.x} ${v.y}`).join(' ') + 'Z ';
+        }
       }
     }
-    pathD.value = completePath;
+    bodyPathD.value = bodyPath;
+    let constraintPath = '';
+    if (Array.isArray(global.svgConstraints)) {
+      for (const constraint of global.svgConstraints) {
+        if (!constraint.render.visible) continue;
+        let startX = constraint.pointA.x;
+        let startY = constraint.pointA.y;
+        let endX = constraint.pointB.x;
+        let endY = constraint.pointB.y;
+        if (constraint.bodyAId) {
+          const bodyA = global.svgContent.find(b => b.id === constraint.bodyAId);
+          if (bodyA) {
+            startX = bodyA.position.x + constraint.pointA.x;
+            startY = bodyA.position.y + constraint.pointA.y;
+          }
+        }
+        if (constraint.bodyBId) {
+          const bodyB = global.svgContent.find(b => b.id === constraint.bodyBId);
+          if (bodyB) {
+            endX = bodyB.position.x + constraint.pointB.x;
+            endY = bodyB.position.y + constraint.pointB.y;
+          }
+        }
+        if (constraint.type === 'pin') {
+          constraintPath += `M ${startX - 3},${startY} a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0 `;
+        } else {
+          constraintPath += `M ${startX},${startY} L ${endX},${endY} `;
+          if (constraint.type === 'spring') {
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+            const length = Math.hypot(deltaX, deltaY);
+            if (length > 0) {
+              const normal = {
+                x: -deltaY / length,
+                y: deltaX / length
+              };
+              const coils = Math.ceil(Math.min(Math.max(length / 5, 12), 20));
+              for (let j = 1; j < coils; j++) {
+                const t = j / coils;
+                const offset = j % 2 === 0 ? 1 : -1;
+                const x = startX + deltaX * t + normal.x * offset * 4;
+                const y = startY + deltaY * t + normal.y * offset * 4;
+                constraintPath += `L ${x},${y} `;
+              }
+            }
+            constraintPath += `L ${endX},${endY} `;
+          }
+        }
+        if (constraint.render.anchors) {
+          constraintPath += `M ${startX - 3},${startY} a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0 `;
+          constraintPath += `M ${endX - 3},${endY} a 3,3 0 1,0 6,0 a 3,3 0 1,0 -6,0 `;
+        }
+      }
+    }
+    constraintPathD.value = constraintPath;
   });
-  const animatedProps = (0, _reactNativeReanimated.useAnimatedProps)(() => {
-    return {
-      d: pathD.value,
-      fill: options.wireframes ? 'none' : 'black',
-      stroke: options.wireframes ? '#2E3440' : 'none',
-      strokeWidth: 1
-    };
-  }, [pathD, options.wireframes]);
+  const bodyAnimatedProps = (0, _reactNativeReanimated.useAnimatedProps)(() => ({
+    d: bodyPathD.value,
+    fill: options.wireframes ? 'none' : 'black',
+    stroke: options.wireframes ? '#2E3440' : 'none',
+    strokeWidth: 1
+  }), [bodyPathD, options.wireframes]);
+  const constraintAnimatedProps = (0, _reactNativeReanimated.useAnimatedProps)(() => ({
+    d: constraintPathD.value,
+    fill: 'none',
+    stroke: options.wireframes ? '#2E3440' : '#bbb',
+    strokeWidth: 1
+  }), [constraintPathD, options.wireframes]);
   return /*#__PURE__*/_react.default.createElement(AnimatedG, null, /*#__PURE__*/_react.default.createElement(AnimatedPath, {
-    animatedProps: animatedProps
+    animatedProps: bodyAnimatedProps
+  }), /*#__PURE__*/_react.default.createElement(AnimatedPath, {
+    animatedProps: constraintAnimatedProps
   }));
 };
 exports.RenderBody = RenderBody;

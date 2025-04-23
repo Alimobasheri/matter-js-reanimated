@@ -23,6 +23,7 @@ import { initCollisionFiltering } from '@/examples/worklets/collisionFiltering';
 import { initCompositeManipulation } from '@/examples/worklets/compositeManipulation';
 import { initCompoundBodies } from '@/examples/worklets/compound';
 import { initCompoundStack } from '@/examples/worklets/compoundStack';
+import { initConstraints } from '@/examples/worklets/constraints';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -38,6 +39,7 @@ const examples = {
     'composite-manipulation': initCompositeManipulation,
     'compound-bodies': initCompoundBodies,
     'compound-stack': initCompoundStack,
+    constraints: initConstraints,
 };
 
 export default function DemoScreen() {
