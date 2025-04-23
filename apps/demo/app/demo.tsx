@@ -35,6 +35,7 @@ import { initNewtonsCradle } from '@/examples/worklets/newtonsCradle';
 import { initPyramid } from '@/examples/worklets/pyramid';
 import { initRagdoll } from '@/examples/worklets/ragdoll';
 import { initRestitution } from '@/examples/worklets/restitution';
+import { initRoundedCorners } from '@/examples/worklets/rounded';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -62,6 +63,7 @@ const examples = {
     pyramid: initPyramid,
     ragdoll: initRagdoll,
     restitution: initRestitution,
+    'rounded-corners': initRoundedCorners,
 };
 
 export default function DemoScreen() {

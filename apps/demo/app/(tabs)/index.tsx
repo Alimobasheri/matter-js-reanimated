@@ -132,6 +132,11 @@ const DEMOS = [
         title: 'Restitution',
         description: 'Demonstrates the effect of restitution on collisions',
     },
+    {
+        id: 'rounded-corners',
+        title: 'Rounded Corners',
+        description: 'Demonstrates different chamfering options for bodies',
+    },
 ];
 
 export default function IndexScreen() {
