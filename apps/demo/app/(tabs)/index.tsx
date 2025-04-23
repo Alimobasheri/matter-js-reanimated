@@ -86,6 +86,11 @@ const DEMOS = [
         title: 'Events',
         description: 'Demonstrates event handling in Matter.js',
     },
+    {
+        id: 'friction',
+        title: 'Friction',
+        description: 'Demonstrates different friction coefficients',
+    },
 ];
 
 export default function IndexScreen() {
