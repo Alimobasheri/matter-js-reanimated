@@ -29,6 +29,7 @@ import { initEvents } from '@/examples/worklets/events';
 import { initFriction } from '@/examples/worklets/friction';
 import { initGravity } from '@/examples/worklets/gravity';
 import { initGyro } from '@/examples/worklets/gyro';
+import { initManipulation } from '@/examples/worklets/manipulation';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -50,6 +51,7 @@ const examples = {
     friction: initFriction,
     gravity: initGravity,
     gyro: initGyro,
+    manipulation: initManipulation,
 };
 
 export default function DemoScreen() {

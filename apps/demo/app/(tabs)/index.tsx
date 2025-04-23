@@ -101,6 +101,11 @@ const DEMOS = [
         title: 'Gyroscope',
         description: 'Control gravity with device orientation',
     },
+    {
+        id: 'manipulation',
+        title: 'Manipulation',
+        description: 'Demonstrates various body manipulation techniques',
+    },
 ];
 
 export default function IndexScreen() {
