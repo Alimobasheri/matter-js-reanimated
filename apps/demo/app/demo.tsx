@@ -25,6 +25,7 @@ import { initCompoundBodies } from '@/examples/worklets/compound';
 import { initCompoundStack } from '@/examples/worklets/compoundStack';
 import { initConstraints } from '@/examples/worklets/constraints';
 import { initDoublePendulum } from '@/examples/worklets/doublePendulum';
+import { initEvents } from '@/examples/worklets/events';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -42,6 +43,7 @@ const examples = {
     'compound-stack': initCompoundStack,
     constraints: initConstraints,
     'double-pendulum': initDoublePendulum,
+    events: initEvents,
 };
 
 export default function DemoScreen() {

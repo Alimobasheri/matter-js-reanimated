@@ -81,6 +81,11 @@ const DEMOS = [
         title: 'Double Pendulum',
         description: 'A chaotic double pendulum system',
     },
+    {
+        id: 'events',
+        title: 'Events',
+        description: 'Demonstrates event handling in Matter.js',
+    },
 ];
 
 export default function IndexScreen() {
