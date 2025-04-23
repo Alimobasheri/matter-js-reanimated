@@ -127,6 +127,11 @@ const DEMOS = [
         title: 'Ragdoll',
         description: 'A physics-based ragdoll simulation',
     },
+    {
+        id: 'restitution',
+        title: 'Restitution',
+        description: 'Demonstrates the effect of restitution on collisions',
+    },
 ];
 
 export default function IndexScreen() {
