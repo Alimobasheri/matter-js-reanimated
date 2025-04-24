@@ -169,6 +169,11 @@ const DEMOS = [
         description:
             'Advanced stress test with multiple stacks and gravity effects',
     },
+    {
+        id: 'time-scale',
+        title: 'Time Scaling',
+        description: 'Demonstrates time scaling effects',
+    },
 ];
 
 export default function IndexScreen() {

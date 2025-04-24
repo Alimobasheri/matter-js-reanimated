@@ -42,6 +42,7 @@ import { initStress } from '@/examples/worklets/stress';
 import { initStress2 } from '@/examples/worklets/stress2';
 import { initStress3 } from '@/examples/worklets/stress3';
 import { initStress4 } from '@/examples/worklets/stress4';
+import { initTimeScale } from '@/examples/worklets/timescale';
 
 const examples = {
     'air-friction': initAirFriction,
@@ -76,6 +77,7 @@ const examples = {
     stress2: initStress2,
     stress3: initStress3,
     stress4: initStress4,
+    'time-scale': initTimeScale,
 };
 
 export default function DemoScreen() {
