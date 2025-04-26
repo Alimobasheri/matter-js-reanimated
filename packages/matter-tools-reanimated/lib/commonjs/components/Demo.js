@@ -20,6 +20,13 @@ const DemoComponent = ({
     (0, _reactNativeReanimated.runOnUI)(() => {
       'worklet';
 
+      console.log('Initializing demo example');
+      if (global.demoEngine && global.Matter) {
+        console.log('Clearing demo engine');
+        global.Matter.Composite.clear(global.demoEngine.world, false, true);
+        // global.demoEngine = undefined;
+      }
+      console.log('Creating demo engine');
       if (!global.Matter) {
         console.warn('Matter.js not initialized! Run initMatter() first.');
         return;
@@ -36,16 +43,6 @@ const DemoComponent = ({
       exampleWorklet(engine);
       console.log('Demo example initialized');
     })();
-    return () => {
-      (0, _reactNativeReanimated.runOnUI)(() => {
-        'worklet';
-
-        if (global.demoEngine) {
-          global.Matter.Composite.clear(global.demoEngine.world, false, true);
-          global.demoEngine = undefined;
-        }
-      })();
-    };
   }, [exampleWorklet]);
   (0, _reactNativeReanimated.useFrameCallback)(() => {
     'worklet';

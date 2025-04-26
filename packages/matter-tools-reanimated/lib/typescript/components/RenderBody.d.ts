@@ -1,5 +1,4 @@
 import React from 'react';
-import { DerivedValue } from 'react-native-reanimated';
 export interface BodyShape {
     id: string | number;
     type: 'circle' | 'polygon';
@@ -24,8 +23,27 @@ export interface BodyShape {
     };
     circleRadius?: number;
 }
+export interface ConstraintShape {
+    id: string | number;
+    type: 'pin' | 'spring';
+    bodyAId?: string | number;
+    bodyBId?: string | number;
+    pointA: {
+        x: number;
+        y: number;
+    };
+    pointB: {
+        x: number;
+        y: number;
+    };
+    render: {
+        visible: boolean;
+        strokeStyle: string;
+        lineWidth: number;
+        anchors: boolean;
+    };
+}
 interface RenderBodyProps {
-    bodies: DerivedValue<BodyShape[]>;
     options?: {
         wireframes?: boolean;
         showBounds?: boolean;

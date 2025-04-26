@@ -76,7 +76,7 @@ var init = function () {
             delete options.chamfer;
         }
 
-        return global.Matter.Body.create({ ...rectangle, ...options });
+        return global.Matter.Body.create(Object.assign(rectangle, options));
     };
 
     /**

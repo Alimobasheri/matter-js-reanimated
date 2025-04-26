@@ -118,7 +118,7 @@ var init = function () {
             _original: null,
         };
 
-        var body = { ...defaults, ...options };
+        var body = global.Matter.Common.extend(defaults, options);
 
         _initProperties(body, options);
 

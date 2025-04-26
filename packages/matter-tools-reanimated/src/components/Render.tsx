@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import {
     useDerivedValue,
@@ -31,18 +31,19 @@ export const Render: React.FC<RenderProps> = ({
     const width = options.width || windowWidth;
     const height = options.height || windowHeight;
 
-    // Single worklet to generate all SVG content
-    const svgContent = useSharedValue<BodyShape[]>([]);
-
-    useFrameCallback(() => {
+    const { setActive } = useFrameCallback(() => {
         'worklet';
-        if (!global.Matter || !(engineId in global)) return [];
+        if (!global.Matter || !(engineId in global)) return;
+        if (!global.svgContent) global.svgContent = [];
+        if (!global.svgConstraints) global.svgConstraints = [];
 
         const engine = (global as any)[engineId];
-        const bodies = engine.world.bodies;
+        if (!engine || !engine.world) return;
+        // Use Composite.allBodies to get all bodies including those in nested composites
+        const bodies = global.Matter.Composite.allBodies(engine.world);
 
         // Generate SVG elements for each body - this runs in the UI thread
-        svgContent.value = bodies.map((body: Matter.Body) => ({
+        global.svgContent = bodies.map((body: Matter.Body) => ({
             id: body.id,
             type: body.circleRadius ? 'circle' : 'polygon',
             position: { ...body.position },
@@ -54,7 +55,31 @@ export const Render: React.FC<RenderProps> = ({
             },
             circleRadius: body.circleRadius,
         }));
+
+        const constraints = global.Matter.Composite.allConstraints(
+            engine.world
+        );
+        global.svgConstraints = constraints.map((constraint: any) => ({
+            id: constraint.id,
+            bodyAId: constraint.bodyA?.id,
+            bodyBId: constraint.bodyB?.id,
+            pointA: { x: constraint.pointA.x, y: constraint.pointA.y },
+            pointB: { x: constraint.pointB.x, y: constraint.pointB.y },
+            type: constraint.render.type || 'spring',
+            render: {
+                visible: constraint.render.visible !== false,
+                strokeStyle: constraint.render.strokeStyle || '#bbb',
+                lineWidth: constraint.render.lineWidth || 1,
+                anchors: constraint.render.anchors || false,
+            },
+        }));
     });
+
+    useEffect(() => {
+        return () => {
+            setActive(false);
+        };
+    }, []);
 
     return (
         <View style={[styles.container, { width, height }]}>
@@ -66,7 +91,7 @@ export const Render: React.FC<RenderProps> = ({
                     { backgroundColor: options.background || 'yellow' },
                 ]}
             >
-                <RenderBody bodies={svgContent} options={options} />
+                <RenderBody options={options} />
             </Svg>
         </View>
     );
