@@ -114,13 +114,8 @@ const position = useDerivedValue(() => {
 
 ## 🛠 Installation
 
-This package is not yet published to npm.
-
-Until then:
-
-```sh
-# Copy the JS build file into your RN app
-# Add it directly into your source and run `initMatter()` from the UI thread
+```bash
+npm i matter-js-reanimated
 ```
 
 ---

@@ -17,14 +17,34 @@ This monorepo contains the following packages:
 -   📱 Native performance on both iOS and Android
 -   🎮 Interactive demos with touch support
 
+## Documentation
+
+Head over to README sections for [matter-js-reanimted](https://github.com/Alimobasheri/matter-js-reanimated/blob/dev/packages/matter-js-reanimated/README.md).
+
+And for [matter-tools-reanimated](https://github.com/Alimobasheri/matter-js-reanimated/blob/dev/packages/matter-tools-reanimated/README.md)
+
 ## Installation
+
+### Installing `matter-js-reanimted`
+
+```bash
+npm i matter-js-reanimated
+```
+
+### Installing `matter-tools-reanimted`
+
+```bash
+npm i matter-tools-reanimted matter-js-reanimated react-native-reanimated react-native-gesture-handler react-native-svg
+```
+
+## Development
+
+### Installing dependencies
 
 ```bash
 # Using yarn workspaces
 yarn install
 ```
-
-## Development
 
 ### Running the demo app
 
@@ -54,7 +74,7 @@ function PhysicsDemo() {
 
 ## Examples
 
-The demo app includes numerous physics examples:
+The demo app includes numerous physics examples from original `matter-js` library ported to use `matter-js-reanimated`:
 
 -   Air Friction
 
@@ -91,10 +111,6 @@ Before contributing, please read the CONTRIBUTING.md file.
 ## License
 
 This project is licensed under the same terms as the original Matter.js license.
-
-## Publishing
-
-To publish packages to npm:
 
 ## Demo App
 
