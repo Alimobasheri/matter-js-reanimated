@@ -4,18 +4,21 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Demo = void 0;
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 var _reactNative = require("react-native");
 var _reactNativeReanimated = require("react-native-reanimated");
 var _withMatter = require("../hoc/withMatter");
 var _Render = require("./Render");
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+var _Touch = require("./Touch");
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 // import { Touch } from './Touch';
 
 const DemoComponent = ({
   exampleWorklet,
   options = {}
 }) => {
+  const [initialized, setInitialized] = (0, _react.useState)(false);
   _react.default.useEffect(() => {
     (0, _reactNativeReanimated.runOnUI)(() => {
       'worklet';
@@ -42,6 +45,7 @@ const DemoComponent = ({
       global.demoEngine = engine;
       exampleWorklet(engine);
       console.log('Demo example initialized');
+      (0, _reactNativeReanimated.runOnJS)(setInitialized)(true);
     })();
   }, [exampleWorklet]);
   (0, _reactNativeReanimated.useFrameCallback)(() => {
@@ -53,10 +57,15 @@ const DemoComponent = ({
   });
   return /*#__PURE__*/_react.default.createElement(_reactNative.View, {
     style: styles.container
+  }, initialized && /*#__PURE__*/_react.default.createElement(_Touch.Touch, {
+    engineId: "demoEngine",
+    options: {
+      enablePan: true
+    }
   }, /*#__PURE__*/_react.default.createElement(_Render.Render, {
     engineId: "demoEngine",
     options: options.render
-  }));
+  })));
 };
 const styles = _reactNative.StyleSheet.create({
   container: {

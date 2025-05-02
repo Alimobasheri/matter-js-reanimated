@@ -56,23 +56,23 @@ export const Render: React.FC<RenderProps> = ({
             circleRadius: body.circleRadius,
         }));
 
-        const constraints = global.Matter.Composite.allConstraints(
-            engine.world
-        );
-        global.svgConstraints = constraints.map((constraint: any) => ({
-            id: constraint.id,
-            bodyAId: constraint.bodyA?.id,
-            bodyBId: constraint.bodyB?.id,
-            pointA: { x: constraint.pointA.x, y: constraint.pointA.y },
-            pointB: { x: constraint.pointB.x, y: constraint.pointB.y },
-            type: constraint.render.type || 'spring',
-            render: {
-                visible: constraint.render.visible !== false,
-                strokeStyle: constraint.render.strokeStyle || '#bbb',
-                lineWidth: constraint.render.lineWidth || 1,
-                anchors: constraint.render.anchors || false,
-            },
-        }));
+        // const constraints = global.Matter.Composite.allConstraints(
+        //     engine.world
+        // );
+        // global.svgConstraints = constraints.map((constraint: any) => ({
+        //     id: constraint.id,
+        //     bodyAId: constraint.bodyA?.id,
+        //     bodyBId: constraint.bodyB?.id,
+        //     pointA: { x: constraint.pointA.x, y: constraint.pointA.y },
+        //     pointB: { x: constraint.pointB.x, y: constraint.pointB.y },
+        //     type: constraint.render.type || 'spring',
+        //     render: {
+        //         visible: constraint.render.visible !== false,
+        //         strokeStyle: constraint.render.strokeStyle || '#bbb',
+        //         lineWidth: constraint.render.lineWidth || 1,
+        //         anchors: constraint.render.anchors || false,
+        //     },
+        // }));
     });
 
     useEffect(() => {

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useFrameCallback, runOnUI } from 'react-native-reanimated';
+import { useFrameCallback, runOnUI, runOnJS } from 'react-native-reanimated';
 import { withMatter } from '../hoc/withMatter';
 import { Render } from './Render';
+import { Touch } from './Touch';
 // import { Touch } from './Touch';
 
 interface DemoProps {
@@ -20,6 +21,7 @@ interface DemoProps {
                 stiffness?: number;
                 damping?: number;
             };
+            enablePan?: boolean;
         };
     };
 }
@@ -28,6 +30,7 @@ const DemoComponent: React.FC<DemoProps> = ({
     exampleWorklet,
     options = {},
 }) => {
+    const [initialized, setInitialized] = useState(false);
     React.useEffect(() => {
         runOnUI(() => {
             'worklet';
@@ -58,6 +61,7 @@ const DemoComponent: React.FC<DemoProps> = ({
             exampleWorklet(engine);
 
             console.log('Demo example initialized');
+            runOnJS(setInitialized)(true);
         })();
     }, [exampleWorklet]);
 
@@ -73,9 +77,11 @@ const DemoComponent: React.FC<DemoProps> = ({
 
     return (
         <View style={styles.container}>
-            {/* <Touch engineId="demoEngine" options={options.touch}> */}
-            <Render engineId="demoEngine" options={options.render} />
-            {/* </Touch> */}
+            {initialized && (
+                <Touch engineId="demoEngine" options={options.touch}>
+                    <Render engineId="demoEngine" options={options.render} />
+                </Touch>
+            )}
         </View>
     );
 };
