@@ -98,6 +98,8 @@ const position = useDerivedValue(() => {
 -   ❌ ESM build or tree-shaking support
 -   ❌ Declarative React components (`<PhysicsWorld />`, `<RigidBody />`)
 
+✅ For rendering, Demo view, Touch Support Example, `matter-tools-reanimated` is published on NPM!
+
 ---
 
 ## 🧩 Planned Features

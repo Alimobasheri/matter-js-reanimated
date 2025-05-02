@@ -59,9 +59,7 @@ const DemoComponent = ({
     style: styles.container
   }, initialized && /*#__PURE__*/_react.default.createElement(_Touch.Touch, {
     engineId: "demoEngine",
-    options: {
-      enablePan: true
-    }
+    options: options.touch
   }, /*#__PURE__*/_react.default.createElement(_Render.Render, {
     engineId: "demoEngine",
     options: options.render

@@ -1,50 +1,164 @@
-# Welcome to your Expo app 👋
+# matter-tools-reanimated
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+`matter-tools-reanimated` is a utility toolkit built on top of [`matter-js-reanimated`](https://www.npmjs.com/package/matter-js-reanimated), a React Native port of the Matter.js physics engine for the UI thread. This package adds developer-friendly components and utilities for rendering, interaction, and experimentation with physics-based scenes in React Native apps using `react-native-reanimated` and `react-native-gesture-handler`.
 
-## Get started
+---
 
-1. Install dependencies
+## ✨ Features
 
-   ```bash
-   npm install
-   ```
+-   🔧 `Render`: Live SVG-based physics renderer using Reanimated.
+-   🎮 `Touch`: Adds drag, pinch, and rotate gestures to physics bodies.
+-   🧪 `Demo`: Plug-and-play interactive physics scenes.
+-   🧱 `withMatter`: HOC for initializing Matter.js safely in the UI thread.
+-   📦 Examples: Includes demo scenes like `BouncingBalls`, `BallPool`, and `Avalanche`.
 
-2. Start the app
+---
 
-   ```bash
-    npx expo start
-   ```
+## 📦 Installation
 
-In the output, you'll find options to open the app in a
+Ensure your project uses:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+-   `react-native-reanimated >= 3.0.0`
+-   `react-native-gesture-handler`
+-   `react-native-svg`
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Then install:
 
-## Get a fresh project
+npm install matter-js-reanimated matter-tools-reanimated
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
+## 🧠 Core Concept
+
+`matter-tools-reanimated` assumes Matter.js is used in the **UI thread**. It wraps common patterns (rendering, interaction, setup) into reusable components so you can focus on the simulation logic.
+
+---
+
+## 🔌 Usage
+
+```js
+import { Demo } from 'matter-tools-reanimated';
+import { initBouncingBalls } from 'matter-tools-reanimated/examples/BouncingBalls';
+
+export default function App() {
+    return (
+        <Demo
+            exampleWorklet={initBouncingBalls}
+            options={{
+                render: { wireframes: true },
+                touch: { constraint: { stiffness: 0.2, damping: 0.3 } },
+            }}
+        />
+    );
+}
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🧩 Exports
 
-To learn more about developing your project with Expo, look at the following resources:
+### `Demo`
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Interactive container that sets up a Matter.js engine and runs a simulation.
 
-## Join the community
+```js
+<Demo
+    exampleWorklet={(engine) => {
+        'workelt';
+        /* worklet to create bodies */
+    }}
+    options={{
+        render: {
+            wireframes: true,
+            background: '#fff',
+            width: 400,
+            height: 800,
+        },
+        touch: {
+            enablePan: true,
+            constraint: {
+                stiffness: 0.2,
+                damping: 0.3,
+            },
+        },
+    }}
+/>
+```
 
-Join our community of developers creating universal apps.
+---
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### `Render`
+
+Renders the current physics world using SVG and Reanimated.
+
+```js
+<Render
+    engineId="demoEngine"
+    options={{
+        wireframes: true,
+        background: '#f0f0f0',
+        width: 300,
+        height: 500,
+    }}
+/>
+```
+
+---
+
+### `Touch`
+
+Gesture handler that allows dragging, pinching, and rotating bodies.
+
+```js
+<Touch
+    engineId="demoEngine"
+    options={{
+        enablePan: true,
+        enablePinch: true,
+        enableRotate: true,
+        constraint: {
+            stiffness: 0.1,
+            damping: 0.2,
+        },
+    }}
+>
+    <Render engineId="demoEngine" />
+</Touch>
+```
+
+---
+
+### `withMatter`
+
+Higher-Order Component to initialize Matter.js on the UI thread.
+
+const MyComponent = () => <Render />;
+export default withMatter(MyComponent);
+
+---
+
+## 🧪 Examples
+
+The package includes the following worklet demos:
+
+-   `initBouncingBalls`
+-   `initBallPool`
+-   `initAvalanche`
+
+You can import and use them with `<Demo />`.
+
+---
+
+## 📁 Folder Structure
+
+-   `src/components`: Core components (`Render`, `Demo`, `Touch`)
+-   `src/examples`: Prebuilt demo scenes
+-   `src/hoc`: Utility HOC (`withMatter`)
+-   `src/worklets`: Internal touch constraint utilities
+-   `lib`: Compiled output
+
+---
+
+## 📝 License
+
+MIT
