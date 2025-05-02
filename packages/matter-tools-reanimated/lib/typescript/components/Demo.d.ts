@@ -14,6 +14,7 @@ interface DemoProps {
                 stiffness?: number;
                 damping?: number;
             };
+            enablePan?: boolean;
         };
     };
 }

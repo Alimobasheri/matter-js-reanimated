@@ -7,8 +7,6 @@ interface TouchProps {
             damping?: number;
         };
         enablePan?: boolean;
-        enablePinch?: boolean;
-        enableRotate?: boolean;
     };
     children: React.ReactNode;
 }
