@@ -4,6 +4,7 @@ import { runOnUI } from 'react-native-reanimated';
 import { Demo } from '../components/Demo';
 import { initBouncingBalls } from '../examples/BouncingBalls';
 import { initAvalanche } from '../examples/avalanche';
+import { initBallPool } from '../examples/ballPool';
 
 export default function TestScreen() {
     const { width, height } = useWindowDimensions();
@@ -20,7 +21,7 @@ export default function TestScreen() {
     return (
         <View style={styles.container}>
             <Demo
-                exampleWorklet={initAvalanche}
+                exampleWorklet={initBallPool}
                 options={{
                     render: {
                         wireframes: true,

@@ -8,7 +8,7 @@ var _react = _interopRequireDefault(require("react"));
 var _reactNative = require("react-native");
 var _reactNativeReanimated = require("react-native-reanimated");
 var _Demo = require("../components/Demo");
-var _avalanche = require("../examples/avalanche");
+var _ballPool = require("../examples/ballPool");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function TestScreen() {
   const {
@@ -27,7 +27,7 @@ function TestScreen() {
   return /*#__PURE__*/_react.default.createElement(_reactNative.View, {
     style: styles.container
   }, /*#__PURE__*/_react.default.createElement(_Demo.Demo, {
-    exampleWorklet: _avalanche.initAvalanche,
+    exampleWorklet: _ballPool.initBallPool,
     options: {
       render: {
         wireframes: true,

@@ -6,8 +6,6 @@ import {
     GestureHandlerRootView,
     GestureUpdateEvent,
     PanGestureHandlerEventPayload,
-    RotationGestureHandlerEventPayload,
-    PinchGestureHandlerEventPayload,
 } from 'react-native-gesture-handler';
 import { runOnUI } from 'react-native-reanimated';
 
@@ -39,13 +37,24 @@ export const Touch: React.FC<TouchProps> = ({
 
             if (!global.mouseConstraint) {
                 const constraint = global.Matter.Constraint.create({
-                    stiffness: options.constraint?.stiffness ?? 0.2,
-                    damping: options.constraint?.damping ?? 0.3,
-                    length: 0,
+                    pointA: { x: 0, y: 0 },
+                    pointB: { x: 0, y: 0 },
+                    length: 0.01,
+                    stiffness: options.constraint?.stiffness ?? 0.1,
                     label: 'Mouse Constraint',
                 });
 
-                global.mouseConstraint = constraint;
+                global.mouseConstraint = {
+                    type: 'mouseConstraint',
+                    constraint: constraint,
+                    body: null,
+                    collisionFilter: {
+                        category: 0x0001,
+                        mask: 0xffffffff,
+                        group: 0,
+                    },
+                };
+
                 global.Matter.World.add(engine.world, constraint);
             }
         })();
@@ -57,7 +66,7 @@ export const Touch: React.FC<TouchProps> = ({
                     const engine = (global as any)[engineId];
                     global.Matter.World.remove(
                         engine.world,
-                        global.mouseConstraint
+                        global.mouseConstraint.constraint
                     );
                     global.mouseConstraint = null;
                 }
@@ -68,91 +77,96 @@ export const Touch: React.FC<TouchProps> = ({
     const pan = Gesture.Pan()
         .enabled(options.enablePan ?? true)
         .onBegin((event: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
-            runOnUI(() => {
-                'worklet';
+            'worklet';
+            if (
+                !global.Matter ||
+                !(engineId in global) ||
+                !global.mouseConstraint
+            )
+                return;
+
+            const engine = (global as any)[engineId];
+            const point = { x: event.absoluteX, y: event.absoluteY };
+            const bodies = global.Matter.Composite.allBodies(engine.world);
+            const mouseConstraint = global.mouseConstraint;
+            const constraint = mouseConstraint.constraint;
+
+            // Reset previous body
+            constraint.bodyB = mouseConstraint.body = null;
+            constraint.pointB = null;
+
+            // Find new body to drag
+            for (let i = 0; i < bodies.length; i++) {
+                const body = bodies[i];
+
                 if (
-                    !global.Matter ||
-                    !(engineId in global) ||
-                    !global.mouseConstraint
-                )
-                    return;
+                    global.Matter.Bounds.contains(body.bounds, point) &&
+                    global.Matter.Detector.canCollide(
+                        body.collisionFilter,
+                        mouseConstraint.collisionFilter
+                    )
+                ) {
+                    // Check parts (for compound bodies)
+                    for (
+                        let j = body.parts.length > 1 ? 1 : 0;
+                        j < body.parts.length;
+                        j++
+                    ) {
+                        const part = body.parts[j];
+                        if (
+                            global.Matter.Vertices.contains(
+                                part.vertices,
+                                point
+                            )
+                        ) {
+                            constraint.pointA = point;
+                            constraint.bodyB = mouseConstraint.body = body;
+                            constraint.pointB = {
+                                x: point.x - body.position.x,
+                                y: point.y - body.position.y,
+                            };
+                            constraint.angleB = body.angle;
 
-                const point = { x: event.absoluteX, y: event.absoluteY };
-                const engine = (global as any)[engineId];
-                const bodies = global.Matter.Query.point(
-                    engine.world.bodies,
-                    point
-                );
+                            global.Matter.Sleeping.set(body, false);
+                            break;
+                        }
+                    }
 
-                if (bodies.length > 0) {
-                    const body = bodies[0];
-                    global.mouseConstraint.bodyB = body;
-                    global.mouseConstraint.pointA = point;
-                    global.mouseConstraint.pointB = global.Matter.Vector.sub(
-                        point,
-                        body.position
-                    );
-                    global.activeDragBody = body;
+                    if (constraint.bodyB) break;
                 }
-            })();
+            }
         })
         .onUpdate(
             (event: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
-                runOnUI(() => {
-                    'worklet';
-                    if (!global.mouseConstraint?.bodyB) return;
-
-                    global.mouseConstraint.pointA = {
-                        x: event.absoluteX,
-                        y: event.absoluteY,
-                    };
-                })();
-            }
-        )
-        .onFinalize(() => {
-            runOnUI(() => {
                 'worklet';
                 if (!global.mouseConstraint) return;
 
-                global.mouseConstraint.bodyB = null;
-                global.activeDragBody = null;
-            })();
+                const constraint = global.mouseConstraint.constraint;
+                const body = constraint.bodyB;
+
+                if (body) {
+                    constraint.pointA = {
+                        x: event.absoluteX,
+                        y: event.absoluteY,
+                    };
+                    global.Matter.Sleeping.set(body, false);
+                }
+            }
+        )
+        .onEnd(() => {
+            'worklet';
+            if (!global.mouseConstraint) return;
+
+            const constraint = global.mouseConstraint.constraint;
+            const body = constraint.bodyB;
+
+            if (body) {
+                constraint.bodyB = global.mouseConstraint.body = null;
+                constraint.pointB = null;
+            }
         });
 
-    const pinch = Gesture.Pinch()
-        .enabled(options.enablePinch ?? true)
-        .onUpdate(
-            (event: GestureUpdateEvent<PinchGestureHandlerEventPayload>) => {
-                runOnUI(() => {
-                    'worklet';
-                    if (!global.activeDragBody) return;
-
-                    global.Matter.Body.scale(
-                        global.activeDragBody,
-                        event.scale,
-                        event.scale
-                    );
-                })();
-            }
-        );
-
-    const rotate = Gesture.Rotation()
-        .enabled(options.enableRotate ?? true)
-        .onUpdate(
-            (event: GestureUpdateEvent<RotationGestureHandlerEventPayload>) => {
-                runOnUI(() => {
-                    'worklet';
-                    if (!global.activeDragBody) return;
-
-                    global.Matter.Body.rotate(
-                        global.activeDragBody,
-                        event.rotation
-                    );
-                })();
-            }
-        );
-
-    const gesture = Gesture.Simultaneous(pan, pinch, rotate);
+    const gesture = Gesture.Simultaneous(pan);
 
     return (
         <GestureHandlerRootView style={styles.container}>
