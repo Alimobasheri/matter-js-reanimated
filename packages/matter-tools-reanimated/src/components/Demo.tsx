@@ -21,6 +21,7 @@ interface DemoProps {
                 stiffness?: number;
                 damping?: number;
             };
+            enablePan?: boolean;
         };
     };
 }
@@ -77,7 +78,7 @@ const DemoComponent: React.FC<DemoProps> = ({
     return (
         <View style={styles.container}>
             {initialized && (
-                <Touch engineId="demoEngine" options={{ enablePan: true }}>
+                <Touch engineId="demoEngine" options={options.touch}>
                     <Render engineId="demoEngine" options={options.render} />
                 </Touch>
             )}

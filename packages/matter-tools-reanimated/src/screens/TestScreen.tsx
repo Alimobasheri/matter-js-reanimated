@@ -33,6 +33,7 @@ export default function TestScreen() {
                             stiffness: 0.2,
                             damping: 0.3,
                         },
+                        enablePan: true,
                     },
                 }}
             />
