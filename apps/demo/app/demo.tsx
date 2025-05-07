@@ -111,6 +111,7 @@ export default function DemoScreen() {
                             stiffness: 0.2,
                             damping: 0.3,
                         },
+                        enablePan: true,
                     },
                 }}
             />
