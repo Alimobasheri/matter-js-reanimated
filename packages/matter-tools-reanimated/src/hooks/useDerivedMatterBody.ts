@@ -37,9 +37,8 @@ export function useDerivedMatterBody<T>(
         if (body) {
             sharedValue.value = process(body);
         }
-    }, true); // Auto-start the frame callback
+    }, true);
 
-    // Optional: Stop the callback when unmounted
     useEffect(() => {
         return () => frameCallback.setActive(false);
     }, []);

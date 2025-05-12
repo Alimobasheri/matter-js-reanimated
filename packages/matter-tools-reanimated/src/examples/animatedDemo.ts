@@ -13,21 +13,23 @@ export const initAniamtedDemo = (engine: Matter.Engine) => {
     const { Bodies, Composite, Constraint } = global.Matter;
 
     // add stiff global constraint
-    var body = Bodies.rectangle(150 * scaleY, 200 * scaleX, width * 0.3, 60, {
+    var body = Bodies.rectangle(200 * scaleX, 150 * scaleY, width * 0.3, 60, {
         label: 'signBody',
     });
 
     var constraint1 = Constraint.create({
-        pointA: { x: 100 * scaleX, y: 75 * scaleY },
+        pointA: { x: 200 * scaleX, y: 75 * scaleY },
         bodyB: body,
         pointB: { x: -(width * 0.3) / 2, y: -30 },
         stiffness: 0.001,
+        label: 'signConstraint1',
     });
     var constraint2 = Constraint.create({
-        pointA: { x: 100 * scaleX, y: 75 * scaleY },
+        pointA: { x: 200 * scaleX, y: 75 * scaleY },
         bodyB: body,
         pointB: { x: (width * 0.3) / 2, y: -30 },
         stiffness: 0.001,
+        label: 'signConstraint2',
     });
 
     Composite.add(engine.world, [body, constraint1, constraint2]);
