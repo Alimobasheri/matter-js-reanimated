@@ -123,7 +123,7 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
                 return;
 
             const engine = (global as any)[engineId];
-            const point = { x: event.absoluteX, y: event.absoluteY };
+            const point = { x: event.x, y: event.y };
             const bodies = global.Matter.Composite.allBodies(engine.world);
             const touchConstraint = global.Matter.touchConstraint;
             const constraint = touchConstraint.constraint;
@@ -162,6 +162,8 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
                                 x: point.x - body.position.x,
                                 y: point.y - body.position.y,
                             };
+                            //@ts-ignore
+                            constraint.angleB = body.angle;
 
                             global.Matter.Sleeping.set(body, false);
                             break;
