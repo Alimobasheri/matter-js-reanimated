@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useFrameCallback, runOnUI, runOnJS } from 'react-native-reanimated';
-import { withMatter } from '../hoc/withMatter';
+import { useFrameCallback } from 'react-native-reanimated';
+import { ReanimatedMatter } from './ReaniamtedMatter';
 import { Render } from './Render';
 import { Touch } from './Touch';
-// import { Touch } from './Touch';
 
 interface DemoProps {
     exampleWorklet: (engine: any) => void;
@@ -26,45 +25,7 @@ interface DemoProps {
     };
 }
 
-const DemoComponent: React.FC<DemoProps> = ({
-    exampleWorklet,
-    options = {},
-}) => {
-    const [initialized, setInitialized] = useState(false);
-    React.useEffect(() => {
-        runOnUI(() => {
-            'worklet';
-            console.log('Initializing demo example');
-            if (global.demoEngine && global.Matter) {
-                console.log('Clearing demo engine');
-                global.Matter.Composite.clear(
-                    global.demoEngine.world,
-                    false,
-                    true
-                );
-                // global.demoEngine = undefined;
-            }
-            console.log('Creating demo engine');
-            if (!global.Matter) {
-                console.warn(
-                    'Matter.js not initialized! Run initMatter() first.'
-                );
-                return;
-            }
-
-            const engine = global.Matter.Engine.create({
-                enableSleeping: false,
-                gravity: { x: 0, y: 1, scale: 0.001 },
-            });
-
-            global.demoEngine = engine;
-            exampleWorklet(engine);
-
-            console.log('Demo example initialized');
-            runOnJS(setInitialized)(true);
-        })();
-    }, [exampleWorklet]);
-
+export const Demo: React.FC<DemoProps> = ({ exampleWorklet, options = {} }) => {
     useFrameCallback(() => {
         'worklet';
         if (!global.demoEngine) return;
@@ -77,11 +38,11 @@ const DemoComponent: React.FC<DemoProps> = ({
 
     return (
         <View style={styles.container}>
-            {initialized && (
+            <ReanimatedMatter worklet={exampleWorklet} engineId="demoEngine">
                 <Touch engineId="demoEngine" options={options.touch}>
                     <Render engineId="demoEngine" options={options.render} />
                 </Touch>
-            )}
+            </ReanimatedMatter>
         </View>
     );
 };
@@ -92,5 +53,3 @@ const styles = StyleSheet.create({
         backgroundColor: '#000',
     },
 });
-
-export const Demo = withMatter(DemoComponent);

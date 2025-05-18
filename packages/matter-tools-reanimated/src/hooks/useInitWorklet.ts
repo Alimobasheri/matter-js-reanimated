@@ -3,8 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { runOnJS, runOnUI } from 'react-native-reanimated';
 
 export const useInitWorklet = (
-    worklet: (engine: any) => void,
-    engineId: string
+    worklet?: (engine: any) => void,
+    engineId: string = 'defaultEngine'
 ) => {
     const [initialized, setInitialized] = useState(false);
 
@@ -33,13 +33,15 @@ export const useInitWorklet = (
 
         //@ts-ignore
         global[engineId] = engine;
-        worklet(engine);
+        if (worklet) {
+            worklet(engine);
+        }
         runOnJS(setInitialized)(true);
-    }, [worklet]);
+    }, [worklet, engineId]);
 
     useEffect(() => {
         runOnUI(initUI)();
-    }, [worklet]);
+    }, [initUI]);
 
     return initialized;
 };

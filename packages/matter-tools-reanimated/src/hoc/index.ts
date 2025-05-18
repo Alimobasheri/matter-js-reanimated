@@ -1,1 +1,1 @@
-export * from './withMatter';
+export * from '../components/ReaniamtedMatter';
