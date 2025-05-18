@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useFrameCallback } from 'react-native-reanimated';
-import { ReanimatedMatter } from './ReaniamtedMatter';
+import { ReanimatedMatter } from './ReanimatedMatter';
 import { Render } from './Render';
-import { Touch } from './Touch';
+import { TouchConstraint } from './TouchConstraint';
 
 interface DemoProps {
     exampleWorklet: (engine: any) => void;
@@ -39,9 +39,9 @@ export const Demo: React.FC<DemoProps> = ({ exampleWorklet, options = {} }) => {
     return (
         <View style={styles.container}>
             <ReanimatedMatter worklet={exampleWorklet} engineId="demoEngine">
-                <Touch engineId="demoEngine" options={options.touch}>
+                <TouchConstraint engineId="demoEngine" options={options.touch}>
                     <Render engineId="demoEngine" options={options.render} />
-                </Touch>
+                </TouchConstraint>
             </ReanimatedMatter>
         </View>
     );

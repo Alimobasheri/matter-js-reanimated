@@ -1,6 +1,14 @@
-import { Matter } from 'matter-js';
+import Matter from 'matter-js';
 import { BodyShape, ConstraintShape } from '../components/RenderBody';
+import { TouchConstraintType } from '../components/TouchConstraint';
+
+type MatterType = typeof Matter & {
+    touchConstraint: TouchConstraintType | null;
+};
+
 declare global {
+    var Matter: MatterType;
+
     // UI thread engine instance
     var demoEngine: any;
     var mouseConstraint: any;
@@ -13,7 +21,6 @@ declare global {
     var svgContent: BodyShape[];
     var svgConstraints: ConstraintShape[];
 
-    // Dynamic body instances
     interface MatterBody {
         id: string | number;
         position: { x: number; y: number };

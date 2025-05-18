@@ -1,8 +1,7 @@
+export { ReanimatedMatter } from './components/ReanimatedMatter';
+export { TouchConstraint } from './components/TouchConstraint';
 export { Render } from './components/Render';
-export { Touch } from './components/Touch';
 export { Demo } from './components/Demo';
-// export { useMatterBody } from './hooks/useMatterBody';
-export { withMatter } from './components/ReaniamtedMatter';
 
 export interface MatterToolsOptions {
     render?: {

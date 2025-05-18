@@ -1,3 +1,4 @@
+import Matter from 'matter-js';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import {
@@ -9,21 +10,59 @@ import {
 } from 'react-native-gesture-handler';
 import { runOnUI } from 'react-native-reanimated';
 
-interface TouchProps {
+interface TouchConstraintProps {
     engineId?: string;
     options?: {
         constraint?: {
             stiffness?: number;
             damping?: number;
         };
-        enablePan?: boolean;
     };
+    enabled?: boolean;
     children: React.ReactNode;
 }
 
-export const Touch: React.FC<TouchProps> = ({
-    engineId = 'physicsEngine',
+export interface TouchConstraintType {
+    type: 'touchConstraint';
+    constraint: Matter.Constraint;
+    body: Matter.Body | null;
+    collisionFilter: {
+        category: number;
+        mask: number;
+        group: number;
+    };
+}
+
+/**
+ * A component that adds a touch constraint to the engine.
+ *
+ * When the user touches the screen, it will try to find a body to drag.
+ * The body is found by checking if the touch point is inside the body's bounds.
+ * If the body is found, it will be assigned to the constraint and the constraint
+ * will be updated to follow the user's touch.
+ *
+ * The touch constraint is created with a stiffness of 0.1 and a length of 0.01.
+ * These values can be changed by passing an options object with the constraint
+ * properties.
+ *
+ * The component uses the `GestureDetector` from `react-native-gesture-handler`
+ * to handle the gesture events.
+ *
+ * @param {Object} props The props object.
+ * @param {string} [props.engineId='defaultEngine'] The ID of the engine.
+ * @param {Object} [props.options={}] The options object.
+ * @param {Object} [props.options.constraint={}] The constraint properties.
+ * @param {number} [props.options.constraint.stiffness=0.1] The stiffness of the constraint.
+ * @param {number} [props.options.constraint.length=0.01] The length of the constraint.
+ * @param {boolean} [props.enabled=true] Whether the constraint is enabled.
+ * @param {React.ReactNode} props.children The children of the component.
+ *
+ * @return {JSX.Element} The component.
+ */
+export const TouchConstraint: React.FC<TouchConstraintProps> = ({
+    engineId = 'defaultEngine',
     options = {},
+    enabled = true,
     children,
 }) => {
     React.useEffect(() => {
@@ -33,7 +72,7 @@ export const Touch: React.FC<TouchProps> = ({
 
             const engine = (global as any)[engineId];
 
-            if (!global.mouseConstraint) {
+            if (!global.Matter.touchConstraint) {
                 const constraint = global.Matter.Constraint.create({
                     pointA: { x: 0, y: 0 },
                     pointB: { x: 0, y: 0 },
@@ -42,8 +81,8 @@ export const Touch: React.FC<TouchProps> = ({
                     label: 'Mouse Constraint',
                 });
 
-                global.mouseConstraint = {
-                    type: 'mouseConstraint',
+                global.Matter.touchConstraint = {
+                    type: 'touchConstraint',
                     constraint: constraint,
                     body: null,
                     collisionFilter: {
@@ -60,38 +99,38 @@ export const Touch: React.FC<TouchProps> = ({
         return () => {
             runOnUI(() => {
                 'worklet';
-                if (global.mouseConstraint) {
+                if (global.Matter.touchConstraint) {
                     const engine = (global as any)[engineId];
                     global.Matter.World.remove(
                         engine.world,
-                        global.mouseConstraint.constraint
+                        global.Matter.touchConstraint.constraint
                     );
-                    global.mouseConstraint = null;
+                    global.Matter.touchConstraint = null;
                 }
             })();
         };
     }, [engineId, options.constraint]);
 
     const pan = Gesture.Pan()
-        .enabled(options.enablePan ?? true)
+        .enabled(enabled)
         .onBegin((event: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
             'worklet';
             if (
                 !global.Matter ||
                 !(engineId in global) ||
-                !global.mouseConstraint
+                !global.Matter.touchConstraint
             )
                 return;
 
             const engine = (global as any)[engineId];
             const point = { x: event.absoluteX, y: event.absoluteY };
             const bodies = global.Matter.Composite.allBodies(engine.world);
-            const mouseConstraint = global.mouseConstraint;
-            const constraint = mouseConstraint.constraint;
+            const touchConstraint = global.Matter.touchConstraint;
+            const constraint = touchConstraint.constraint;
 
             // Reset previous body
-            constraint.bodyB = mouseConstraint.body = null;
-            constraint.pointB = null;
+            constraint.bodyB = touchConstraint.body = null;
+            constraint.pointB = global.Matter.Vector.create(0, 0);
 
             // Find new body to drag
             for (let i = 0; i < bodies.length; i++) {
@@ -101,7 +140,7 @@ export const Touch: React.FC<TouchProps> = ({
                     global.Matter.Bounds.contains(body.bounds, point) &&
                     global.Matter.Detector.canCollide(
                         body.collisionFilter,
-                        mouseConstraint.collisionFilter
+                        touchConstraint.collisionFilter
                     )
                 ) {
                     // Check parts (for compound bodies)
@@ -118,12 +157,11 @@ export const Touch: React.FC<TouchProps> = ({
                             )
                         ) {
                             constraint.pointA = point;
-                            constraint.bodyB = mouseConstraint.body = body;
+                            constraint.bodyB = touchConstraint.body = body;
                             constraint.pointB = {
                                 x: point.x - body.position.x,
                                 y: point.y - body.position.y,
                             };
-                            constraint.angleB = body.angle;
 
                             global.Matter.Sleeping.set(body, false);
                             break;
@@ -137,9 +175,9 @@ export const Touch: React.FC<TouchProps> = ({
         .onUpdate(
             (event: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
                 'worklet';
-                if (!global.mouseConstraint) return;
+                if (!global.Matter || !global.Matter.touchConstraint) return;
 
-                const constraint = global.mouseConstraint.constraint;
+                const constraint = global.Matter.touchConstraint.constraint;
                 const body = constraint.bodyB;
 
                 if (body) {
@@ -153,14 +191,14 @@ export const Touch: React.FC<TouchProps> = ({
         )
         .onEnd(() => {
             'worklet';
-            if (!global.mouseConstraint) return;
+            if (!global.Matter || !global.Matter.touchConstraint) return;
 
-            const constraint = global.mouseConstraint.constraint;
+            const constraint = global.Matter.touchConstraint.constraint;
             const body = constraint.bodyB;
 
             if (body) {
-                constraint.bodyB = global.mouseConstraint.body = null;
-                constraint.pointB = null;
+                constraint.bodyB = global.Matter.touchConstraint.body = null;
+                constraint.pointB = global.Matter.Vector.create(0, 0);
             }
         });
 
