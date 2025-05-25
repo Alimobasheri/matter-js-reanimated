@@ -1,3 +1,4 @@
+import Matter from 'matter-js';
 import { DerivedValue, useDerivedValue } from 'react-native-reanimated';
 
 export interface MatterBodyState {
@@ -23,8 +24,7 @@ export function useMatterBody(bodyId: string): DerivedValue<MatterBodyState> {
         if (!global.Matter || !(bodyId in global)) {
             return defaultState;
         }
-
-        //@ts-ignore
+        // @ts-ignore
         const body: Matter.Body = (global as unknown as Global)[bodyId];
         return {
             position: { ...body.position },

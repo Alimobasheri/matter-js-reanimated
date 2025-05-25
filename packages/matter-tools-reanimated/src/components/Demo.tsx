@@ -4,6 +4,7 @@ import { useFrameCallback } from 'react-native-reanimated';
 import { ReanimatedMatter } from './ReanimatedMatter';
 import { Render, RenderProps } from './Render';
 import { TouchConstraint } from './TouchConstraint';
+import { SkiaRender } from './skia/SkiaRender';
 
 interface DemoProps {
     exampleWorklet: (engine: any) => void;
@@ -16,6 +17,7 @@ interface DemoProps {
             };
             enablePan?: boolean;
         };
+        skia?: boolean;
     };
 }
 
@@ -34,7 +36,17 @@ export const Demo: React.FC<DemoProps> = ({ exampleWorklet, options = {} }) => {
         <View style={styles.container}>
             <ReanimatedMatter worklet={exampleWorklet} engineId="demoEngine">
                 <TouchConstraint engineId="demoEngine" options={options.touch}>
-                    <Render engineId="demoEngine" options={options.render} />
+                    {options.skia ? (
+                        <SkiaRender
+                            engineId="demoEngine"
+                            options={options.render}
+                        />
+                    ) : (
+                        <Render
+                            engineId="demoEngine"
+                            options={options.render}
+                        />
+                    )}
                 </TouchConstraint>
             </ReanimatedMatter>
         </View>

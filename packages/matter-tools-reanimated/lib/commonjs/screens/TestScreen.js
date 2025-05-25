@@ -30,9 +30,7 @@ function TestScreen() {
     exampleWorklet: _ballPool.initBallPool,
     options: {
       render: {
-        wireframes: true,
-        showBounds: true,
-        showPositions: true
+        wireframes: false
       },
       touch: {
         constraint: {
@@ -40,7 +38,8 @@ function TestScreen() {
           damping: 0.3
         },
         enablePan: true
-      }
+      },
+      skia: true
     }
   }));
 }

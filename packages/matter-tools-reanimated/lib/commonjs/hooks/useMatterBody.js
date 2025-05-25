@@ -30,8 +30,7 @@ function useMatterBody(bodyId) {
     if (!global.Matter || !(bodyId in global)) {
       return defaultState;
     }
-
-    //@ts-ignore
+    // @ts-ignore
     const body = global[bodyId];
     return {
       position: {

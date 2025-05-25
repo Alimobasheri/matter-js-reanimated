@@ -13,5 +13,5 @@ export interface RenderProps {
         showAngleIndicator?: boolean;
     };
 }
-export declare const Render: React.FC<RenderProps>;
-//# sourceMappingURL=Render.d.ts.map
+export declare const SkiaRender: React.FC<RenderProps>;
+//# sourceMappingURL=SkiaRender.d.ts.map

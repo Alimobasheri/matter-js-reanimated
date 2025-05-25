@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.RenderBody = void 0;
+exports.Constraints = void 0;
 var _react = _interopRequireDefault(require("react"));
 var _reactNativeSvg = require("react-native-svg");
 var _reactNativeReanimated = _interopRequireWildcard(require("react-native-reanimated"));
@@ -13,30 +13,14 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 //@ts-ignore
 
 const AnimatedPath = _reactNativeReanimated.default.createAnimatedComponent(_reactNativeSvg.Path);
-const AnimatedCircle = _reactNativeReanimated.default.createAnimatedComponent(_reactNativeSvg.Circle);
 const AnimatedG = _reactNativeReanimated.default.createAnimatedComponent(_reactNativeSvg.G);
-const RenderBody = ({
+const Constraints = ({
   options = {}
 }) => {
-  const bodyPathD = (0, _reactNativeReanimated.useSharedValue)('');
   const constraintPathD = (0, _reactNativeReanimated.useSharedValue)('');
   (0, _reactNativeReanimated.useFrameCallback)(() => {
     'worklet';
 
-    let bodyPath = '';
-    if (Array.isArray(global.svgContent)) {
-      for (const body of global.svgContent) {
-        if (body.type === 'circle' && body.circleRadius !== undefined) {
-          const x = body.position.x;
-          const y = body.position.y;
-          const r = body.circleRadius;
-          bodyPath += `M ${x - r},${y} a ${r},${r} 0 1,0 ${r * 2},0 a ${r},${r} 0 1,0 -${r * 2},0 `;
-        } else {
-          bodyPath += body.vertices.map((v, j) => `${j === 0 ? 'M' : 'L'} ${v.x} ${v.y}`).join(' ') + 'Z ';
-        }
-      }
-    }
-    bodyPathD.value = bodyPath;
     let constraintPath = '';
     if (Array.isArray(global.svgConstraints)) {
       for (const constraint of global.svgConstraints) {
@@ -92,12 +76,6 @@ const RenderBody = ({
     }
     constraintPathD.value = constraintPath;
   });
-  const bodyAnimatedProps = (0, _reactNativeReanimated.useAnimatedProps)(() => ({
-    d: bodyPathD.value,
-    fill: options.wireframes ? 'none' : 'black',
-    stroke: options.wireframes ? '#2E3440' : 'none',
-    strokeWidth: 1
-  }), [bodyPathD, options.wireframes]);
   const constraintAnimatedProps = (0, _reactNativeReanimated.useAnimatedProps)(() => ({
     d: constraintPathD.value,
     fill: 'none',
@@ -105,10 +83,8 @@ const RenderBody = ({
     strokeWidth: 1
   }), [constraintPathD, options.wireframes]);
   return /*#__PURE__*/_react.default.createElement(AnimatedG, null, /*#__PURE__*/_react.default.createElement(AnimatedPath, {
-    animatedProps: bodyAnimatedProps
-  }), /*#__PURE__*/_react.default.createElement(AnimatedPath, {
     animatedProps: constraintAnimatedProps
   }));
 };
-exports.RenderBody = RenderBody;
-//# sourceMappingURL=RenderBody.js.map
+exports.Constraints = Constraints;
+//# sourceMappingURL=Constraints.js.map

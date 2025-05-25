@@ -33,6 +33,7 @@ export default function TestScreen() {
                         },
                         enablePan: true,
                     },
+                    skia: true,
                 }}
             />
         </View>

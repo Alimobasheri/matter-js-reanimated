@@ -3,19 +3,17 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Render = void 0;
+exports.SkiaRender = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _reactNative = require("react-native");
 var _reactNativeReanimated = require("react-native-reanimated");
-var _reactNativeSvg = _interopRequireDefault(require("react-native-svg"));
-var _Bodies = require("./Bodies");
-var _Constraints = require("./Constraints");
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+var _reactNativeSkia = require("@shopify/react-native-skia");
+var _SkiaBodies = require("./SkiaBodies");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 //@ts-ignore
 
-const Render = ({
+const SkiaRender = ({
   engineId = 'physicsEngine',
   options = {}
 }) => {
@@ -92,19 +90,17 @@ const Render = ({
       width,
       height
     }]
-  }, /*#__PURE__*/_react.default.createElement(_reactNativeSvg.default, {
-    width: width,
-    height: height,
+  }, /*#__PURE__*/_react.default.createElement(_reactNativeSkia.Canvas, {
     style: [styles.svg, {
-      backgroundColor: options.background || 'transparent'
+      backgroundColor: options.background || 'transparent',
+      width,
+      height
     }]
-  }, /*#__PURE__*/_react.default.createElement(_Bodies.Bodies, {
-    options: options
-  }), options.showConstraints && /*#__PURE__*/_react.default.createElement(_Constraints.Constraints, {
+  }, /*#__PURE__*/_react.default.createElement(_SkiaBodies.SkiaBodies, {
     options: options
   })));
 };
-exports.Render = Render;
+exports.SkiaRender = SkiaRender;
 const styles = _reactNative.StyleSheet.create({
   container: {
     overflow: 'hidden',
@@ -114,4 +110,4 @@ const styles = _reactNative.StyleSheet.create({
     flex: 1
   }
 });
-//# sourceMappingURL=Render.js.map
+//# sourceMappingURL=SkiaRender.js.map

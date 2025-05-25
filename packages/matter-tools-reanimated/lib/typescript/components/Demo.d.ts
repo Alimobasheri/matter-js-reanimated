@@ -1,14 +1,9 @@
 import React from 'react';
+import { RenderProps } from './Render';
 interface DemoProps {
     exampleWorklet: (engine: any) => void;
     options?: {
-        render?: {
-            wireframes?: boolean;
-            showBounds?: boolean;
-            showAxes?: boolean;
-            showPositions?: boolean;
-            showAngleIndicator?: boolean;
-        };
+        render?: RenderProps['options'];
         touch?: {
             constraint?: {
                 stiffness?: number;
@@ -16,8 +11,9 @@ interface DemoProps {
             };
             enablePan?: boolean;
         };
+        skia?: boolean;
     };
 }
-export declare const Demo: React.ComponentType<DemoProps>;
+export declare const Demo: React.FC<DemoProps>;
 export {};
 //# sourceMappingURL=Demo.d.ts.map
