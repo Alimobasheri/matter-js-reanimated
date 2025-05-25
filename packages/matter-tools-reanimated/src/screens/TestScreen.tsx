@@ -5,44 +5,46 @@ import { Demo } from '../components/Demo';
 import { initBouncingBalls } from '../examples/BouncingBalls';
 import { initAvalanche } from '../examples/avalanche';
 import { initBallPool } from '../examples/ballPool';
+import { initConstraints } from '../examples/constraints';
 
 export default function TestScreen() {
-    const { width, height } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
-    React.useEffect(() => {
-        // Make dimensions available to worklets
-        runOnUI(() => {
-            'worklet';
-            global.windowWidth = width;
-            global.windowHeight = height;
-        })();
-    }, [width, height]);
+  React.useEffect(() => {
+    // Make dimensions available to worklets
+    runOnUI(() => {
+      'worklet';
+      global.windowWidth = width;
+      global.windowHeight = height;
+    })();
+  }, [width, height]);
 
-    return (
-        <View style={styles.container}>
-            <Demo
-                exampleWorklet={initBallPool}
-                options={{
-                    render: {
-                        wireframes: false,
-                    },
-                    touch: {
-                        constraint: {
-                            stiffness: 0.2,
-                            damping: 0.3,
-                        },
-                        enablePan: true,
-                    },
-                    skia: true,
-                }}
-            />
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <Demo
+        exampleWorklet={initConstraints}
+        options={{
+          render: {
+            wireframes: false,
+            showConstraints: true,
+          },
+          touch: {
+            constraint: {
+              stiffness: 0.2,
+              damping: 0.3,
+            },
+            enablePan: true,
+          },
+          skia: true,
+        }}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#000',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
 });
