@@ -1,53 +1,65 @@
 # matter-tools-reanimated
 
-`matter-tools-reanimated` is a utility toolkit built on top of [`matter-js-reanimated`](https://www.npmjs.com/package/matter-js-reanimated), a React Native port of the Matter.js physics engine for the UI thread. This package adds developer-friendly components and utilities for rendering, interaction, and experimentation with physics-based scenes in React Native apps using `react-native-reanimated` and `react-native-gesture-handler`.
+A companion library for [`matter-js-reanimated`](https://www.npmjs.com/package/matter-js-reanimated), providing ready-to-use UI-thread physics rendering, gesture interactions, and utilities for React Native apps using `react-native-reanimated`, `react-native-skia`, and `react-native-gesture-handler`.
 
 ---
 
 ## ✨ Features
 
-- 🔧 `Render`: Live SVG or Skia-based physics renderer using Reanimated.
-- 🎮 `Touch`: Adds drag to physics bodies.
-- 🧪 `Demo`: Plug-and-play interactive physics scenes.
-- 🧱 `ReanimatedMatter`: Wrapper Component for initializing Matter.js safely in the UI thread.
-- 📦 Examples: Includes demo scenes like `BouncingBalls`, `BallPool`, and `Avalanche`.
+- 🧱 **ReanimatedMatter**: Safely initializes `Matter.js` in the UI thread.
+- 🔼️ **Render / SkiaRender**: Declarative real-time rendering using either SVG or Skia canvas.
+- 🎮 **TouchConstraint**: Drag and manipulate physics bodies using pan gestures.
+- 🤪 **Demo**: All-in-one wrapper for quickly testing simulations.
+- 🔧 **Bodies** and **Constraints**: Internal SVG representations for live rendering.
+- 💡 **Skia Support**: High-performance Skia-based canvas rendering with `SkiaRender` and `SkiaBodies`.
+- 🔬 **Hooks**:
+
+  - `useDerivedMatterBody` & `useDerivedMatterConstraint` for live physics state.
+  - `useMatterBody` for low-level body access in the UI thread.
+
+- 🧩 **Example Worklets**: Plug-and-play examples:
+
+  - `initBouncingBalls`
+  - `initBallPool`
+  - `initAvalanche`
+  - `initAnimatedDemo` (includes dynamic constraint visuals)
 
 ---
 
 ## 📦 Installation
 
-Ensure your project uses:
+```sh
+npm install matter-js-reanimated matter-tools-reanimated
+```
+
+Peer dependencies:
 
 - `react-native-reanimated >= 3.0.0`
-- `react-native-gesture-handler`
-- `react-native-svg`
-- `react-native-skia` (optional if you don't want to use Skia)
-
-Then install:
-
-npm install matter-js-reanimated matter-tools-reanimated
+- `react-native-gesture-handler >= 2.0.0`
+- `react-native-svg >= 15.0.0`
+- `@shopify/react-native-skia` (optional, for Skia rendering)
 
 ---
 
 ## 🧠 Core Concept
 
-`matter-tools-reanimated` assumes Matter.js is used in the **UI thread**. It wraps common patterns (rendering, interaction, setup) into reusable components so you can focus on the simulation logic.
+This library simplifies using `matter-js-reanimated` by abstracting rendering, input, and simulation setup into reusable components—all safely running on the UI thread.
 
 ---
 
-## 🔌 Usage
+## 🔌 Usage Example
 
-```js
+```tsx
 import { Demo } from 'matter-tools-reanimated';
-import { initBouncingBalls } from 'matter-tools-reanimated/examples/BouncingBalls';
+import { initBallPool } from 'matter-tools-reanimated/examples/ballPool';
 
 export default function App() {
   return (
     <Demo
-      exampleWorklet={initBouncingBalls}
+      exampleWorklet={initBallPool}
       options={{
-        render: { wireframes: true },
-        touch: { constraint: { stiffness: 0.2, damping: 0.3 } },
+        render: { wireframes: false },
+        touch: { enablePan: true },
         skia: true,
       }}
     />
@@ -57,97 +69,111 @@ export default function App() {
 
 ---
 
-## 🧩 Exports
+## 🤩 Components & Exports
 
-### `Demo`
+### `<ReanimatedMatter />`
 
-Interactive container that sets up a Matter.js engine and runs a simulation.
+Initializes and safely mounts a Matter.js engine on the UI thread.
 
-```js
-<Demo
-  exampleWorklet={(engine) => {
-    'workelt';
-    /* worklet to create bodies */
+```tsx
+<ReanimatedMatter
+  engineId="demoEngine"
+  worklet={(engine) => {
+    'worklet';
   }}
+>
+  {...children}
+</ReanimatedMatter>
+```
+
+---
+
+### `<Demo />`
+
+A quick wrapper for testing example worklets with rendering and touch enabled.
+
+```tsx
+<Demo
+  exampleWorklet={initBallPool}
   options={{
-    render: {
-      wireframes: true,
-      background: '#fff',
-      width: 400,
-      height: 800,
-    },
-    touch: {
-      enablePan: true,
-      constraint: {
-        stiffness: 0.2,
-        damping: 0.3,
-      },
-    },
+    render: { wireframes: false },
+    touch: { enablePan: true, constraint: { stiffness: 0.2, damping: 0.3 } },
+    skia: true,
   }}
 />
 ```
 
 ---
 
-### `Render`
+### `<Render />` and `<SkiaRender />`
 
-Renders the current physics world using SVG and Reanimated.
+Real-time SVG or Skia rendering of physics bodies and constraints.
 
-```js
+```tsx
 <Render
   engineId="demoEngine"
   options={{
     wireframes: true,
-    background: '#f0f0f0',
-    width: 300,
-    height: 500,
+    background: '#fff',
+    showConstraints: true,
   }}
 />
 ```
 
 ---
 
-### `Touch`
+### `<TouchConstraint />`
 
-Gesture handler that allows dragging, pinching, and rotating bodies.
+Adds drag gestures to interact with physics bodies.
 
-```js
-<Touch
-  engineId="demoEngine"
-  options={{
-    enablePan: true,
-    enablePinch: true,
-    enableRotate: true,
-    constraint: {
-      stiffness: 0.1,
-      damping: 0.2,
-    },
-  }}
->
+```tsx
+<TouchConstraint engineId="demoEngine">
   <Render engineId="demoEngine" />
-</Touch>
+</TouchConstraint>
 ```
 
 ---
 
-## 🧪 Examples
+## 🔬 Hooks
 
-The package includes the following worklet demos:
+### `useDerivedMatterBody` & `useDerivedMatterConstraint`
 
-- `initBouncingBalls`
-- `initBallPool`
-- `initAvalanche`
+Extract live physics data as `SharedValue`s on the UI thread.
 
-You can import and use them with `<Demo />`.
+```ts
+const bodyState = useDerivedMatterBody(
+  { label: 'signBody' },
+  'demoEngine',
+  (body) => ({ x: body.position.x, y: body.position.y })
+);
+```
+
+### `useMatterBody`
+
+Directly access any body's real-time state via `DerivedValue`.
 
 ---
 
-## 📁 Folder Structure
+## 🤪 Included Examples
 
-- `src/components`: Core components (`Render`, `Demo`, `TouchConstraint`, `ReanimatedMatter`)
-- `src/examples`: Prebuilt demo scenes
-- `src/worklets`: Internal touch constraint utilities
-- `lib`: Compiled output
+- `initBouncingBalls` – Falling and bouncing balls.
+- `initBallPool` – Confined dynamic pool of balls and shapes.
+- `initAvalanche` – Simulated avalanche on sloped platforms.
+- `initAnimatedDemo` – Renders a sign with visual constraints using body and constraint tracking.
+
+---
+
+## 📁 Directory Overview
+
+```
+src/
+├── components/         // Core physics + rendering components
+├── components/skia/    // Skia-based renderers
+├── examples/           // Worklet demos
+├── hooks/              // Live data hooks for Matter objects
+├── screens/            // Example app screens
+├── types/              // Global declarations
+```
 
 ---
 
