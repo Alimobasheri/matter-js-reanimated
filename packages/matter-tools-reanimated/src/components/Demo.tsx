@@ -2,19 +2,13 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useFrameCallback } from 'react-native-reanimated';
 import { ReanimatedMatter } from './ReanimatedMatter';
-import { Render } from './Render';
+import { Render, RenderProps } from './Render';
 import { TouchConstraint } from './TouchConstraint';
 
 interface DemoProps {
     exampleWorklet: (engine: any) => void;
     options?: {
-        render?: {
-            wireframes?: boolean;
-            showBounds?: boolean;
-            showAxes?: boolean;
-            showPositions?: boolean;
-            showAngleIndicator?: boolean;
-        };
+        render?: RenderProps['options'];
         touch?: {
             constraint?: {
                 stiffness?: number;

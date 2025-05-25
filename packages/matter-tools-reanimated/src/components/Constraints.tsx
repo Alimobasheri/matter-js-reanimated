@@ -1,26 +1,12 @@
 import React from 'react';
 //@ts-ignore
-import { Path, Circle, G } from 'react-native-svg';
+import { Path, G } from 'react-native-svg';
 import Animated, {
-    AnimatedProps,
-    DerivedValue,
     useAnimatedProps,
     useFrameCallback,
     useSharedValue,
 } from 'react-native-reanimated';
-
-export interface BodyShape {
-    id: string | number;
-    type: 'circle' | 'polygon';
-    position: { x: number; y: number };
-    angle: number;
-    vertices: Array<{ x: number; y: number }>;
-    bounds: {
-        min: { x: number; y: number };
-        max: { x: number; y: number };
-    };
-    circleRadius?: number;
-}
+import { RenderProps } from './Render';
 
 export interface ConstraintShape {
     id: string | number;
@@ -37,48 +23,14 @@ export interface ConstraintShape {
     };
 }
 
-interface RenderBodyProps {
-    options?: {
-        wireframes?: boolean;
-        showBounds?: boolean;
-        showAxes?: boolean;
-        showPositions?: boolean;
-        showAngleIndicator?: boolean;
-    };
-}
-
 const AnimatedPath = Animated.createAnimatedComponent(Path);
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedG = Animated.createAnimatedComponent(G);
 
-export const RenderBody: React.FC<RenderBodyProps> = ({ options = {} }) => {
-    const bodyPathD = useSharedValue('');
+export const Constraints: React.FC<RenderProps> = ({ options = {} }) => {
     const constraintPathD = useSharedValue('');
 
     useFrameCallback(() => {
         'worklet';
-        let bodyPath = '';
-        if (Array.isArray(global.svgContent)) {
-            for (const body of global.svgContent) {
-                if (body.type === 'circle' && body.circleRadius !== undefined) {
-                    const x = body.position.x;
-                    const y = body.position.y;
-                    const r = body.circleRadius;
-                    bodyPath += `M ${x - r},${y} a ${r},${r} 0 1,0 ${
-                        r * 2
-                    },0 a ${r},${r} 0 1,0 -${r * 2},0 `;
-                } else {
-                    bodyPath +=
-                        body.vertices
-                            .map(
-                                (v, j) => `${j === 0 ? 'M' : 'L'} ${v.x} ${v.y}`
-                            )
-                            .join(' ') + 'Z ';
-                }
-            }
-        }
-        bodyPathD.value = bodyPath;
-
         let constraintPath = '';
         if (Array.isArray(global.svgConstraints)) {
             for (const constraint of global.svgConstraints) {
@@ -154,16 +106,6 @@ export const RenderBody: React.FC<RenderBodyProps> = ({ options = {} }) => {
         constraintPathD.value = constraintPath;
     });
 
-    const bodyAnimatedProps = useAnimatedProps(
-        () => ({
-            d: bodyPathD.value,
-            fill: options.wireframes ? 'none' : 'black',
-            stroke: options.wireframes ? '#2E3440' : 'none',
-            strokeWidth: 1,
-        }),
-        [bodyPathD, options.wireframes]
-    );
-
     const constraintAnimatedProps = useAnimatedProps(
         () => ({
             d: constraintPathD.value,
@@ -176,7 +118,6 @@ export const RenderBody: React.FC<RenderBodyProps> = ({ options = {} }) => {
 
     return (
         <AnimatedG>
-            <AnimatedPath animatedProps={bodyAnimatedProps} />
             <AnimatedPath animatedProps={constraintAnimatedProps} />
         </AnimatedG>
     );

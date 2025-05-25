@@ -1,6 +1,7 @@
 import Matter from 'matter-js';
-import { BodyShape, ConstraintShape } from '../components/RenderBody';
 import { TouchConstraintType } from '../components/TouchConstraint';
+import { BodyShape } from '../components/Bodies';
+import { ConstraintShape } from '../components/Constraints';
 
 type MatterType = typeof Matter & {
     touchConstraint: TouchConstraintType | null;

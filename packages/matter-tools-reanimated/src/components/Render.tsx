@@ -1,22 +1,20 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
-import {
-    useDerivedValue,
-    useFrameCallback,
-    useSharedValue,
-} from 'react-native-reanimated';
+import { useFrameCallback } from 'react-native-reanimated';
 //@ts-ignore
 import Svg from 'react-native-svg';
-import { BodyShape, RenderBody } from './RenderBody';
 import Matter from 'matter-js';
+import { Bodies } from './Bodies';
+import { Constraints } from './Constraints';
 
-interface RenderProps {
+export interface RenderProps {
     engineId?: string;
     options?: {
         width?: number;
         height?: number;
         background?: string;
         wireframes?: boolean;
+        showConstraints?: boolean;
         showBounds?: boolean;
         showAxes?: boolean;
         showPositions?: boolean;
@@ -55,6 +53,7 @@ export const Render: React.FC<RenderProps> = ({
                 max: { ...body.bounds.max },
             },
             circleRadius: body.circleRadius,
+            render: body.render,
         }));
 
         const constraints = global.Matter.Composite.allConstraints(
@@ -92,7 +91,8 @@ export const Render: React.FC<RenderProps> = ({
                     { backgroundColor: options.background || 'transparent' },
                 ]}
             >
-                <RenderBody options={options} />
+                <Bodies options={options} />
+                {options.showConstraints && <Constraints options={options} />}
             </Svg>
         </View>
     );

@@ -24,9 +24,7 @@ export default function TestScreen() {
                 exampleWorklet={initBallPool}
                 options={{
                     render: {
-                        wireframes: true,
-                        showBounds: true,
-                        showPositions: true,
+                        wireframes: false,
                     },
                     touch: {
                         constraint: {
