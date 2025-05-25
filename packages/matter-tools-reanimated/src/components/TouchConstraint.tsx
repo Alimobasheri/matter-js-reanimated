@@ -184,8 +184,8 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
 
                 if (body) {
                     constraint.pointA = {
-                        x: event.absoluteX,
-                        y: event.absoluteY,
+                        x: event.x,
+                        y: event.y,
                     };
                     global.Matter.Sleeping.set(body, false);
                 }
@@ -195,12 +195,18 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
             'worklet';
             if (!global.Matter || !global.Matter.touchConstraint) return;
 
-            const constraint = global.Matter.touchConstraint.constraint;
+            const touchConstraint = global.Matter.touchConstraint;
+            const constraint = touchConstraint.constraint;
             const body = constraint.bodyB;
 
             if (body) {
-                constraint.bodyB = global.Matter.touchConstraint.body = null;
-                constraint.pointB = global.Matter.Vector.create(0, 0);
+                // Clear all references to the body
+                constraint.bodyB = null;
+                touchConstraint.body = null;
+
+                // Reset the constraint points
+                constraint.pointA = { x: 0, y: 0 };
+                constraint.pointB = { x: 0, y: 0 };
             }
         });
 

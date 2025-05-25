@@ -9,7 +9,7 @@
 -   🔧 `Render`: Live SVG-based physics renderer using Reanimated.
 -   🎮 `Touch`: Adds drag, pinch, and rotate gestures to physics bodies.
 -   🧪 `Demo`: Plug-and-play interactive physics scenes.
--   🧱 `withMatter`: HOC for initializing Matter.js safely in the UI thread.
+-   🧱 `ReanimatedMatter`: Wrapper Component for initializing Matter.js safely in the UI thread.
 -   📦 Examples: Includes demo scenes like `BouncingBalls`, `BallPool`, and `Avalanche`.
 
 ---
@@ -128,15 +128,6 @@ Gesture handler that allows dragging, pinching, and rotating bodies.
 
 ---
 
-### `withMatter`
-
-Higher-Order Component to initialize Matter.js on the UI thread.
-
-const MyComponent = () => <Render />;
-export default withMatter(MyComponent);
-
----
-
 ## 🧪 Examples
 
 The package includes the following worklet demos:
@@ -151,9 +142,8 @@ You can import and use them with `<Demo />`.
 
 ## 📁 Folder Structure
 
--   `src/components`: Core components (`Render`, `Demo`, `Touch`)
+-   `src/components`: Core components (`Render`, `Demo`, `TouchConstraint`, `ReanimatedMatter`)
 -   `src/examples`: Prebuilt demo scenes
--   `src/hoc`: Utility HOC (`withMatter`)
 -   `src/worklets`: Internal touch constraint utilities
 -   `lib`: Compiled output
 
