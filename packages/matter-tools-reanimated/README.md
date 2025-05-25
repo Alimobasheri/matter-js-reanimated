@@ -6,11 +6,11 @@
 
 ## ✨ Features
 
--   🔧 `Render`: Live SVG-based physics renderer using Reanimated.
--   🎮 `Touch`: Adds drag, pinch, and rotate gestures to physics bodies.
--   🧪 `Demo`: Plug-and-play interactive physics scenes.
--   🧱 `ReanimatedMatter`: Wrapper Component for initializing Matter.js safely in the UI thread.
--   📦 Examples: Includes demo scenes like `BouncingBalls`, `BallPool`, and `Avalanche`.
+- 🔧 `Render`: Live SVG or Skia-based physics renderer using Reanimated.
+- 🎮 `Touch`: Adds drag to physics bodies.
+- 🧪 `Demo`: Plug-and-play interactive physics scenes.
+- 🧱 `ReanimatedMatter`: Wrapper Component for initializing Matter.js safely in the UI thread.
+- 📦 Examples: Includes demo scenes like `BouncingBalls`, `BallPool`, and `Avalanche`.
 
 ---
 
@@ -18,9 +18,10 @@
 
 Ensure your project uses:
 
--   `react-native-reanimated >= 3.0.0`
--   `react-native-gesture-handler`
--   `react-native-svg`
+- `react-native-reanimated >= 3.0.0`
+- `react-native-gesture-handler`
+- `react-native-svg`
+- `react-native-skia` (optional if you don't want to use Skia)
 
 Then install:
 
@@ -41,15 +42,16 @@ import { Demo } from 'matter-tools-reanimated';
 import { initBouncingBalls } from 'matter-tools-reanimated/examples/BouncingBalls';
 
 export default function App() {
-    return (
-        <Demo
-            exampleWorklet={initBouncingBalls}
-            options={{
-                render: { wireframes: true },
-                touch: { constraint: { stiffness: 0.2, damping: 0.3 } },
-            }}
-        />
-    );
+  return (
+    <Demo
+      exampleWorklet={initBouncingBalls}
+      options={{
+        render: { wireframes: true },
+        touch: { constraint: { stiffness: 0.2, damping: 0.3 } },
+        skia: true,
+      }}
+    />
+  );
 }
 ```
 
@@ -63,25 +65,25 @@ Interactive container that sets up a Matter.js engine and runs a simulation.
 
 ```js
 <Demo
-    exampleWorklet={(engine) => {
-        'workelt';
-        /* worklet to create bodies */
-    }}
-    options={{
-        render: {
-            wireframes: true,
-            background: '#fff',
-            width: 400,
-            height: 800,
-        },
-        touch: {
-            enablePan: true,
-            constraint: {
-                stiffness: 0.2,
-                damping: 0.3,
-            },
-        },
-    }}
+  exampleWorklet={(engine) => {
+    'workelt';
+    /* worklet to create bodies */
+  }}
+  options={{
+    render: {
+      wireframes: true,
+      background: '#fff',
+      width: 400,
+      height: 800,
+    },
+    touch: {
+      enablePan: true,
+      constraint: {
+        stiffness: 0.2,
+        damping: 0.3,
+      },
+    },
+  }}
 />
 ```
 
@@ -93,13 +95,13 @@ Renders the current physics world using SVG and Reanimated.
 
 ```js
 <Render
-    engineId="demoEngine"
-    options={{
-        wireframes: true,
-        background: '#f0f0f0',
-        width: 300,
-        height: 500,
-    }}
+  engineId="demoEngine"
+  options={{
+    wireframes: true,
+    background: '#f0f0f0',
+    width: 300,
+    height: 500,
+  }}
 />
 ```
 
@@ -111,18 +113,18 @@ Gesture handler that allows dragging, pinching, and rotating bodies.
 
 ```js
 <Touch
-    engineId="demoEngine"
-    options={{
-        enablePan: true,
-        enablePinch: true,
-        enableRotate: true,
-        constraint: {
-            stiffness: 0.1,
-            damping: 0.2,
-        },
-    }}
+  engineId="demoEngine"
+  options={{
+    enablePan: true,
+    enablePinch: true,
+    enableRotate: true,
+    constraint: {
+      stiffness: 0.1,
+      damping: 0.2,
+    },
+  }}
 >
-    <Render engineId="demoEngine" />
+  <Render engineId="demoEngine" />
 </Touch>
 ```
 
@@ -132,9 +134,9 @@ Gesture handler that allows dragging, pinching, and rotating bodies.
 
 The package includes the following worklet demos:
 
--   `initBouncingBalls`
--   `initBallPool`
--   `initAvalanche`
+- `initBouncingBalls`
+- `initBallPool`
+- `initAvalanche`
 
 You can import and use them with `<Demo />`.
 
@@ -142,10 +144,10 @@ You can import and use them with `<Demo />`.
 
 ## 📁 Folder Structure
 
--   `src/components`: Core components (`Render`, `Demo`, `TouchConstraint`, `ReanimatedMatter`)
--   `src/examples`: Prebuilt demo scenes
--   `src/worklets`: Internal touch constraint utilities
--   `lib`: Compiled output
+- `src/components`: Core components (`Render`, `Demo`, `TouchConstraint`, `ReanimatedMatter`)
+- `src/examples`: Prebuilt demo scenes
+- `src/worklets`: Internal touch constraint utilities
+- `lib`: Compiled output
 
 ---
 
