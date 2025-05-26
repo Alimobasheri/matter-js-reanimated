@@ -24,6 +24,7 @@ export interface BodyShape {
     };
     circleRadius?: number;
     render?: {
+        visible?: boolean;
         fillStyle?: string;
         strokeStyle?: string;
         lineWidth?: number;

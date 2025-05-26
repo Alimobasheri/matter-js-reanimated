@@ -6,29 +6,27 @@ Object.defineProperty(exports, "__esModule", {
 exports.Demo = void 0;
 var _react = _interopRequireDefault(require("react"));
 var _reactNative = require("react-native");
-var _reactNativeReanimated = require("react-native-reanimated");
 var _ReanimatedMatter = require("./ReanimatedMatter");
 var _Render = require("./Render");
 var _TouchConstraint = require("./TouchConstraint");
 var _SkiaRender = require("./skia/SkiaRender");
+var _Runner = require("./Runner");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const Demo = ({
   exampleWorklet,
   options = {}
 }) => {
-  (0, _reactNativeReanimated.useFrameCallback)(() => {
-    'worklet';
-
-    if (!global.demoEngine) return;
-    global.Matter.Engine.update(global.demoEngine, 16.667 // Use fixed timestep for demos
-    );
-  });
   return /*#__PURE__*/_react.default.createElement(_reactNative.View, {
     style: styles.container
   }, /*#__PURE__*/_react.default.createElement(_ReanimatedMatter.ReanimatedMatter, {
     worklet: exampleWorklet,
     engineId: "demoEngine"
-  }, /*#__PURE__*/_react.default.createElement(_TouchConstraint.TouchConstraint, {
+  }, /*#__PURE__*/_react.default.createElement(_Runner.Runner, {
+    engineId: "demoEngine",
+    options: {
+      enabled: true
+    }
+  }), /*#__PURE__*/_react.default.createElement(_TouchConstraint.TouchConstraint, {
     engineId: "demoEngine",
     options: options.touch
   }, options.skia ? /*#__PURE__*/_react.default.createElement(_SkiaRender.SkiaRender, {

@@ -4,37 +4,38 @@ import { BodyShape } from '../components/Bodies';
 import { ConstraintShape } from '../components/Constraints';
 
 type MatterType = typeof Matter & {
-    touchConstraint: TouchConstraintType | null;
+  touchConstraint: TouchConstraintType | null;
 };
 
 declare global {
-    var Matter: MatterType;
+  var Matter: MatterType;
+  var runner: MatterType.Runner | null;
 
-    // UI thread engine instance
-    var demoEngine: any;
-    var mouseConstraint: any;
-    var activeDragBody: any;
+  // UI thread engine instance
+  var demoEngine: any;
+  var mouseConstraint: any;
+  var activeDragBody: any;
 
-    // Window dimensions available in worklets
-    var windowWidth: number;
-    var windowHeight: number;
+  // Window dimensions available in worklets
+  var windowWidth: number;
+  var windowHeight: number;
 
-    var svgContent: BodyShape[];
-    var svgConstraints: ConstraintShape[];
+  var svgContent: BodyShape[];
+  var svgConstraints: ConstraintShape[];
 
-    interface MatterBody {
-        id: string | number;
-        position: { x: number; y: number };
-        angle: number;
-        bounds: {
-            min: { x: number; y: number };
-            max: { x: number; y: number };
-        };
-        vertices: Array<{ x: number; y: number }>;
-        circleRadius?: number;
-    }
-
-    var demoes: {
-        [key: string]: (engine: any) => void;
+  interface MatterBody {
+    id: string | number;
+    position: { x: number; y: number };
+    angle: number;
+    bounds: {
+      min: { x: number; y: number };
+      max: { x: number; y: number };
     };
+    vertices: Array<{ x: number; y: number }>;
+    circleRadius?: number;
+  }
+
+  var demoes: {
+    [key: string]: (engine: any) => void;
+  };
 }

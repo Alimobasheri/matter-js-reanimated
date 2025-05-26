@@ -6,6 +6,7 @@ import { initBouncingBalls } from '../examples/BouncingBalls';
 import { initAvalanche } from '../examples/avalanche';
 import { initBallPool } from '../examples/ballPool';
 import { initConstraints } from '../examples/constraints';
+import { initCloth } from '../examples/cloth';
 
 export default function TestScreen() {
   const { width, height } = useWindowDimensions();
@@ -22,7 +23,7 @@ export default function TestScreen() {
   return (
     <View style={styles.container}>
       <Demo
-        exampleWorklet={initConstraints}
+        exampleWorklet={initCloth}
         options={{
           render: {
             wireframes: false,
@@ -35,7 +36,7 @@ export default function TestScreen() {
             },
             enablePan: true,
           },
-          skia: true,
+          skia: false,
         }}
       />
     </View>

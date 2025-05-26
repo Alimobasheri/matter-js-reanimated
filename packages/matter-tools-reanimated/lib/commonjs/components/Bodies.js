@@ -24,6 +24,9 @@ const Bodies = ({
     if (!Array.isArray(global.svgContent)) return;
     const newPaths = {};
     for (const body of global.svgContent) {
+      if (body.render?.visible === false) {
+        continue;
+      }
       const pathD = body.type === 'circle' && body.circleRadius !== undefined ? `M ${body.position.x - body.circleRadius},${body.position.y} ` + `a ${body.circleRadius},${body.circleRadius} 0 1,0 ${body.circleRadius * 2},0 ` + `a ${body.circleRadius},${body.circleRadius} 0 1,0 -${body.circleRadius * 2},0` : body.vertices.map((v, j) => `${j === 0 ? 'M' : 'L'} ${v.x} ${v.y}`).join(' ') + 'Z';
       newPaths[body.id] = {
         d: pathD,
@@ -33,8 +36,7 @@ const Bodies = ({
       };
     }
     pathsData.value = newPaths;
-  }, true); // <-- Set active to true to run on every frame
-
+  }, true);
   const animatedProps = (0, _reactNativeReanimated.useAnimatedProps)(() => {
     'worklet';
 

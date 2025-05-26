@@ -3,10 +3,7 @@ import React from 'react';
 interface TouchConstraintProps {
     engineId?: string;
     options?: {
-        constraint?: {
-            stiffness?: number;
-            damping?: number;
-        };
+        constraint?: Matter.IConstraintDefinition;
     };
     enabled?: boolean;
     children: React.ReactNode;

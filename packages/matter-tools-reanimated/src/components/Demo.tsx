@@ -1,61 +1,44 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useFrameCallback } from 'react-native-reanimated';
 import { ReanimatedMatter } from './ReanimatedMatter';
 import { Render, RenderProps } from './Render';
 import { TouchConstraint } from './TouchConstraint';
 import { SkiaRender } from './skia/SkiaRender';
+import { Runner } from './Runner';
+import Matter from 'matter-js';
 
 interface DemoProps {
-    exampleWorklet: (engine: any) => void;
-    options?: {
-        render?: RenderProps['options'];
-        touch?: {
-            constraint?: {
-                stiffness?: number;
-                damping?: number;
-            };
-            enablePan?: boolean;
-        };
-        skia?: boolean;
+  exampleWorklet: (engine: any) => void;
+  options?: {
+    render?: RenderProps['options'];
+    touch?: {
+      constraint?: Matter.IConstraintDefinition;
+      enablePan?: boolean;
     };
+    skia?: boolean;
+  };
 }
 
 export const Demo: React.FC<DemoProps> = ({ exampleWorklet, options = {} }) => {
-    useFrameCallback(() => {
-        'worklet';
-        if (!global.demoEngine) return;
-
-        global.Matter.Engine.update(
-            global.demoEngine,
-            16.667 // Use fixed timestep for demos
-        );
-    });
-
-    return (
-        <View style={styles.container}>
-            <ReanimatedMatter worklet={exampleWorklet} engineId="demoEngine">
-                <TouchConstraint engineId="demoEngine" options={options.touch}>
-                    {options.skia ? (
-                        <SkiaRender
-                            engineId="demoEngine"
-                            options={options.render}
-                        />
-                    ) : (
-                        <Render
-                            engineId="demoEngine"
-                            options={options.render}
-                        />
-                    )}
-                </TouchConstraint>
-            </ReanimatedMatter>
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <ReanimatedMatter worklet={exampleWorklet} engineId="demoEngine">
+        <Runner engineId="demoEngine" options={{ enabled: true }} />
+        <TouchConstraint engineId="demoEngine" options={options.touch}>
+          {options.skia ? (
+            <SkiaRender engineId="demoEngine" options={options.render} />
+          ) : (
+            <Render engineId="demoEngine" options={options.render} />
+          )}
+        </TouchConstraint>
+      </ReanimatedMatter>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#000',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
 });

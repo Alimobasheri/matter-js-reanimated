@@ -2,35 +2,32 @@ import Matter from 'matter-js';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import {
-    GestureDetector,
-    Gesture,
-    GestureHandlerRootView,
-    GestureUpdateEvent,
-    PanGestureHandlerEventPayload,
+  GestureDetector,
+  Gesture,
+  GestureHandlerRootView,
+  GestureUpdateEvent,
+  PanGestureHandlerEventPayload,
 } from 'react-native-gesture-handler';
 import { runOnUI } from 'react-native-reanimated';
 
 interface TouchConstraintProps {
-    engineId?: string;
-    options?: {
-        constraint?: {
-            stiffness?: number;
-            damping?: number;
-        };
-    };
-    enabled?: boolean;
-    children: React.ReactNode;
+  engineId?: string;
+  options?: {
+    constraint?: Matter.IConstraintDefinition;
+  };
+  enabled?: boolean;
+  children: React.ReactNode;
 }
 
 export interface TouchConstraintType {
-    type: 'touchConstraint';
-    constraint: Matter.Constraint;
-    body: Matter.Body | null;
-    collisionFilter: {
-        category: number;
-        mask: number;
-        group: number;
-    };
+  type: 'touchConstraint';
+  constraint: Matter.Constraint;
+  body: Matter.Body | null;
+  collisionFilter: {
+    category: number;
+    mask: number;
+    group: number;
+  };
 }
 
 /**
@@ -60,167 +57,163 @@ export interface TouchConstraintType {
  * @return {JSX.Element} The component.
  */
 export const TouchConstraint: React.FC<TouchConstraintProps> = ({
-    engineId = 'defaultEngine',
-    options = {},
-    enabled = true,
-    children,
+  engineId = 'defaultEngine',
+  options = {},
+  enabled = true,
+  children,
 }) => {
-    React.useEffect(() => {
-        runOnUI(() => {
-            'worklet';
-            if (!global.Matter || !(engineId in global)) return;
+  React.useEffect(() => {
+    runOnUI(() => {
+      'worklet';
+      if (!global.Matter || !(engineId in global)) return;
 
-            const engine = (global as any)[engineId];
+      const engine = (global as any)[engineId];
 
-            if (!global.Matter.touchConstraint) {
-                const constraint = global.Matter.Constraint.create({
-                    pointA: { x: 0, y: 0 },
-                    pointB: { x: 0, y: 0 },
-                    length: 0.01,
-                    stiffness: options.constraint?.stiffness ?? 0.1,
-                    label: 'Mouse Constraint',
-                });
-
-                global.Matter.touchConstraint = {
-                    type: 'touchConstraint',
-                    constraint: constraint,
-                    body: null,
-                    collisionFilter: {
-                        category: 0x0001,
-                        mask: 0xffffffff,
-                        group: 0,
-                    },
-                };
-
-                global.Matter.World.add(engine.world, constraint);
-            }
-        })();
-
-        return () => {
-            runOnUI(() => {
-                'worklet';
-                if (global.Matter.touchConstraint) {
-                    const engine = (global as any)[engineId];
-                    global.Matter.World.remove(
-                        engine.world,
-                        global.Matter.touchConstraint.constraint
-                    );
-                    global.Matter.touchConstraint = null;
-                }
-            })();
-        };
-    }, [engineId, options.constraint]);
-
-    const pan = Gesture.Pan()
-        .enabled(enabled)
-        .onBegin((event: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
-            'worklet';
-            if (
-                !global.Matter ||
-                !(engineId in global) ||
-                !global.Matter.touchConstraint
-            )
-                return;
-
-            const engine = (global as any)[engineId];
-            const point = { x: event.x, y: event.y };
-            const bodies = global.Matter.Composite.allBodies(engine.world);
-            const touchConstraint = global.Matter.touchConstraint;
-            const constraint = touchConstraint.constraint;
-
-            // Reset previous body
-            constraint.bodyB = touchConstraint.body = null;
-            constraint.pointB = global.Matter.Vector.create(0, 0);
-
-            // Find new body to drag
-            for (let i = 0; i < bodies.length; i++) {
-                const body = bodies[i];
-
-                if (
-                    global.Matter.Bounds.contains(body.bounds, point) &&
-                    global.Matter.Detector.canCollide(
-                        body.collisionFilter,
-                        touchConstraint.collisionFilter
-                    )
-                ) {
-                    // Check parts (for compound bodies)
-                    for (
-                        let j = body.parts.length > 1 ? 1 : 0;
-                        j < body.parts.length;
-                        j++
-                    ) {
-                        const part = body.parts[j];
-                        if (
-                            global.Matter.Vertices.contains(
-                                part.vertices,
-                                point
-                            )
-                        ) {
-                            constraint.pointA = point;
-                            constraint.bodyB = touchConstraint.body = body;
-                            constraint.pointB = {
-                                x: point.x - body.position.x,
-                                y: point.y - body.position.y,
-                            };
-                            //@ts-ignore
-                            constraint.angleB = body.angle;
-
-                            global.Matter.Sleeping.set(body, false);
-                            break;
-                        }
-                    }
-
-                    if (constraint.bodyB) break;
-                }
-            }
-        })
-        .onUpdate(
-            (event: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
-                'worklet';
-                if (!global.Matter || !global.Matter.touchConstraint) return;
-
-                const constraint = global.Matter.touchConstraint.constraint;
-                const body = constraint.bodyB;
-
-                if (body) {
-                    constraint.pointA = {
-                        x: event.x,
-                        y: event.y,
-                    };
-                    global.Matter.Sleeping.set(body, false);
-                }
-            }
-        )
-        .onEnd(() => {
-            'worklet';
-            if (!global.Matter || !global.Matter.touchConstraint) return;
-
-            const touchConstraint = global.Matter.touchConstraint;
-            const constraint = touchConstraint.constraint;
-            const body = constraint.bodyB;
-
-            if (body) {
-                // Clear all references to the body
-                constraint.bodyB = null;
-                touchConstraint.body = null;
-
-                // Reset the constraint points
-                constraint.pointA = { x: 0, y: 0 };
-                constraint.pointB = { x: 0, y: 0 };
-            }
+      if (!global.Matter.touchConstraint) {
+        const constraint = global.Matter.Constraint.create({
+          pointA: { x: 0, y: 0 },
+          pointB: { x: 0, y: 0 },
+          length: 0.01,
+          stiffness: options.constraint?.stiffness ?? 0.1,
+          render: options.constraint?.render ?? {
+            visible: false,
+          },
+          label: 'Mouse Constraint',
         });
 
-    const gesture = Gesture.Simultaneous(pan);
+        global.Matter.touchConstraint = {
+          type: 'touchConstraint',
+          constraint: constraint,
+          body: null,
+          collisionFilter: {
+            category: 0x0001,
+            mask: 0xffffffff,
+            group: 0,
+          },
+        };
 
-    return (
-        <GestureHandlerRootView style={styles.container}>
-            <GestureDetector gesture={gesture}>{children}</GestureDetector>
-        </GestureHandlerRootView>
-    );
+        global.Matter.World.add(engine.world, constraint);
+      }
+    })();
+
+    return () => {
+      runOnUI(() => {
+        'worklet';
+        if (global.Matter.touchConstraint) {
+          const engine = (global as any)[engineId];
+          global.Matter.World.remove(
+            engine.world,
+            global.Matter.touchConstraint.constraint
+          );
+          global.Matter.touchConstraint = null;
+        }
+      })();
+    };
+  }, [engineId, options.constraint]);
+
+  const pan = Gesture.Pan()
+    .enabled(enabled)
+    .onBegin((event: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
+      'worklet';
+      if (
+        !global.Matter ||
+        !(engineId in global) ||
+        !global.Matter.touchConstraint
+      )
+        return;
+
+      const engine = (global as any)[engineId];
+      const point = { x: event.x, y: event.y };
+      const bodies = global.Matter.Composite.allBodies(engine.world);
+      const touchConstraint = global.Matter.touchConstraint;
+      const constraint = touchConstraint.constraint;
+
+      // Reset previous body
+      constraint.bodyB = touchConstraint.body = null;
+      constraint.pointB = global.Matter.Vector.create(0, 0);
+
+      // Find new body to drag
+      for (let i = 0; i < bodies.length; i++) {
+        const body = bodies[i];
+
+        if (
+          global.Matter.Bounds.contains(body.bounds, point) &&
+          global.Matter.Detector.canCollide(
+            body.collisionFilter,
+            touchConstraint.collisionFilter
+          )
+        ) {
+          // Check parts (for compound bodies)
+          for (
+            let j = body.parts.length > 1 ? 1 : 0;
+            j < body.parts.length;
+            j++
+          ) {
+            const part = body.parts[j];
+            if (global.Matter.Vertices.contains(part.vertices, point)) {
+              constraint.pointA = point;
+              constraint.bodyB = touchConstraint.body = body;
+              constraint.pointB = {
+                x: point.x - body.position.x,
+                y: point.y - body.position.y,
+              };
+              //@ts-ignore
+              constraint.angleB = body.angle;
+
+              global.Matter.Sleeping.set(body, false);
+              break;
+            }
+          }
+
+          if (constraint.bodyB) break;
+        }
+      }
+    })
+    .onUpdate((event: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
+      'worklet';
+      if (!global.Matter || !global.Matter.touchConstraint) return;
+
+      const constraint = global.Matter.touchConstraint.constraint;
+      const body = constraint.bodyB;
+
+      if (body) {
+        constraint.pointA = {
+          x: event.x,
+          y: event.y,
+        };
+        global.Matter.Sleeping.set(body, false);
+      }
+    })
+    .onEnd(() => {
+      'worklet';
+      if (!global.Matter || !global.Matter.touchConstraint) return;
+
+      const touchConstraint = global.Matter.touchConstraint;
+      const constraint = touchConstraint.constraint;
+      const body = constraint.bodyB;
+
+      if (body) {
+        // Clear all references to the body
+        constraint.bodyB = null;
+        touchConstraint.body = null;
+
+        // Reset the constraint points
+        constraint.pointA = { x: 0, y: 0 };
+        constraint.pointB = { x: 0, y: 0 };
+      }
+    });
+
+  const gesture = Gesture.Simultaneous(pan);
+
+  return (
+    <GestureHandlerRootView style={styles.container}>
+      <GestureDetector gesture={gesture}>{children}</GestureDetector>
+    </GestureHandlerRootView>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
+  container: {
+    flex: 1,
+  },
 });

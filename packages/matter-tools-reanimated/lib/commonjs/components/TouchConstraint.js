@@ -59,6 +59,9 @@ const TouchConstraint = ({
           },
           length: 0.01,
           stiffness: options.constraint?.stiffness ?? 0.1,
+          render: options.constraint?.render ?? {
+            visible: false
+          },
           label: 'Mouse Constraint'
         });
         global.Matter.touchConstraint = {
