@@ -11,6 +11,9 @@ declare global {
   var Matter: MatterType;
   var runner: MatterType.Runner | null;
 
+  var __lastDrawConstraintsTime: number | null;
+  var __lastDrawBodiesTime: number | null;
+
   // UI thread engine instance
   var demoEngine: any;
   var mouseConstraint: any;

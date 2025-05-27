@@ -1,118 +1,90 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
-  Canvas,
-  Image,
-  PaintStyle,
+  Picture,
   Skia,
-  useCanvasRef,
+  PaintStyle,
+  createPicture,
 } from '@shopify/react-native-skia';
-import { useWindowDimensions } from 'react-native';
 import {
   useSharedValue,
+  useDerivedValue,
   runOnUI,
   useFrameCallback,
 } from 'react-native-reanimated';
-import type { SkImage } from '@shopify/react-native-skia';
+import { useWindowDimensions } from 'react-native';
 import type { RenderProps } from './SkiaRender';
 
-export const SkiaBodies: React.FC<RenderProps> = ({ options = {} }) => {
+export const SkiaBodies: React.FC<RenderProps> = ({
+  engineId = 'defaultEngine',
+  options = {},
+}) => {
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
-  const width = options.width || windowWidth;
-  const height = options.height || windowHeight;
+  const canvasWidth = options.width || windowWidth;
+  const canvasHeight = options.height || windowHeight;
 
-  // Shared value to hold the Skia image snapshot of the scene
-  const image = useSharedValue<SkImage | null>(null);
+  // Shared values to trigger re-render
+  const frameTick = useSharedValue(0);
 
-  /**
-   * Draws the entire scene onto an offscreen Skia surface and creates an image snapshot.
-   * This function is a worklet and runs on the UI thread.
-   * @param imgRef A shared value reference to store the resulting Skia image.
-   */
-  const drawScene = (imgRef: typeof image) => {
-    'worklet'; // Marks this function as a Reanimated worklet
-
-    // Create an offscreen Skia surface with the specified dimensions
-    const surface = Skia.Surface.MakeOffscreen(width, height);
-    if (!surface) {
-      // If surface creation fails, return early
-      console.error('Failed to create Skia surface.');
-      return;
-    }
-    const canvas = surface.getCanvas();
-
-    // Clear the canvas with the specified background color, or white by default
-    canvas.clear(Skia.Color(options.background || 'white'));
-
-    // Check if global.svgContent is an array; if not, snapshot and return
-    // global.svgContent is expected to contain the Matter.js bodies' render data
-    if (!Array.isArray(global.svgContent)) {
-      imgRef.value = surface.makeImageSnapshot();
-      return;
-    }
-
-    // Iterate over each body in the global.svgContent array
-    for (const body of global.svgContent) {
-      // If body.render exists and body.render.visible is explicitly false, skip rendering this body.
-      // If body.render or body.render.visible is undefined/null, or true, it will be rendered.
-      if (body.render?.visible === false) {
-        continue; // Skip to the next body
-      }
-
-      // Create a new Skia Path for the current body
-      const skPath = Skia.Path.Make();
-
-      // Handle circle bodies
-      if (body.type === 'circle' && body.circleRadius !== undefined) {
-        skPath.addCircle(body.position.x, body.position.y, body.circleRadius);
-      } else {
-        // Handle polygon/other bodies
-        const verts = body.vertices;
-        if (verts && verts.length > 0) {
-          // Move to the first vertex
-          skPath.moveTo(verts[0].x, verts[0].y);
-          // Draw lines to subsequent vertices
-          for (let j = 1; j < verts.length; j++) {
-            skPath.lineTo(verts[j].x, verts[j].y);
-          }
-          skPath.close(); // Close the path to form a polygon
-        }
-      }
-
-      // Create and configure the fill paint
-      const fillPaint = Skia.Paint();
-      fillPaint.setAntiAlias(true); // Enable anti-aliasing for smoother edges
-      fillPaint.setStyle(PaintStyle.Fill); // Set paint style to fill
-      fillPaint.setColor(
-        Skia.Color(
-          options.wireframes
-            ? 'transparent' // If wireframes option is true, fill is transparent
-            : body.render?.fillStyle || '#000000' // Use body's fillStyle or default to black
-        )
-      );
-      canvas.drawPath(skPath, fillPaint); // Draw the path with the fill paint
-
-      // Optional stroke for wireframes or if body has a strokeStyle
-      if (options.wireframes || body.render?.strokeStyle) {
-        const strokePaint = Skia.Paint();
-        strokePaint.setStyle(PaintStyle.Stroke); // Set paint style to stroke
-        strokePaint.setStrokeWidth(body.render?.lineWidth || 1); // Use body's lineWidth or default to 1
-        strokePaint.setColor(
-          Skia.Color(body.render?.strokeStyle || '#2E3440') // Use body's strokeStyle or default to a dark grey
-        );
-        canvas.drawPath(skPath, strokePaint); // Draw the path with the stroke paint
-      }
-    }
-
-    surface.flush(); // Ensure all drawing operations are committed to the surface
-    imgRef.value = surface.makeImageSnapshot(); // Create a snapshot of the drawn scene
-  };
-
-  // Use useFrameCallback to redraw the scene on every frame
   useFrameCallback(() => {
-    'worklet'; // Marks this callback as a Reanimated worklet
-    drawScene(image); // Call drawScene to update the image shared value
+    'worklet';
+    let now = Date.now();
+    // console.log(now - frameTick.value, 'ms since last frame');
+    frameTick.value = now;
   });
 
-  // Render the Skia Image component, which displays the snapshot from the shared value
-  return <Image image={image} x={0} y={0} width={width} height={height} />;
+  const picture = useDerivedValue(() => {
+    return createPicture((canvas) => {
+      if (!global.Matter || !(engineId in global)) return;
+      const engine = (global as any)[engineId];
+      if (!engine || !engine.world) return;
+
+      const _ = frameTick.value;
+
+      const bodies = global.Matter.Composite.allBodies(engine.world);
+      canvas.clear(Skia.Color(options.background || 'white'));
+
+      for (const body of bodies) {
+        if (body.render?.visible === false) continue;
+
+        const skPath = Skia.Path.Make();
+
+        if (body.type === 'circle' && body.circleRadius !== undefined) {
+          skPath.addCircle(body.position.x, body.position.y, body.circleRadius);
+        } else {
+          const verts = body.vertices;
+          if (verts && verts.length > 0) {
+            skPath.moveTo(verts[0].x, verts[0].y);
+            for (let j = 1; j < verts.length; j++) {
+              skPath.lineTo(verts[j].x, verts[j].y);
+            }
+            skPath.close();
+          }
+        }
+
+        const fillPaint = Skia.Paint();
+        fillPaint.setAntiAlias(true);
+        fillPaint.setStyle(PaintStyle.Fill);
+        fillPaint.setColor(
+          Skia.Color(
+            options.wireframes
+              ? 'transparent'
+              : body.render?.fillStyle || '#000000'
+          )
+        );
+        canvas.drawPath(skPath, fillPaint);
+
+        if (options.wireframes || body.render?.strokeStyle) {
+          const strokePaint = Skia.Paint();
+          strokePaint.setStyle(PaintStyle.Stroke);
+          strokePaint.setStrokeWidth(body.render?.lineWidth || 1);
+          strokePaint.setColor(
+            Skia.Color(body.render?.strokeStyle || '#2E3440')
+          );
+          canvas.drawPath(skPath, strokePaint);
+        }
+      }
+    });
+  }, [frameTick]);
+
+  return <Picture picture={picture} />;
 };

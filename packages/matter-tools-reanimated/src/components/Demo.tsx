@@ -23,7 +23,6 @@ export const Demo: React.FC<DemoProps> = ({ exampleWorklet, options = {} }) => {
   return (
     <View style={styles.container}>
       <ReanimatedMatter worklet={exampleWorklet} engineId="demoEngine">
-        <Runner engineId="demoEngine" options={{ enabled: true }} />
         <TouchConstraint engineId="demoEngine" options={options.touch}>
           {options.skia ? (
             <SkiaRender engineId="demoEngine" options={options.render} />

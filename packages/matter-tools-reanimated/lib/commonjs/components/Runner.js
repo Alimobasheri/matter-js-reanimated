@@ -78,7 +78,8 @@ const tickWorklet = (runnerValue, engineId, time) => {
   // Access Matter.js modules from global scope
   const {
     Events,
-    Engine
+    Engine,
+    Common
   } = global.Matter;
   const _maxFrameDelta = 1000 / 15;
   const _frameDeltaFallback = 1000 / 60;
@@ -177,9 +178,9 @@ const tickWorklet = (runnerValue, engineId, time) => {
   // Show useful warnings if needed (simplified for worklet context)
   if (runnerValue.frameDeltaHistory.length >= 100) {
     if (runnerValue.lastUpdatesDeferred && Math.round(runnerValue.frameDelta / engineDelta) > maxUpdates) {
-      console.warn('Matter.Runner: runner reached runner.maxUpdates, see docs.');
+      Common.warnOnce('Matter.Runner: runner reached runner.maxUpdates, see docs.');
     } else if (runnerValue.lastUpdatesDeferred) {
-      console.warn('Matter.Runner: runner reached runner.maxFrameTime, see docs.');
+      Common.warnOnce('Matter.Runner: runner reached runner.maxFrameTime, see docs.');
     }
   }
 };
@@ -222,8 +223,9 @@ const Runner = ({
   (0, _reactNativeReanimated.useFrameCallback)(frameInfo => {
     'worklet';
 
+    global.gc && global.gc();
     // The frameInfo.timestamp is the current time in milliseconds
-    const time = frameInfo.timestamp;
+    const time = Date.now();
 
     // Initialize the runner on the first frame callback if not already initialized
     if (!isRunnerInitialized.value) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { runOnUI } from 'react-native-reanimated';
 import { Demo } from '../components/Demo';
@@ -7,23 +7,22 @@ import { initAvalanche } from '../examples/avalanche';
 import { initBallPool } from '../examples/ballPool';
 import { initConstraints } from '../examples/constraints';
 import { initCloth } from '../examples/cloth';
+import Matter from 'matter-js';
 
 export default function TestScreen() {
   const { width, height } = useWindowDimensions();
 
-  React.useEffect(() => {
-    // Make dimensions available to worklets
-    runOnUI(() => {
-      'worklet';
-      global.windowWidth = width;
-      global.windowHeight = height;
-    })();
-  }, [width, height]);
+  const exampleWorklet = useCallback((engine: Matter.Engine) => {
+    'worklet';
+    global.windowWidth = width;
+    global.windowHeight = height;
+    initCloth(engine);
+  }, []);
 
   return (
     <View style={styles.container}>
       <Demo
-        exampleWorklet={initCloth}
+        exampleWorklet={exampleWorklet}
         options={{
           render: {
             wireframes: false,
@@ -36,7 +35,7 @@ export default function TestScreen() {
             },
             enablePan: true,
           },
-          skia: false,
+          skia: true,
         }}
       />
     </View>

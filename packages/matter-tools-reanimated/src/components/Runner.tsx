@@ -107,7 +107,7 @@ const tickWorklet = (
   if (!engine || !engine.world) return; // Check for engine and its world property
 
   // Access Matter.js modules from global scope
-  const { Events, Engine } = global.Matter;
+  const { Events, Engine, Common } = global.Matter;
 
   const _maxFrameDelta = 1000 / 15;
   const _frameDeltaFallback = 1000 / 60;
@@ -239,11 +239,11 @@ const tickWorklet = (
       runnerValue.lastUpdatesDeferred &&
       Math.round(runnerValue.frameDelta / engineDelta) > maxUpdates
     ) {
-      console.warn(
+      Common.warnOnce(
         'Matter.Runner: runner reached runner.maxUpdates, see docs.'
       );
     } else if (runnerValue.lastUpdatesDeferred) {
-      console.warn(
+      Common.warnOnce(
         'Matter.Runner: runner reached runner.maxFrameTime, see docs.'
       );
     }
@@ -289,8 +289,9 @@ export const Runner: FC<RunnerProps> = ({ engineId, options }) => {
   // Use useFrameCallback to drive the Matter.js engine updates
   useFrameCallback((frameInfo) => {
     'worklet';
+    global.gc && global.gc();
     // The frameInfo.timestamp is the current time in milliseconds
-    const time = frameInfo.timestamp;
+    const time = Date.now();
 
     // Initialize the runner on the first frame callback if not already initialized
     if (!isRunnerInitialized.value) {

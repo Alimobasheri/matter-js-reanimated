@@ -22,7 +22,6 @@
     "start": "yarn dev",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "prepare": "bob build",
     "build": "bob build"
   },
   "dependencies": {
