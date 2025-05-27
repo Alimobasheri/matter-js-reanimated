@@ -1,8 +1,11 @@
+export { ReanimatedMatter } from './components/ReanimatedMatter';
+export { TouchConstraint } from './components/TouchConstraint';
 export { Render } from './components/Render';
-export { Touch } from './components/Touch';
+export { Bodies, BodyShape } from './components/Bodies';
+export { Constraints, ConstraintShape } from './components/Constraints';
 export { Demo } from './components/Demo';
-// export { useMatterBody } from './hooks/useMatterBody';
-export { withMatter } from './hoc/withMatter';
+export { SkiaRender } from './components/skia/SkiaRender';
+export { SkiaBodies } from './components/skia/SkiaBodies';
 
 export interface MatterToolsOptions {
     render?: {

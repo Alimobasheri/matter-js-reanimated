@@ -1,10 +1,10 @@
 import { Demo } from 'matter-tools-reanimated';
 import { useLocalSearchParams, router } from 'expo-router';
 import {
-    StyleSheet,
-    useWindowDimensions,
-    View,
-    BackHandler,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+  BackHandler,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { initAirFriction } from '@/examples/worklets/airFriction';
@@ -45,82 +45,80 @@ import { initStress4 } from '@/examples/worklets/stress4';
 import { initTimeScale } from '@/examples/worklets/timescale';
 
 const examples = {
-    'air-friction': initAirFriction,
-    avalanche: initAvalanche,
-    'ball-pool': initBallPool,
-    bridge: initBridge,
-    car: initCar,
-    catapult: initCatapult,
-    chains: initChains,
-    circleStack: initCircleStack,
-    cloth: initCloth,
-    'collision-filtering': initCollisionFiltering,
-    'composite-manipulation': initCompositeManipulation,
-    'compound-bodies': initCompoundBodies,
-    'compound-stack': initCompoundStack,
-    constraints: initConstraints,
-    'double-pendulum': initDoublePendulum,
-    events: initEvents,
-    friction: initFriction,
-    gravity: initGravity,
-    gyro: initGyro,
-    manipulation: initManipulation,
-    'mixed-shapes': initMixedShapes,
-    newtonsCradle: initNewtonsCradle,
-    pyramid: initPyramid,
-    ragdoll: initRagdoll,
-    restitution: initRestitution,
-    'rounded-corners': initRoundedCorners,
-    'soft-body': initSoftBody,
-    'static-friction': initStaticFriction,
-    stress: initStress,
-    stress2: initStress2,
-    stress3: initStress3,
-    stress4: initStress4,
-    'time-scale': initTimeScale,
+  'air-friction': initAirFriction,
+  avalanche: initAvalanche,
+  'ball-pool': initBallPool,
+  bridge: initBridge,
+  car: initCar,
+  catapult: initCatapult,
+  chains: initChains,
+  circleStack: initCircleStack,
+  cloth: initCloth,
+  'collision-filtering': initCollisionFiltering,
+  'composite-manipulation': initCompositeManipulation,
+  'compound-bodies': initCompoundBodies,
+  'compound-stack': initCompoundStack,
+  constraints: initConstraints,
+  'double-pendulum': initDoublePendulum,
+  events: initEvents,
+  friction: initFriction,
+  gravity: initGravity,
+  gyro: initGyro,
+  manipulation: initManipulation,
+  'mixed-shapes': initMixedShapes,
+  newtonsCradle: initNewtonsCradle,
+  pyramid: initPyramid,
+  ragdoll: initRagdoll,
+  restitution: initRestitution,
+  'rounded-corners': initRoundedCorners,
+  'soft-body': initSoftBody,
+  'static-friction': initStaticFriction,
+  stress: initStress,
+  stress2: initStress2,
+  stress3: initStress3,
+  stress4: initStress4,
+  'time-scale': initTimeScale,
 };
 
 export default function DemoScreen() {
-    const { example } = useLocalSearchParams();
-    const insets = useSafeAreaInsets();
-    const exampleWorklet = examples[example as keyof typeof examples];
-    const headerHeight = useHeaderHeight();
-    const { width, height } = useWindowDimensions();
+  const { example } = useLocalSearchParams();
+  const insets = useSafeAreaInsets();
+  const exampleWorklet = examples[example as keyof typeof examples];
+  const headerHeight = useHeaderHeight();
+  const { width, height } = useWindowDimensions();
 
-    useEffect(() => {
-        runOnUI(() => {
-            'worklet';
-            global.windowWidth = width - insets.left - insets.right;
-            global.windowHeight =
-                height - insets.top - insets.bottom - headerHeight;
-        })();
-    }, [width, height, insets, headerHeight]);
+  useEffect(() => {
+    runOnUI(() => {
+      'worklet';
+      global.windowWidth = width - insets.left - insets.right;
+      global.windowHeight = height - insets.top - insets.bottom - headerHeight;
+    })();
+  }, [width, height, insets, headerHeight]);
 
-    return (
-        <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-            <Demo
-                exampleWorklet={exampleWorklet}
-                options={{
-                    render: {
-                        wireframes: true,
-                        showBounds: true,
-                        showPositions: true,
-                    },
-                    touch: {
-                        constraint: {
-                            stiffness: 0.2,
-                            damping: 0.3,
-                        },
-                    },
-                }}
-            />
-        </View>
-    );
+  return (
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+      <Demo
+        exampleWorklet={exampleWorklet}
+        options={{
+          render: {
+            wireframes: false,
+            showBounds: true,
+            showPositions: true,
+            showConstraints: true,
+          },
+          touch: {
+            enablePan: true,
+          },
+          skia: true,
+        }}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#000',
-    },
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
 });

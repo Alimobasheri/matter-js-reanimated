@@ -1,11 +1,12 @@
 import React from 'react';
-interface RenderProps {
+export interface RenderProps {
     engineId?: string;
     options?: {
         width?: number;
         height?: number;
         background?: string;
         wireframes?: boolean;
+        showConstraints?: boolean;
         showBounds?: boolean;
         showAxes?: boolean;
         showPositions?: boolean;
@@ -13,5 +14,4 @@ interface RenderProps {
     };
 }
 export declare const Render: React.FC<RenderProps>;
-export {};
 //# sourceMappingURL=Render.d.ts.map
