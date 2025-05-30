@@ -98,5 +98,14 @@
       ]
     ]
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alimobasheri/matter-js-reanimated.git",
+    "directory": "packages/matter-tools-reanimated"
+  },
+  "bugs": {
+    "url": "https://github.com/Alimobasheri/matter-js-reanimated/issues"
+  },
+  "homepage": "https://github.com/Alimobasheri/matter-js-reanimated/tree/dev/packages/matter-tools-reanimated#readme",
   "private": false
 }

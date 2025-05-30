@@ -1,12 +1,20 @@
 {
-    "name": "matter-js-reanimated",
-    "private": true,
-    "workspaces": [
-        "packages/*",
-        "apps/*"
-    ],
-    "scripts": {
-        "build": "yarn workspace matter-js-reanimated run build",
-        "dev": "yarn workspace demo run start"
-    }
+  "name": "matter-js-reanimated",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "yarn workspace matter-js-reanimated run build",
+    "dev": "yarn workspace demo run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alimobasheri/matter-js-reanimated.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Alimobasheri/matter-js-reanimated/issues"
+  },
+  "homepage": "https://github.com/Alimobasheri/matter-js-reanimated/tree/dev#readme"
 }
