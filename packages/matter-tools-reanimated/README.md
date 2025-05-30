@@ -1,5 +1,9 @@
 # `matter-tools-reanimated`
 
+[![npm version](https://badge.fury.io/js/my-awesome-package.svg)](https://www.npmjs.com/package/matter-tools-reanimated)
+[![npm downloads](https://img.shields.io/npm/dw/my-awesome-package)](https://www.npmjs.com/package/matter-tools-reanimated)
+[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
+
 A companion library for [`matter-js-reanimated`](https://github.com/Alimobasheri/matter-js-reanimated/tree/dev/packages/matter-js-reanimated), providing ready-to-use UI-thread physics rendering, gesture interactions, and utilities for React Native apps using `react-native-reanimated`, `react-native-skia`, and `react-native-gesture-handler`.
 
 ## ✨ Features
