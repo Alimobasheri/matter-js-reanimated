@@ -1,6 +1,6 @@
 /*!
  * matter-js-reanimated 0.1.0 by @liabru
- * undefined
+ * https://github.com/Alimobasheri/matter-js-reanimated/tree/dev/packages/matter-js-reanimated#readme
  * License MIT
  * 
  * The MIT License (MIT)
