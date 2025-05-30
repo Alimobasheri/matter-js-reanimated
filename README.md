@@ -1,5 +1,9 @@
 # Matter.js Reanimated
 
+[![npm version](https://badge.fury.io/js/matter-js-reanimated.svg)](https://www.npmjs.com/package/matter-js-reanimated)
+[![npm downloads](https://img.shields.io/npm/dw/matter-js-reanimated)](https://www.npmjs.com/package/matter-js-reanimated)
+[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
+
 A React Native wrapper for Matter.js physics engine using Reanimated for high-performance animations.
 
 ## Packages
@@ -12,10 +16,10 @@ This monorepo contains the following packages:
 
 ## Features
 
--   🚀 High-performance physics simulation using Reanimated worklets
--   🧩 Rewritten physics examples of original matter-js (avalanche, ball pool, bridge, car, etc.)
--   📱 Native performance on both iOS and Android
--   🎮 Interactive demos with touch support
+- 🚀 High-performance physics simulation using Reanimated worklets
+- 🧩 Rewritten physics examples of original matter-js (avalanche, ball pool, bridge, car, etc.)
+- 📱 Native performance on both iOS and Android
+- 🎮 Interactive demos with touch support
 
 ## Documentation
 
@@ -68,7 +72,7 @@ import { Demo } from 'matter-tools-reanimated';
 import { myWorklet } from './myAwesomePhysicsWorklet';
 
 function PhysicsDemo() {
-    return <Demo exampleWorklet={myWorklet} />;
+  return <Demo exampleWorklet={myWorklet} />;
 }
 ```
 
@@ -76,23 +80,23 @@ function PhysicsDemo() {
 
 The demo app includes numerous physics examples from original `matter-js` library ported to use `matter-js-reanimated`:
 
--   Air Friction
+- Air Friction
 
--   Avalanche
+- Avalanche
 
--   Ball Pool
+- Ball Pool
 
--   Bridge
+- Bridge
 
--   Car
+- Car
 
--   Catapult
+- Catapult
 
--   Chains
+- Chains
 
--   Cloth
+- Cloth
 
--   Ragdoll
+- Ragdoll
 
 And many more...
 
@@ -100,11 +104,11 @@ And many more...
 
 Contributions are welcome! Please follow these guidelines:
 
--   Fork the repository
+- Fork the repository
 
--   Create a feature branch
+- Create a feature branch
 
--   Submit a pull request
+- Submit a pull request
 
 Before contributing, please read the CONTRIBUTING.md file.
 
