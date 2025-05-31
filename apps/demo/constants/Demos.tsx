@@ -1,10 +1,38 @@
-import { Link } from 'expo-router';
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { initAirFriction } from '@/examples/worklets/airFriction';
+import { initAvalanche } from '@/examples/worklets/avalanche';
+import { initBallPool } from '@/examples/worklets/ballPool';
+import { initBridge } from '@/examples/worklets/bridge';
+import { initCar } from '@/examples/worklets/car';
+import { initCatapult } from '@/examples/worklets/catapult';
+import { initChains } from '@/examples/worklets/chains';
+import { initCircleStack } from '@/examples/worklets/circleStack';
+import { initCloth } from '@/examples/worklets/cloth';
+import { initCollisionFiltering } from '@/examples/worklets/collisionFiltering';
+import { initCompositeManipulation } from '@/examples/worklets/compositeManipulation';
+import { initCompoundBodies } from '@/examples/worklets/compound';
+import { initCompoundStack } from '@/examples/worklets/compoundStack';
+import { initConstraints } from '@/examples/worklets/constraints';
+import { initDoublePendulum } from '@/examples/worklets/doublePendulum';
+import { initEvents } from '@/examples/worklets/events';
+import { initFriction } from '@/examples/worklets/friction';
+import { initGravity } from '@/examples/worklets/gravity';
+import { initGyro } from '@/examples/worklets/gyro';
+import { initManipulation } from '@/examples/worklets/manipulation';
+import { initMixedShapes } from '@/examples/worklets/mixed';
+import { initNewtonsCradle } from '@/examples/worklets/newtonsCradle';
+import { initPyramid } from '@/examples/worklets/pyramid';
+import { initRagdoll } from '@/examples/worklets/ragdoll';
+import { initRestitution } from '@/examples/worklets/restitution';
+import { initRoundedCorners } from '@/examples/worklets/rounded';
+import { initSoftBody } from '@/examples/worklets/softBody';
+import { initStaticFriction } from '@/examples/worklets/staticFriction';
+import { initStress } from '@/examples/worklets/stress';
+import { initStress2 } from '@/examples/worklets/stress2';
+import { initStress3 } from '@/examples/worklets/stress3';
+import { initStress4 } from '@/examples/worklets/stress4';
+import { initTimeScale } from '@/examples/worklets/timescale';
 
-const DEMOS = [
+export const DEMOS = [
   {
     id: 'air-friction',
     title: 'Air Friction',
@@ -174,52 +202,38 @@ const DEMOS = [
   },
 ];
 
-export default function IndexScreen() {
-  const insets = useSafeAreaInsets();
-  return (
-    <ThemedView style={[styles.container]}>
-      <FlatList<(typeof DEMOS)[0]>
-        renderItem={({ item: demo }) => (
-          <Link key={demo.id} href={`/demo?example=${demo.id}`} asChild>
-            <TouchableOpacity>
-              <View style={styles.demoItem}>
-                <ThemedText style={styles.title}>{demo.title}</ThemedText>
-                <ThemedText style={styles.description}>
-                  {demo.description}
-                </ThemedText>
-              </View>
-            </TouchableOpacity>
-          </Link>
-        )}
-        data={DEMOS}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: insets.bottom }}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      />
-    </ThemedView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    paddingBottom: 32,
-  },
-  demoItem: {
-    padding: 16,
-    borderRadius: 8,
-    backgroundColor: '#222',
-    marginBottom: 12,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  description: {
-    fontSize: 14,
-    color: '#888',
-  },
-});
+export const examples = {
+  'air-friction': initAirFriction,
+  avalanche: initAvalanche,
+  'ball-pool': initBallPool,
+  bridge: initBridge,
+  car: initCar,
+  catapult: initCatapult,
+  chains: initChains,
+  circleStack: initCircleStack,
+  cloth: initCloth,
+  'collision-filtering': initCollisionFiltering,
+  'composite-manipulation': initCompositeManipulation,
+  'compound-bodies': initCompoundBodies,
+  'compound-stack': initCompoundStack,
+  constraints: initConstraints,
+  'double-pendulum': initDoublePendulum,
+  events: initEvents,
+  friction: initFriction,
+  gravity: initGravity,
+  gyro: initGyro,
+  manipulation: initManipulation,
+  'mixed-shapes': initMixedShapes,
+  newtonsCradle: initNewtonsCradle,
+  pyramid: initPyramid,
+  ragdoll: initRagdoll,
+  restitution: initRestitution,
+  'rounded-corners': initRoundedCorners,
+  'soft-body': initSoftBody,
+  'static-friction': initStaticFriction,
+  stress: initStress,
+  stress2: initStress2,
+  stress3: initStress3,
+  stress4: initStress4,
+  'time-scale': initTimeScale,
+};
