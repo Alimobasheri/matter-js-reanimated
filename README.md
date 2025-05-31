@@ -38,7 +38,7 @@ npm i matter-js-reanimated
 ### Installing `matter-tools-reanimted`
 
 ```bash
-npm i matter-tools-reanimted matter-js-reanimated react-native-reanimated react-native-gesture-handler react-native-svg
+npm i matter-tools-reanimated matter-js-reanimated react-native-reanimated react-native-gesture-handler react-native-svg
 ```
 
 ## Development

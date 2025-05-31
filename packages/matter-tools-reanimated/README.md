@@ -84,7 +84,7 @@ Here's how to set up a simple physics scene using the Demo component:
 export const setupWorldWorklet = (
   engine: Matter.Engine,
   width: number = 800,
-  height: numebr = 800
+  height: number = 800
 ) => {
   'worklet';
   // Access Matter Modules from `global.Matter`, registered by `matter-js-reanimated`.
