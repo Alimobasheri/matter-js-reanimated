@@ -4,11 +4,11 @@ var Common = require('./Common');
 var init = function () {
     'worklet';
 
-    if (global.Matter) {
+    if (global.MatterReanimated) {
         return;
     }
 
-    global.Matter = {};
+    global.MatterReanimated = {};
     Plugin();
     Common();
 
@@ -18,7 +18,7 @@ var init = function () {
      * @readOnly
      * @type {String}
      */
-    global.Matter.name = 'matter-js';
+    global.MatterReanimated.name = 'matter-js';
 
     /**
      * The library version.
@@ -26,7 +26,7 @@ var init = function () {
      * @readOnly
      * @type {String}
      */
-    global.Matter.version =
+    global.MatterReanimated.version =
         typeof __MATTER_VERSION__ !== 'undefined' ? __MATTER_VERSION__ : '*';
 
     /**
@@ -34,7 +34,7 @@ var init = function () {
      * @property uses
      * @type {Array}
      */
-    global.Matter.uses = [];
+    global.MatterReanimated.uses = [];
 
     /**
      * The plugins that have been installed.
@@ -42,16 +42,16 @@ var init = function () {
      * @readOnly
      * @type {Array}
      */
-    global.Matter.used = [];
+    global.MatterReanimated.used = [];
 
     /**
-     * Installs plugins on the `Matter` namespace.
+     * Installs plugins on the `MatterReanimated` namespace.
      * @method use
      * @param {...Function} plugins The plugins to install
      */
-    global.Matter.use = function () {
-        global.Matter.Plugin.use(
-            global.Matter,
+    global.MatterReanimated.use = function () {
+        global.MatterReanimated.Plugin.use(
+            global.MatterReanimated,
             Array.prototype.slice.call(arguments)
         );
     };
@@ -59,25 +59,33 @@ var init = function () {
     /**
      * Chains a function to execute before the original function.
      * @method before
-     * @param {string} path The path relative to `Matter`
+     * @param {string} path The path relative to `MatterReanimated`
      * @param {function} func The function to chain before the original
      * @return {function} The chained function that replaced the original
      */
-    global.Matter.before = function (path, func) {
-        path = path.replace(/^Matter./, '');
-        return global.Matter.Common.chainPathBefore(global.Matter, path, func);
+    global.MatterReanimated.before = function (path, func) {
+        path = path.replace(/^MatterReanimated./, '');
+        return global.MatterReanimated.Common.chainPathBefore(
+            global.MatterReanimated,
+            path,
+            func
+        );
     };
 
     /**
      * Chains a function to execute after the original function.
      * @method after
-     * @param {string} path The path relative to `Matter`
+     * @param {string} path The path relative to `MatterReanimated`
      * @param {function} func The function to chain after the original
      * @return {function} The chained function that replaced the original
      */
-    global.Matter.after = function (path, func) {
-        path = path.replace(/^Matter./, '');
-        return global.Matter.Common.chainPathAfter(global.Matter, path, func);
+    global.MatterReanimated.after = function (path, func) {
+        path = path.replace(/^MatterReanimated./, '');
+        return global.MatterReanimated.Common.chainPathAfter(
+            global.MatterReanimated,
+            path,
+            func
+        );
     };
 };
 

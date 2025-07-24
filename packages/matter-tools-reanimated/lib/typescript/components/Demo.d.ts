@@ -1,12 +1,11 @@
 import React from 'react';
 import { RenderProps } from './Render';
-import Matter from 'matter-js';
 interface DemoProps {
     exampleWorklet: (engine: any) => void;
     options?: {
         render?: RenderProps['options'];
         touch?: {
-            constraint?: Matter.IConstraintDefinition;
+            constraint?: MatterReanimated.IConstraintDefinition;
             enablePan?: boolean;
         };
         skia?: boolean;

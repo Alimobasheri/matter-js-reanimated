@@ -1,4 +1,4 @@
-import Matter from 'matter-js';
+import Matter from 'matter-js-reanimated';
 import React from 'react';
 interface TouchConstraintProps {
     engineId?: string;

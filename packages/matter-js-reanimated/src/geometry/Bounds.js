@@ -1,5 +1,5 @@
 /**
- * The `Matter.Bounds` module contains methods for creating and manipulating axis-aligned bounding boxes (AABB).
+ * The `MatterReanimated.Bounds` module contains methods for creating and manipulating axis-aligned bounding boxes (AABB).
  *
  * @class Bounds
  */
@@ -7,17 +7,17 @@
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Bounds) {
+    if (global.MatterReanimated && global.MatterReanimated.Bounds) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Bounds = {};
+    global.MatterReanimated.Bounds = {};
 
-    var Bounds = global.Matter.Bounds;
+    var Bounds = global.MatterReanimated.Bounds;
 
     /**
      * Creates a new axis-aligned bounding box (AABB) for the given vertices.

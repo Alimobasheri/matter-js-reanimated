@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Ramp Cruise-Control Car</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      background: #eef4fa;
+    }
+
+    #downloadBtn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 10px 16px;
+      background: #111;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+    }
+  </style>
+</head>
+
+<body>
+  <button id="downloadBtn">Download Video</button>
+  <button id="stopBtn">🛑 Stop Capture</button>
+  <canvas id="world"></canvas>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+  <script>
+    const { Engine, Render, Runner, World, Bodies, Body, Events, Vector, Detector } = Matter;
+
+    const W = 960, H = 540;
+    const canvas = document.getElementById('world');
+    canvas.width = W;
+    canvas.height = H;
+
+    const engine = Engine.create();
+    const world = engine.world;
+    engine.gravity.scale = 0.001;
+
+    const render = Render.create({
+      canvas, engine,
+      options: { width: W, height: H, wireframes: false, background: '#eef4fa' }
+    });
+    Render.run(render);
+    Runner.run(Runner.create(), engine);
+
+    // Snapshot settings
+    let snapshotCount = 0;
+    const maxSnapshots = 5;
+    const snapshotInterval = 300; // ms
+    let lastSnapshotTime = -snapshotInterval;
+    const snapshotImages = [];
+
+    // Buttons
+    const snapshotBtn = document.createElement("button");
+    snapshotBtn.innerText = "Take Snapshot";
+    snapshotBtn.style = "position:absolute;top:50px;left:10px;padding:10px 16px;background:#0066cc;color:white;z-index:10;border:none;cursor:pointer";
+
+    const downloadAllBtn = document.createElement("button");
+    downloadAllBtn.innerText = "Download All Snapshots";
+    downloadAllBtn.style = "position:absolute;top:90px;left:10px;padding:10px 16px;background:#228822;color:white;z-index:10;border:none;cursor:pointer";
+
+    document.body.appendChild(snapshotBtn);
+    document.body.appendChild(downloadAllBtn);
+
+    // Manual snapshot
+    snapshotBtn.onclick = () => takeSnapshot(Math.floor(engine.timing.timestamp));
+
+    // Download all
+    downloadAllBtn.onclick = () => {
+      snapshotImages.forEach((img, i) => {
+        const a = document.createElement("a");
+        a.href = img.src;
+        a.download = `snapshot_${i}.png`;
+        a.click();
+      });
+    };
+
+    Events.on(engine, 'beforeUpdate', event => {
+      const now = event.timestamp;
+      if (
+        snapshotCount < maxSnapshots &&
+        now - lastSnapshotTime >= snapshotInterval
+      ) {
+        takeSnapshot(Math.floor(now));
+        lastSnapshotTime = now;
+      }
+    });
+
+    function takeSnapshot(ms) {
+      const img = new Image();
+      img.src = canvas.toDataURL("image/png");
+      img.alt = `Snapshot at ${ms}ms`;
+      img.style.border = "2px solid #444";
+      img.style.margin = "10px";
+      img.style.width = "240px";
+      document.body.appendChild(img);
+      snapshotImages.push(img);
+      snapshotCount++;
+    }
+
+
+
+    // Ramp constants
+    const rampAngle = Math.PI / 10; // ~18°
+    const rampLength = 300;
+    const mass = 10;
+    const targetSpeed = 2.5;
+    const gain = 0.015;
+
+    // Left & right ramps
+    const leftRamp = Bodies.rectangle(300, 500, rampLength, 20, {
+      isStatic: true,
+      angle: -rampAngle,
+      render: { fillStyle: '#999' }
+    });
+    const rightRamp = Bodies.rectangle(750, 500, rampLength, 20, {
+      isStatic: true,
+      angle: rampAngle,
+      render: { fillStyle: '#999' }
+    });
+    World.add(world, [leftRamp, rightRamp]);
+
+    // Car on ramp
+    const carWidth = 80, carHeight = 30;
+    const carX = leftRamp.position.x - 100 * Math.cos(rampAngle);
+    const carY = leftRamp.position.y - 100 * Math.sin(rampAngle) - carHeight / 2;
+
+    const car = Bodies.rectangle(carX, carY, carWidth, carHeight, {
+      mass,
+      frictionAir: 0.01,
+      friction: 0.001,
+      render: { fillStyle: '#e74c3c' }
+    });
+    World.add(world, car);
+
+    // Vector direction along ramp
+    const rampDir = Vector.rotate({ x: 1, y: 0 }, -rampAngle);
+
+    // Collision tracking: is car on the ramp?
+    let onRamp = false;
+    Events.on(engine, 'collisionActive', e => {
+      onRamp = false;
+      for (const pair of e.pairs) {
+        if (
+          (pair.bodyA === car && pair.bodyB === leftRamp) ||
+          (pair.bodyB === car && pair.bodyA === leftRamp)
+        ) {
+          onRamp = true;
+          break;
+        }
+      }
+    });
+
+    // Cruise control logic: only push if car is on ramp AND slower than desired
+    Events.on(engine, 'beforeUpdate', e => {
+      if (!onRamp || e.timestamp > 1400) return;
+
+      const v = car.velocity;
+      const vAlongRamp = Vector.dot(v, rampDir);
+      const deltaV = targetSpeed - vAlongRamp;
+
+      if (deltaV <= 0) return; // already fast enough
+
+      const forceMag = car.mass * gain * deltaV;
+      const fx = forceMag * rampDir.x;
+      const fy = forceMag * rampDir.y;
+      console.log("🚀 ~ fx:", fx)
+      console.log("🚀 ~ fy:", fy)
+      Body.applyForce(car, car.position, { x: fx, y: fy });
+    });
+
+
+    // Record 2s of video
+    const stream = canvas.captureStream(60);
+    const recorder = new MediaRecorder(stream);
+    const chunks = [];
+    // recorder.ondataavailable = e => chunks.push(e.data);
+    // recorder.onstop = () => {
+    //   const blob = new Blob(chunks, { type: 'video/webm' });
+    //   const url = URL.createObjectURL(blob);
+    //   const a = document.createElement('a');
+    //   a.href = url;
+    //   a.download = 'ramp_cruise_control.webm';
+    //   a.click();
+    // };
+    // recorder.start();
+    // setTimeout(() => recorder.stop(), 2000);
+
+    document.getElementById('downloadBtn').onclick = () => recorder.stop();
+  </script>
+</body>
+
+</html>

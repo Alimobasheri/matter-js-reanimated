@@ -1,4 +1,4 @@
-import Matter from 'matter-js';
+import Matter from 'matter-js-reanimated';
 import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import {

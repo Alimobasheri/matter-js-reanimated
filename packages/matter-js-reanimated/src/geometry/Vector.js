@@ -1,7 +1,7 @@
 /**
- * The `Matter.Vector` module contains methods for creating and manipulating vectors.
+ * The `MatterReanimated.Vector` module contains methods for creating and manipulating vectors.
  * Vectors are the basis of all the geometry related operations in the engine.
- * A `Matter.Vector` object is of the form `{ x: 0, y: 0 }`.
+ * A `MatterReanimated.Vector` object is of the form `{ x: 0, y: 0 }`.
  *
  * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
  *
@@ -11,17 +11,17 @@
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Vector) {
+    if (global.MatterReanimated && global.MatterReanimated.Vector) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Vector = {};
+    global.MatterReanimated.Vector = {};
 
-    var Vector = global.Matter.Vector;
+    var Vector = global.MatterReanimated.Vector;
 
     /**
      * Creates a new vector.

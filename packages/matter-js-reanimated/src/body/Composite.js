@@ -4,7 +4,7 @@ var Bounds = require('../geometry/Bounds');
 var Body = require('./Body');
 
 /**
- * A composite is a collection of `Matter.Body`, `Matter.Constraint` and other `Matter.Composite` objects.
+ * A composite is a collection of `MatterReanimated.Body`, `MatterReanimated.Constraint` and other `MatterReanimated.Composite` objects.
  *
  * They are a container that can represent complex objects made of multiple parts, even if they are not physically connected.
  * A composite could contain anything from a single body all the way up to a whole world.
@@ -19,17 +19,17 @@ var Body = require('./Body');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Composite) {
+    if (global.MatterReanimated && global.MatterReanimated.Composite) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Composite = {};
+    global.MatterReanimated.Composite = {};
 
-    var Composite = global.Matter.Composite;
+    var Composite = global.MatterReanimated.Composite;
 
     Events();
     Common();
@@ -44,9 +44,9 @@ var init = function () {
      * @return {composite} A new composite
      */
     Composite.create = function (options) {
-        return global.Matter.Common.extend(
+        return global.MatterReanimated.Common.extend(
             {
-                id: global.Matter.Common.nextId(),
+                id: global.MatterReanimated.Common.nextId(),
                 type: 'composite',
                 parent: null,
                 isModified: false,
@@ -123,7 +123,7 @@ var init = function () {
     Composite.add = function (composite, object) {
         var objects = [].concat(object);
 
-        global.Matter.Events.trigger(composite, 'beforeAdd', {
+        global.MatterReanimated.Events.trigger(composite, 'beforeAdd', {
             object: object,
         });
 
@@ -134,7 +134,7 @@ var init = function () {
                 case 'body':
                     // skip adding compound parts
                     if (obj.parent !== obj) {
-                        global.Matter.Common.warn(
+                        global.MatterReanimated.Common.warn(
                             'Composite.add: skipped adding a compound body part (you must add its parent instead)'
                         );
                         break;
@@ -154,7 +154,9 @@ var init = function () {
             }
         }
 
-        global.Matter.Events.trigger(composite, 'afterAdd', { object: object });
+        global.MatterReanimated.Events.trigger(composite, 'afterAdd', {
+            object: object,
+        });
 
         return composite;
     };
@@ -172,7 +174,7 @@ var init = function () {
     Composite.remove = function (composite, object, deep) {
         var objects = [].concat(object);
 
-        global.Matter.Events.trigger(composite, 'beforeRemove', {
+        global.MatterReanimated.Events.trigger(composite, 'beforeRemove', {
             object: object,
         });
 
@@ -195,7 +197,7 @@ var init = function () {
             }
         }
 
-        global.Matter.Events.trigger(composite, 'afterRemove', {
+        global.MatterReanimated.Events.trigger(composite, 'afterRemove', {
             object: object,
         });
 
@@ -227,7 +229,7 @@ var init = function () {
      * @return {composite} The original compositeA with the composite removed
      */
     Composite.removeComposite = function (compositeA, compositeB, deep) {
-        var position = global.Matter.Common.indexOf(
+        var position = global.MatterReanimated.Common.indexOf(
             compositeA.composites,
             compositeB
         );
@@ -293,7 +295,10 @@ var init = function () {
      * @return {composite} The original composite with the body removed
      */
     Composite.removeBody = function (composite, body, deep) {
-        var position = global.Matter.Common.indexOf(composite.bodies, body);
+        var position = global.MatterReanimated.Common.indexOf(
+            composite.bodies,
+            body
+        );
 
         if (position !== -1) {
             Composite.removeBodyAt(composite, position);
@@ -347,7 +352,7 @@ var init = function () {
      * @return {composite} The original composite with the constraint removed
      */
     Composite.removeConstraint = function (composite, constraint, deep) {
-        var position = global.Matter.Common.indexOf(
+        var position = global.MatterReanimated.Common.indexOf(
             composite.constraints,
             constraint
         );
@@ -547,7 +552,7 @@ var init = function () {
             .concat(Composite.allComposites(composite));
 
         for (var i = 0; i < objects.length; i++) {
-            objects[i].id = global.Matter.Common.nextId();
+            objects[i].id = global.MatterReanimated.Common.nextId();
         }
 
         return composite;
@@ -567,7 +572,7 @@ var init = function () {
             : composite.bodies;
 
         for (var i = 0; i < bodies.length; i++) {
-            global.Matter.Body.translate(bodies[i], translation);
+            global.MatterReanimated.Body.translate(bodies[i], translation);
         }
 
         return composite;
@@ -593,12 +598,12 @@ var init = function () {
                 dx = body.position.x - point.x,
                 dy = body.position.y - point.y;
 
-            global.Matter.Body.setPosition(body, {
+            global.MatterReanimated.Body.setPosition(body, {
                 x: point.x + (dx * cos - dy * sin),
                 y: point.y + (dx * sin + dy * cos),
             });
 
-            global.Matter.Body.rotate(body, rotation);
+            global.MatterReanimated.Body.rotate(body, rotation);
         }
 
         return composite;
@@ -623,12 +628,12 @@ var init = function () {
                 dx = body.position.x - point.x,
                 dy = body.position.y - point.y;
 
-            global.Matter.Body.setPosition(body, {
+            global.MatterReanimated.Body.setPosition(body, {
                 x: point.x + dx * scaleX,
                 y: point.y + dy * scaleY,
             });
 
-            global.Matter.Body.scale(body, scaleX, scaleY);
+            global.MatterReanimated.Body.scale(body, scaleX, scaleY);
         }
 
         return composite;
@@ -649,7 +654,7 @@ var init = function () {
             vertices.push(body.bounds.min, body.bounds.max);
         }
 
-        return global.Matter.Bounds.create(vertices);
+        return global.MatterReanimated.Bounds.create(vertices);
     };
 
     /*
@@ -738,7 +743,7 @@ var init = function () {
      */
 
     /**
-     * The `Composite` that is the parent of this composite. It is automatically managed by the `Matter.Composite` methods.
+     * The `Composite` that is the parent of this composite. It is automatically managed by the `MatterReanimated.Composite` methods.
      *
      * @property parent
      * @type composite

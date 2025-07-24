@@ -1,4 +1,4 @@
-import Matter from 'matter-js';
+import Matter from 'matter-js-reanimated';
 type BodyIdentifier = {
     id: number;
 } | {

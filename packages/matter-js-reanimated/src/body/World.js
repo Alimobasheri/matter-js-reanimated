@@ -2,14 +2,14 @@ var Composite = require('./Composite');
 var Common = require('../core/Common');
 
 /**
- * This module has now been replaced by `Matter.Composite`.
+ * This module has now been replaced by `MatterReanimated.Composite`.
  *
- * All usage should be migrated to the equivalent functions found on `Matter.Composite`.
+ * All usage should be migrated to the equivalent functions found on `MatterReanimated.Composite`.
  * For example `World.add(world, body)` now becomes `Composite.add(world, body)`.
  *
  * The property `world.gravity` has been moved to `engine.gravity`.
  *
- * For back-compatibility purposes this module will remain as a direct alias to `Matter.Composite` in the short term during migration.
+ * For back-compatibility purposes this module will remain as a direct alias to `MatterReanimated.Composite` in the short term during migration.
  * Eventually this alias module will be marked as deprecated and then later removed in a future release.
  *
  * @class World
@@ -18,17 +18,17 @@ var Common = require('../core/Common');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.World) {
+    if (global.MatterReanimated && global.MatterReanimated.World) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.World = {};
+    global.MatterReanimated.World = {};
 
-    var World = global.Matter.World;
+    var World = global.MatterReanimated.World;
 
     Composite();
     Common();
@@ -36,13 +36,13 @@ var init = function () {
     /**
      * See above, aliases for back compatibility only
      */
-    World.create = global.Matter.Composite.create;
-    World.add = global.Matter.Composite.add;
-    World.remove = global.Matter.Composite.remove;
-    World.clear = global.Matter.Composite.clear;
-    World.addComposite = global.Matter.Composite.addComposite;
-    World.addBody = global.Matter.Composite.addBody;
-    World.addConstraint = global.Matter.Composite.addConstraint;
+    World.create = global.MatterReanimated.Composite.create;
+    World.add = global.MatterReanimated.Composite.add;
+    World.remove = global.MatterReanimated.Composite.remove;
+    World.clear = global.MatterReanimated.Composite.clear;
+    World.addComposite = global.MatterReanimated.Composite.addComposite;
+    World.addBody = global.MatterReanimated.Composite.addBody;
+    World.addConstraint = global.MatterReanimated.Composite.addConstraint;
 };
 
 module.exports = init;

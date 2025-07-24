@@ -1,5 +1,5 @@
 /**
- * The `Matter.Contact` module contains methods for creating and manipulating collision contacts.
+ * The `MatterReanimated.Contact` module contains methods for creating and manipulating collision contacts.
  *
  * @class Contact
  */
@@ -7,17 +7,17 @@
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Contact) {
+    if (global.MatterReanimated && global.MatterReanimated.Contact) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Contact = {};
+    global.MatterReanimated.Contact = {};
 
-    var Contact = global.Matter.Contact;
+    var Contact = global.MatterReanimated.Contact;
 
     /**
      * Creates a new contact.

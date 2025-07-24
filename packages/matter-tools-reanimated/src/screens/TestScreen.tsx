@@ -7,7 +7,7 @@ import { initAvalanche } from '../examples/avalanche';
 import { initBallPool } from '../examples/ballPool';
 import { initConstraints } from '../examples/constraints';
 import { initCloth } from '../examples/cloth';
-import Matter from 'matter-js';
+import Matter from 'matter-js-reanimated';
 
 export default function TestScreen() {
   const { width, height } = useWindowDimensions();

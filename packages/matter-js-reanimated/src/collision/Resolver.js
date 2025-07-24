@@ -3,7 +3,7 @@ var Common = require('../core/Common');
 var Bounds = require('../geometry/Bounds');
 
 /**
- * The `Matter.Resolver` module contains methods for resolving collision pairs.
+ * The `MatterReanimated.Resolver` module contains methods for resolving collision pairs.
  *
  * @class Resolver
  */
@@ -11,17 +11,17 @@ var Bounds = require('../geometry/Bounds');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Resolver) {
+    if (global.MatterReanimated && global.MatterReanimated.Resolver) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Resolver = {};
+    global.MatterReanimated.Resolver = {};
 
-    var Resolver = global.Matter.Resolver;
+    var Resolver = global.MatterReanimated.Resolver;
 
     Vertices();
     Common();
@@ -74,8 +74,8 @@ var init = function () {
             contactShare,
             positionImpulse,
             positionDampen = Resolver._positionDampen * (damping || 1),
-            slopDampen = global.Matter.Common.clamp(
-                delta / global.Matter.Common._baseDelta,
+            slopDampen = global.MatterReanimated.Common.clamp(
+                delta / global.MatterReanimated.Common._baseDelta,
                 0,
                 1
             ),
@@ -138,8 +138,8 @@ var init = function () {
     Resolver.postSolvePosition = function (bodies) {
         var positionWarming = Resolver._positionWarming,
             bodiesLength = bodies.length,
-            verticesTranslate = global.Matter.Vertices.translate,
-            boundsUpdate = global.Matter.Bounds.update;
+            verticesTranslate = global.MatterReanimated.Vertices.translate,
+            boundsUpdate = global.MatterReanimated.Bounds.update;
 
         for (var i = 0; i < bodiesLength; i++) {
             var body = bodies[i],
@@ -253,7 +253,7 @@ var init = function () {
      * @param {number} delta
      */
     Resolver.solveVelocity = function (pairs, delta) {
-        var timeScale = delta / global.Matter.Common._baseDelta,
+        var timeScale = delta / global.MatterReanimated.Common._baseDelta,
             timeScaleSquared = timeScale * timeScale,
             timeScaleCubed = timeScaleSquared * timeScale,
             restingThresh = -Resolver._restingThresh * timeScale,

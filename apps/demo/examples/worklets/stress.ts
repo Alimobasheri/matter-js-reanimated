@@ -1,47 +1,47 @@
 declare global {
-    var windowWidth: number;
-    var windowHeight: number;
+  var windowWidth: number;
+  var windowHeight: number;
 }
 
 export const initStress = (engine: any) => {
-    'worklet';
+  'worklet';
 
-    const width = global.windowWidth || 800;
-    const height = global.windowHeight || 600;
+  const width = global.windowWidth || 800;
+  const height = global.windowHeight || 600;
 
-    const scaleX = width / 800;
-    const scaleY = height / 600;
-    const scale = Math.min(scaleX, scaleY);
+  const scaleX = width / 800;
+  const scaleY = height / 600;
+  const scale = Math.min(scaleX, scaleY);
 
-    const { Bodies, Composites, Composite, World } = global.Matter;
+  const { Bodies, Composites, Composite, World } = global.MatterReanimated;
 
-    const stack = Composites.stack(
-        90 * scale,
-        height - 25 * scale - 15 * 35 * scale,
-        18,
-        15,
-        0,
-        0,
-        (x: number, y: number) => {
-            return Bodies.rectangle(x, y, 35 * scale, 35 * scale);
-        }
-    );
+  const stack = Composites.stack(
+    90 * scale,
+    height - 25 * scale - 15 * 35 * scale,
+    18,
+    15,
+    0,
+    0,
+    (x: number, y: number) => {
+      return Bodies.rectangle(x, y, 35 * scale, 35 * scale);
+    }
+  );
 
-    World.add(engine.world, [
-        stack,
-        Bodies.rectangle(400 * scale, 0, 800 * scale, 50 * scale, {
-            isStatic: true,
-        }),
-        Bodies.rectangle(400 * scale, height, 800 * scale, 50 * scale, {
-            isStatic: true,
-        }),
-        Bodies.rectangle(800 * scale, 300 * scale, 50 * scale, 600 * scale, {
-            isStatic: true,
-        }),
-        Bodies.rectangle(0, 300 * scale, 50 * scale, 600 * scale, {
-            isStatic: true,
-        }),
-    ]);
+  World.add(engine.world, [
+    stack,
+    Bodies.rectangle(400 * scale, 0, 800 * scale, 50 * scale, {
+      isStatic: true,
+    }),
+    Bodies.rectangle(400 * scale, height, 800 * scale, 50 * scale, {
+      isStatic: true,
+    }),
+    Bodies.rectangle(800 * scale, 300 * scale, 50 * scale, 600 * scale, {
+      isStatic: true,
+    }),
+    Bodies.rectangle(0, 300 * scale, 50 * scale, 600 * scale, {
+      isStatic: true,
+    }),
+  ]);
 
-    engine.gravity.y = 1;
+  engine.gravity.y = 1;
 };

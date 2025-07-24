@@ -1,14 +1,14 @@
 /**
-* This module has now been replaced by `Matter.Detector`.
-*
-* All usage should be migrated to `Matter.Detector` or another alternative.
-* For back-compatibility purposes this module will remain for a short term and then later removed in a future release.
-*
-* The `Matter.Grid` module contains methods for creating and manipulating collision broadphase grid structures.
-*
-* @class Grid
-* @deprecated
-*/
+ * This module has now been replaced by `MatterReanimated.Detector`.
+ *
+ * All usage should be migrated to `MatterReanimated.Detector` or another alternative.
+ * For back-compatibility purposes this module will remain for a short term and then later removed in a future release.
+ *
+ * The `MatterReanimated.Grid` module contains methods for creating and manipulating collision broadphase grid structures.
+ *
+ * @class Grid
+ * @deprecated
+ */
 
 var Grid = {};
 
@@ -18,22 +18,21 @@ var Pair = require('./Pair');
 var Common = require('../core/Common');
 var deprecated = Common.deprecated;
 
-(function() {
-
+(function () {
     /**
      * Creates a new grid.
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @method create
      * @param {} options
      * @return {grid} A new grid
      */
-    Grid.create = function(options) {
+    Grid.create = function (options) {
         var defaults = {
             buckets: {},
             pairs: {},
             pairsList: [],
             bucketWidth: 48,
-            bucketHeight: 48
+            bucketHeight: 48,
         };
 
         return Common.extend(defaults, options);
@@ -57,15 +56,17 @@ var deprecated = Common.deprecated;
 
     /**
      * Updates the grid.
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @method update
      * @param {grid} grid
      * @param {body[]} bodies
      * @param {engine} engine
      * @param {boolean} forceUpdate
      */
-    Grid.update = function(grid, bodies, engine, forceUpdate) {
-        var i, col, row,
+    Grid.update = function (grid, bodies, engine, forceUpdate) {
+        var i,
+            col,
+            row,
             world = engine.world,
             buckets = grid.buckets,
             bucket,
@@ -75,21 +76,27 @@ var deprecated = Common.deprecated;
         for (i = 0; i < bodies.length; i++) {
             var body = bodies[i];
 
-            if (body.isSleeping && !forceUpdate)
-                continue;
+            if (body.isSleeping && !forceUpdate) continue;
 
             // temporary back compatibility bounds check
-            if (world.bounds && (body.bounds.max.x < world.bounds.min.x || body.bounds.min.x > world.bounds.max.x
-                || body.bounds.max.y < world.bounds.min.y || body.bounds.min.y > world.bounds.max.y))
+            if (
+                world.bounds &&
+                (body.bounds.max.x < world.bounds.min.x ||
+                    body.bounds.min.x > world.bounds.max.x ||
+                    body.bounds.max.y < world.bounds.min.y ||
+                    body.bounds.min.y > world.bounds.max.y)
+            )
                 continue;
 
             var newRegion = Grid._getRegion(grid, body);
 
             // if the body has changed grid region
-            if (!body.region || newRegion.id !== body.region.id || forceUpdate) {
-
-                if (!body.region || forceUpdate)
-                    body.region = newRegion;
+            if (
+                !body.region ||
+                newRegion.id !== body.region.id ||
+                forceUpdate
+            ) {
+                if (!body.region || forceUpdate) body.region = newRegion;
 
                 var union = Grid._regionUnion(newRegion, body.region);
 
@@ -100,11 +107,17 @@ var deprecated = Common.deprecated;
                         bucketId = Grid._getBucketId(col, row);
                         bucket = buckets[bucketId];
 
-                        var isInsideNewRegion = (col >= newRegion.startCol && col <= newRegion.endCol
-                                                && row >= newRegion.startRow && row <= newRegion.endRow);
+                        var isInsideNewRegion =
+                            col >= newRegion.startCol &&
+                            col <= newRegion.endCol &&
+                            row >= newRegion.startRow &&
+                            row <= newRegion.endRow;
 
-                        var isInsideOldRegion = (col >= body.region.startCol && col <= body.region.endCol
-                                                && row >= body.region.startRow && row <= body.region.endRow);
+                        var isInsideOldRegion =
+                            col >= body.region.startCol &&
+                            col <= body.region.endCol &&
+                            row >= body.region.startRow &&
+                            row <= body.region.endRow;
 
                         // remove from old region buckets
                         if (!isInsideNewRegion && isInsideOldRegion) {
@@ -115,7 +128,11 @@ var deprecated = Common.deprecated;
                         }
 
                         // add to new region buckets
-                        if (body.region === newRegion || (isInsideNewRegion && !isInsideOldRegion) || forceUpdate) {
+                        if (
+                            body.region === newRegion ||
+                            (isInsideNewRegion && !isInsideOldRegion) ||
+                            forceUpdate
+                        ) {
                             if (!bucket)
                                 bucket = Grid._createBucket(buckets, bucketId);
                             Grid._bucketAddBody(grid, bucket, body);
@@ -132,36 +149,43 @@ var deprecated = Common.deprecated;
         }
 
         // update pairs list only if pairs changed (i.e. a body changed region)
-        if (gridChanged)
-            grid.pairsList = Grid._createActivePairsList(grid);
+        if (gridChanged) grid.pairsList = Grid._createActivePairsList(grid);
     };
 
-    deprecated(Grid, 'update', 'Grid.update ➤ replaced by Matter.Detector');
+    deprecated(
+        Grid,
+        'update',
+        'Grid.update ➤ replaced by MatterReanimated.Detector'
+    );
 
     /**
      * Clears the grid.
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @method clear
      * @param {grid} grid
      */
-    Grid.clear = function(grid) {
+    Grid.clear = function (grid) {
         grid.buckets = {};
         grid.pairs = {};
         grid.pairsList = [];
     };
 
-    deprecated(Grid, 'clear', 'Grid.clear ➤ replaced by Matter.Detector');
+    deprecated(
+        Grid,
+        'clear',
+        'Grid.clear ➤ replaced by MatterReanimated.Detector'
+    );
 
     /**
      * Finds the union of two regions.
      * @method _regionUnion
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @private
      * @param {} regionA
      * @param {} regionB
      * @return {} region
      */
-    Grid._regionUnion = function(regionA, regionB) {
+    Grid._regionUnion = function (regionA, regionB) {
         var startCol = Math.min(regionA.startCol, regionB.startCol),
             endCol = Math.max(regionA.endCol, regionB.endCol),
             startRow = Math.min(regionA.startRow, regionB.startRow),
@@ -173,13 +197,13 @@ var deprecated = Common.deprecated;
     /**
      * Gets the region a given body falls in for a given grid.
      * @method _getRegion
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @private
      * @param {} grid
      * @param {} body
      * @return {} region
      */
-    Grid._getRegion = function(grid, body) {
+    Grid._getRegion = function (grid, body) {
         var bounds = body.bounds,
             startCol = Math.floor(bounds.min.x / grid.bucketWidth),
             endCol = Math.floor(bounds.max.x / grid.bucketWidth),
@@ -192,7 +216,7 @@ var deprecated = Common.deprecated;
     /**
      * Creates a region.
      * @method _createRegion
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @private
      * @param {} startCol
      * @param {} endCol
@@ -200,53 +224,53 @@ var deprecated = Common.deprecated;
      * @param {} endRow
      * @return {} region
      */
-    Grid._createRegion = function(startCol, endCol, startRow, endRow) {
-        return { 
+    Grid._createRegion = function (startCol, endCol, startRow, endRow) {
+        return {
             id: startCol + ',' + endCol + ',' + startRow + ',' + endRow,
-            startCol: startCol, 
-            endCol: endCol, 
-            startRow: startRow, 
-            endRow: endRow 
+            startCol: startCol,
+            endCol: endCol,
+            startRow: startRow,
+            endRow: endRow,
         };
     };
 
     /**
      * Gets the bucket id at the given position.
      * @method _getBucketId
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @private
      * @param {} column
      * @param {} row
      * @return {string} bucket id
      */
-    Grid._getBucketId = function(column, row) {
+    Grid._getBucketId = function (column, row) {
         return 'C' + column + 'R' + row;
     };
 
     /**
      * Creates a bucket.
      * @method _createBucket
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @private
      * @param {} buckets
      * @param {} bucketId
      * @return {} bucket
      */
-    Grid._createBucket = function(buckets, bucketId) {
-        var bucket = buckets[bucketId] = [];
+    Grid._createBucket = function (buckets, bucketId) {
+        var bucket = (buckets[bucketId] = []);
         return bucket;
     };
 
     /**
      * Adds a body to a bucket.
      * @method _bucketAddBody
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @private
      * @param {} grid
      * @param {} bucket
      * @param {} body
      */
-    Grid._bucketAddBody = function(grid, bucket, body) {
+    Grid._bucketAddBody = function (grid, bucket, body) {
         var gridPairs = grid.pairs,
             pairId = Pair.id,
             bucketLength = bucket.length,
@@ -278,13 +302,13 @@ var deprecated = Common.deprecated;
     /**
      * Removes a body from a bucket.
      * @method _bucketRemoveBody
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @private
      * @param {} grid
      * @param {} bucket
      * @param {} body
      */
-    Grid._bucketRemoveBody = function(grid, bucket, body) {
+    Grid._bucketRemoveBody = function (grid, bucket, body) {
         var gridPairs = grid.pairs,
             pairId = Pair.id,
             i;
@@ -300,20 +324,19 @@ var deprecated = Common.deprecated;
             // important for _createActivePairsList to work
             var pair = gridPairs[pairId(body, bucket[i])];
 
-            if (pair)
-                pair[2] -= 1;
+            if (pair) pair[2] -= 1;
         }
     };
 
     /**
      * Generates a list of the active pairs in the grid.
      * @method _createActivePairsList
-     * @deprecated replaced by Matter.Detector
+     * @deprecated replaced by MatterReanimated.Detector
      * @private
      * @param {} grid
      * @return [] pairs
      */
-    Grid._createActivePairsList = function(grid) {
+    Grid._createActivePairsList = function (grid) {
         var pair,
             gridPairs = grid.pairs,
             pairKeys = Common.keys(gridPairs),
@@ -336,5 +359,4 @@ var deprecated = Common.deprecated;
 
         return pairs;
     };
-    
 })();

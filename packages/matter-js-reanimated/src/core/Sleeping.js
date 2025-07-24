@@ -3,7 +3,7 @@ var Events = require('./Events');
 var Common = require('./Common');
 
 /**
- * The `Matter.Sleeping` module contains methods to manage the sleeping state of bodies.
+ * The `MatterReanimated.Sleeping` module contains methods to manage the sleeping state of bodies.
  *
  * @class Sleeping
  */
@@ -11,17 +11,17 @@ var Common = require('./Common');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Sleeping) {
+    if (global.MatterReanimated && global.MatterReanimated.Sleeping) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Sleeping = {};
+    global.MatterReanimated.Sleeping = {};
 
-    var Sleeping = global.Matter.Sleeping;
+    var Sleeping = global.MatterReanimated.Sleeping;
 
     // Body();
     Events();
@@ -38,14 +38,15 @@ var init = function () {
      * @param {number} delta
      */
     Sleeping.update = function (bodies, delta) {
-        var timeScale = delta / global.Matter.Common._baseDelta,
+        var timeScale = delta / global.MatterReanimated.Common._baseDelta,
             motionSleepThreshold = Sleeping._motionSleepThreshold;
 
         // update bodies sleeping status
         for (var i = 0; i < bodies.length; i++) {
             var body = bodies[i],
-                speed = global.Matter.Body.getSpeed(body),
-                angularSpeed = global.Matter.Body.getAngularSpeed(body),
+                speed = global.MatterReanimated.Body.getSpeed(body),
+                angularSpeed =
+                    global.MatterReanimated.Body.getAngularSpeed(body),
                 motion = speed * speed + angularSpeed * angularSpeed;
 
             // wake up bodies if they have a force applied
@@ -141,14 +142,14 @@ var init = function () {
             body.motion = 0;
 
             if (!wasSleeping) {
-                global.Matter.Events.trigger(body, 'sleepStart');
+                global.MatterReanimated.Events.trigger(body, 'sleepStart');
             }
         } else {
             body.isSleeping = false;
             body.sleepCounter = 0;
 
             if (wasSleeping) {
-                global.Matter.Events.trigger(body, 'sleepEnd');
+                global.MatterReanimated.Events.trigger(body, 'sleepEnd');
             }
         }
     };

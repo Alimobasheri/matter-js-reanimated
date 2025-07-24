@@ -1,4 +1,4 @@
-import Matter from 'matter-js';
+import Matter from 'matter-js-reanimated';
 import { TouchConstraintType } from '../components/TouchConstraint';
 import { BodyShape } from '../components/Bodies';
 import { ConstraintShape } from '../components/Constraints';
