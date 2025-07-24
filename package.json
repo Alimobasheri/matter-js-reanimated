@@ -1,6 +1,7 @@
 {
   "name": "matter-js-reanimated",
   "private": true,
+  "packageManager": "yarn@1.22.19",
   "workspaces": [
     "packages/*",
     "apps/*"
