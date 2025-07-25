@@ -9,6 +9,7 @@ var init = function () {
     }
 
     global.MatterReanimated = {};
+    global.Matter = global.MatterReanimated;
     Plugin();
     Common();
 
