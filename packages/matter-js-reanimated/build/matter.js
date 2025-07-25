@@ -29,11 +29,11 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("Matter", [], factory);
+		define("MatterReanimated", [], factory);
 	else if(typeof exports === 'object')
-		exports["Matter"] = factory();
+		exports["MatterReanimated"] = factory();
 	else
-		root["Matter"] = factory();
+		root["MatterReanimated"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -7166,6 +7166,7 @@ var init = function () {
     }
 
     global.MatterReanimated = {};
+    global.Matter = global.MatterReanimated;
     Plugin();
     Common();
 
