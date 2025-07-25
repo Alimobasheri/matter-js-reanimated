@@ -25,7 +25,7 @@ A **UI-thread-safe**, functional port of [Matter.js](https://github.com/liabru/m
 - 🧱 No rendering, no DOM, no Canvas
 - 📦 Headless and side-effect-free
 - ⏱ Manually driven via `useFrameCallback`
-- 🌐 Injected via `global.Matter` for worklet access
+- 🌐 Injected via `global.MatterReanimated` for worklet access
 - 📉 Based on Matter.js core but stripped of deprecated or browser-specific APIs
 
 ---
@@ -35,26 +35,26 @@ A **UI-thread-safe**, functional port of [Matter.js](https://github.com/liabru/m
 ```ts
 // 1. Inject Matter modules on the UI thread (run this ONCE before anything else)
 runOnUI(() => {
-  initMatter(); // defines global.Matter
+  initMatter(); // defines global.MatterReanimated
 })();
 
-// 2. Ensure global.Matter is initialized before using it
+// 2. Ensure global.MatterReanimated is initialized before using it
 // This must be called AFTER the above runOnUI has completed
 runOnUI(() => {
   'worklet';
 
-  if (!global.Matter) {
+  if (!global.MatterReanimated) {
     console.warn('Matter not initialized yet!');
     return;
   }
 
-  const engine = global.Matter.Engine.create();
-  const ball = global.Matter.Bodies.circle(100, 100, 20);
+  const engine = global.MatterReanimated.Engine.create();
+  const ball = global.MatterReanimated.Bodies.circle(100, 100, 20);
 
   global.physicsEngine = engine;
   global.ball = ball;
 
-  global.Matter.World.add(engine.world, [ball]);
+  global.MatterReanimated.World.add(engine.world, [ball]);
 })();
 ```
 
@@ -63,7 +63,7 @@ runOnUI(() => {
 useFrameCallback((frame) => {
   runOnUI(() => {
     'worklet';
-    global.Matter.Engine.update(global.physicsEngine, frame.delta);
+    global.MatterReanimated.Engine.update(global.physicsEngine, frame.delta);
   })();
 });
 ```
@@ -87,7 +87,7 @@ const position = useDerivedValue(() => {
 
 - [x] `Engine`, `World`, `Body`, `Composite`, `Vector`, `Bounds`, `Sleeping`, etc.
 - [x] Gravity, collision resolution, compound bodies, sleeping
-- [x] Worklet-safe structure using `global.Matter`
+- [x] Worklet-safe structure using `global.MatterReanimated`
 - [x] Hermes-compatible
 - [x] Functional, CommonJS-style output
 
