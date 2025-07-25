@@ -12,6 +12,9 @@
         "webpack": "^4.46.0",
         "webpack-cli": "^3.3.11"
     },
+    "dependencies": {
+        "@types/matter-js": "^0.19.8"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Alimobasheri/matter-js-reanimated.git",
