@@ -1,4 +1,5 @@
-export = MatterReanimated;
+declare function initMatter(): void;
+export = initMatter;
 export as namespace MatterReanimated;
 
 declare namespace MatterReanimated {
@@ -3968,4 +3969,9 @@ declare namespace MatterReanimated {
          */
         pairs: Pairs | null;
     }
+}
+
+declare global {
+    var MatterReanimated: typeof MatterReanimated;
+    var Matter: typeof MatterReanimated;
 }
