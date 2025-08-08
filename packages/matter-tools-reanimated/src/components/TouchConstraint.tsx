@@ -1,4 +1,3 @@
-import type { Matter } from 'matter-js-reanimated';
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import {

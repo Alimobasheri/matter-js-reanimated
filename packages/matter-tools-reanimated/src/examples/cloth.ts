@@ -1,5 +1,3 @@
-import type { Matter } from 'matter-js-reanimated';
-
 function createCloth(
   xx: number,
   yy: number,

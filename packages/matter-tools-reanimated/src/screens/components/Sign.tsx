@@ -1,6 +1,5 @@
 import { useDerivedMatterBody } from '@/src/hooks/useDerivedMatterBody';
 import { useDerivedMatterConstraint } from '@/src/hooks/useDerivedMatterConstraint';
-import type { Matter } from 'matter-js-reanimated';
 import { Text, View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 

@@ -1,4 +1,3 @@
-import type { Matter } from 'matter-js-reanimated';
 import { DerivedValue, useDerivedValue } from 'react-native-reanimated';
 
 export interface MatterBodyState {

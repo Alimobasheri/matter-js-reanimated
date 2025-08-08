@@ -1,7 +1,7 @@
 import { TouchConstraintType } from './components/TouchConstraint';
 import { BodyShape } from './components/Bodies';
 import { ConstraintShape } from './components/Constraints';
-import type { Matter } from 'matter-js-reanimated';
+import type { MatterReanimated } from 'matter-js-reanimated';
 export { ReanimatedMatter } from './components/ReanimatedMatter';
 export { TouchConstraint } from './components/TouchConstraint';
 export { Render } from './components/Render';
@@ -38,7 +38,7 @@ export interface MatterExample {
   init: (engine: any) => void;
 }
 
-type MatterType = Matter & {
+type MatterType = MatterReanimated & {
   touchConstraint: TouchConstraintType | null;
 };
 

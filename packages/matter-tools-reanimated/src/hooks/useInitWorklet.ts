@@ -1,5 +1,4 @@
 import initMatter from 'matter-js-reanimated';
-import type { Matter } from 'matter-js-reanimated';
 import { useCallback, useEffect, useState } from 'react';
 import { runOnJS, runOnUI } from 'react-native-reanimated';
 

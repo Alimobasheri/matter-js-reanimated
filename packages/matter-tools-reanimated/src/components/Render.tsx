@@ -3,7 +3,6 @@ import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useFrameCallback } from 'react-native-reanimated';
 //@ts-ignore
 import Svg from 'react-native-svg';
-import type { Matter } from 'matter-js-reanimated';
 import { Bodies } from './Bodies';
 import { Constraints } from './Constraints';
 import { Runner } from './Runner';

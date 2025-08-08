@@ -1,13 +1,7 @@
 import React, { useCallback } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
-import { runOnUI } from 'react-native-reanimated';
 import { Demo } from '../components/Demo';
-import { initBouncingBalls } from '../examples/BouncingBalls';
-import { initAvalanche } from '../examples/avalanche';
-import { initBallPool } from '../examples/ballPool';
-import { initConstraints } from '../examples/constraints';
 import { initCloth } from '../examples/cloth';
-import type { Matter } from 'matter-js-reanimated';
 
 export default function TestScreen() {
   const { width, height } = useWindowDimensions();
