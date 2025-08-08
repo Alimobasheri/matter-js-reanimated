@@ -1,4 +1,4 @@
-import { Matter } from 'matter-js-reanimated';
+import type { Matter } from 'matter-js-reanimated';
 
 export const initAniamtedDemo = (engine: Matter.Engine) => {
   'worklet';

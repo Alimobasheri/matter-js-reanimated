@@ -1,6 +1,5 @@
 import React from 'react';
 import { RenderProps } from './Render';
-import { Matter } from 'matter-js-reanimated';
 interface DemoProps {
     exampleWorklet: (engine: any) => void;
     options?: {

@@ -1,5 +1,3 @@
-/// <reference types="matter-js-reanimated/src/types" />
-
 import { TouchConstraintType } from './components/TouchConstraint';
 import { BodyShape } from './components/Bodies';
 import { ConstraintShape } from './components/Constraints';
@@ -40,7 +38,7 @@ export interface MatterExample {
   init: (engine: any) => void;
 }
 
-type MatterType = typeof Matter & {
+type MatterType = Matter & {
   touchConstraint: TouchConstraintType | null;
 };
 

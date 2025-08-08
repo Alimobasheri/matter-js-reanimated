@@ -35,7 +35,7 @@ export interface MatterExample {
     name: string;
     init: (engine: any) => void;
 }
-type MatterType = typeof Matter & {
+type MatterType = Matter & {
     touchConstraint: TouchConstraintType | null;
 };
 declare global {
