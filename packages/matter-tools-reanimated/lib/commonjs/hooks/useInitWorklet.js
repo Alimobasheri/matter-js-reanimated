@@ -14,17 +14,17 @@ const useInitWorklet = (worklet, engineId = 'defaultEngine') => {
     'worklet';
 
     // Only initialize if not already done
-    if (!global.Matter) {
+    if (!global.MatterReanimated) {
       //@ts-ignore
       (0, _matterJsReanimated.default)();
     }
     let engine;
-    if (engineId in global && global.Matter) {
+    if (engineId in global && global.MatterReanimated) {
       //@ts-ignore
       engine = global[engineId];
       global.Matter.Composite.clear(engine.world, false, true);
     }
-    if (!global.Matter) {
+    if (!global.MatterReanimated) {
       console.warn('Matter.js not initialized! Run initMatter() first.');
       return;
     }

@@ -1,4 +1,4 @@
-import Matter from 'matter-js-reanimated';
+import { Matter } from 'matter-js-reanimated';
 type ConstraintIdentifier = {
     id: number;
 } | {

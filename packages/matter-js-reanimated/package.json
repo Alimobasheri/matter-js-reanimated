@@ -5,7 +5,8 @@
     "types": "src/types/index.d.ts",
     "license": "MIT",
     "scripts": {
-        "build": "webpack --config webpack.config.js"
+        "build": "webpack --config webpack.config.js && tsc",
+        "build:types": "tsc --emitDeclarationOnly"
     },
     "devDependencies": {
         "html-webpack-plugin": "^4.5.1",

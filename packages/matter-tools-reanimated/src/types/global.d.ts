@@ -1,14 +1,16 @@
-import Matter from 'matter-js-reanimated';
+/// <reference types="matter-js-reanimated/src/types" />
+
 import { TouchConstraintType } from '../components/TouchConstraint';
 import { BodyShape } from '../components/Bodies';
 import { ConstraintShape } from '../components/Constraints';
+import type { Matter } from 'matter-js-reanimated';
 
 type MatterType = typeof Matter & {
   touchConstraint: TouchConstraintType | null;
 };
 
 declare global {
-  var Matter: MatterType;
+  var MatterReanimated: MatterType;
   var runner: MatterType.Runner | null;
 
   var __lastDrawConstraintsTime: number | null;

@@ -1,7 +1,6 @@
 import { useSharedValue } from 'react-native-reanimated';
 import { useFrameCallback } from 'react-native-reanimated';
 import { useEffect } from 'react';
-import Matter from 'matter-js-reanimated';
 
 type BodyIdentifier = { id: number } | { label: string };
 

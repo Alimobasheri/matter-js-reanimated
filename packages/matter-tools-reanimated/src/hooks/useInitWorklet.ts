@@ -1,5 +1,4 @@
-import Matter from 'matter-js-reanimated';
-import initMatter from 'matter-js-reanimated';
+import initMatter, { Matter } from 'matter-js-reanimated';
 import { useCallback, useEffect, useState } from 'react';
 import { runOnJS, runOnUI } from 'react-native-reanimated';
 
@@ -12,17 +11,17 @@ export const useInitWorklet = (
   const initUI = useCallback(() => {
     'worklet';
     // Only initialize if not already done
-    if (!global.Matter) {
+    if (!global.MatterReanimated) {
       //@ts-ignore
       initMatter();
     }
     let engine: Matter.Engine | undefined;
-    if (engineId in global && global.Matter) {
+    if (engineId in global && global.MatterReanimated) {
       //@ts-ignore
       engine = global[engineId] as Matter.Engine;
       global.Matter.Composite.clear(engine.world, false, true);
     }
-    if (!global.Matter) {
+    if (!global.MatterReanimated) {
       console.warn('Matter.js not initialized! Run initMatter() first.');
       return;
     }

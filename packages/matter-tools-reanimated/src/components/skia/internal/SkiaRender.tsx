@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useFrameCallback } from 'react-native-reanimated';
-import Matter from 'matter-js-reanimated';
 import { Canvas } from '@shopify/react-native-skia';
 import { SkiaBodies } from './SkiaBodies';
 import { SkiaConstraints } from './SkiaConstraints';

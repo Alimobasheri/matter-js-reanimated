@@ -1,3 +1,9 @@
+/// <reference types="matter-js-reanimated/src/types" />
+
+import { TouchConstraintType } from './components/TouchConstraint';
+import { BodyShape } from './components/Bodies';
+import { ConstraintShape } from './components/Constraints';
+import type { Matter } from 'matter-js-reanimated';
 export { ReanimatedMatter } from './components/ReanimatedMatter';
 export { TouchConstraint } from './components/TouchConstraint';
 export { Render } from './components/Render';
@@ -8,28 +14,68 @@ export { SkiaRender } from './components/skia/SkiaRender';
 export { SkiaBodies } from './components/skia/SkiaBodies';
 
 export interface MatterToolsOptions {
-    render?: {
-        width?: number;
-        height?: number;
-        background?: string;
-        wireframes?: boolean;
-        showBounds?: boolean;
-        showAxes?: boolean;
-        showPositions?: boolean;
-        showAngleIndicator?: boolean;
+  render?: {
+    width?: number;
+    height?: number;
+    background?: string;
+    wireframes?: boolean;
+    showBounds?: boolean;
+    showAxes?: boolean;
+    showPositions?: boolean;
+    showAngleIndicator?: boolean;
+  };
+  touch?: {
+    constraint?: {
+      stiffness?: number;
+      damping?: number;
     };
-    touch?: {
-        constraint?: {
-            stiffness?: number;
-            damping?: number;
-        };
-        enablePan?: boolean;
-        enablePinch?: boolean;
-        enableRotate?: boolean;
-    };
+    enablePan?: boolean;
+    enablePinch?: boolean;
+    enableRotate?: boolean;
+  };
 }
 
 export interface MatterExample {
-    name: string;
-    init: (engine: any) => void;
+  name: string;
+  init: (engine: any) => void;
+}
+
+type MatterType = typeof Matter & {
+  touchConstraint: TouchConstraintType | null;
+};
+
+declare global {
+  var MatterReanimated: MatterType;
+  var runner: MatterType['Runner'] | null;
+
+  var __lastDrawConstraintsTime: number | null;
+  var __lastDrawBodiesTime: number | null;
+
+  // UI thread engine instance
+  var demoEngine: any;
+  var mouseConstraint: any;
+  var activeDragBody: any;
+
+  // Window dimensions available in worklets
+  var windowWidth: number;
+  var windowHeight: number;
+
+  var svgContent: BodyShape[];
+  var svgConstraints: ConstraintShape[];
+
+  interface MatterBody {
+    id: string | number;
+    position: { x: number; y: number };
+    angle: number;
+    bounds: {
+      min: { x: number; y: number };
+      max: { x: number; y: number };
+    };
+    vertices: Array<{ x: number; y: number }>;
+    circleRadius?: number;
+  }
+
+  var demoes: {
+    [key: string]: (engine: any) => void;
+  };
 }

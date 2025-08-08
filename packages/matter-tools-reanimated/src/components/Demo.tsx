@@ -5,14 +5,14 @@ import { Render, RenderProps } from './Render';
 import { TouchConstraint } from './TouchConstraint';
 import { SkiaRender } from './skia/SkiaRender';
 import { Runner } from './Runner';
-import MatterReanimated from 'matter-js-reanimated';
+import { Matter } from 'matter-js-reanimated';
 
 interface DemoProps {
   exampleWorklet: (engine: any) => void;
   options?: {
     render?: RenderProps['options'];
     touch?: {
-      constraint?: MatterReanimated.IConstraintDefinition;
+      constraint?: Matter.IConstraintDefinition;
       enablePan?: boolean;
     };
     skia?: boolean;

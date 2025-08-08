@@ -1,11 +1,5 @@
-import type * as Matter from 'matter-js';
-export * from 'matter-js';
-export as namespace MatterReanimated;
+/// <reference types="@types/matter-js" />
 
 declare function initMatter(): void;
-export = initMatter;
-
-declare global {
-  var MatterReanimated: typeof Matter;
-  var Matter: typeof Matter;
-}
+export default initMatter;
+export type { Matter };

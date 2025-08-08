@@ -1,6 +1,5 @@
-import Matter from 'matter-js-reanimated';
-import React, { FC, useEffect } from 'react';
-import { View } from 'react-native';
+import { Matter } from 'matter-js-reanimated';
+import { FC } from 'react';
 import {
   useFrameCallback,
   useSharedValue,

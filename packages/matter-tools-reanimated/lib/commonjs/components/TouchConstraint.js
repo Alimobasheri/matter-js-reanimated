@@ -45,10 +45,10 @@ const TouchConstraint = ({
     (0, _reactNativeReanimated.runOnUI)(() => {
       'worklet';
 
-      if (!global.Matter || !(engineId in global)) return;
+      if (!global.MatterReanimated || !(engineId in global)) return;
       const engine = global[engineId];
-      if (!global.Matter.touchConstraint) {
-        const constraint = global.Matter.Constraint.create({
+      if (!global.MatterReanimated.touchConstraint) {
+        const constraint = global.MatterReanimated.Constraint.create({
           pointA: {
             x: 0,
             y: 0
@@ -64,7 +64,7 @@ const TouchConstraint = ({
           },
           label: 'Mouse Constraint'
         });
-        global.Matter.touchConstraint = {
+        global.MatterReanimated.touchConstraint = {
           type: 'touchConstraint',
           constraint: constraint,
           body: null,
@@ -74,17 +74,17 @@ const TouchConstraint = ({
             group: 0
           }
         };
-        global.Matter.World.add(engine.world, constraint);
+        global.MatterReanimated.World.add(engine.world, constraint);
       }
     })();
     return () => {
       (0, _reactNativeReanimated.runOnUI)(() => {
         'worklet';
 
-        if (global.Matter.touchConstraint) {
+        if (global.MatterReanimated.touchConstraint) {
           const engine = global[engineId];
-          global.Matter.World.remove(engine.world, global.Matter.touchConstraint.constraint);
-          global.Matter.touchConstraint = null;
+          global.MatterReanimated.World.remove(engine.world, global.MatterReanimated.touchConstraint.constraint);
+          global.MatterReanimated.touchConstraint = null;
         }
       })();
     };
@@ -92,28 +92,28 @@ const TouchConstraint = ({
   const pan = _reactNativeGestureHandler.Gesture.Pan().enabled(enabled).onBegin(event => {
     'worklet';
 
-    if (!global.Matter || !(engineId in global) || !global.Matter.touchConstraint) return;
+    if (!global.MatterReanimated || !(engineId in global) || !global.MatterReanimated.touchConstraint) return;
     const engine = global[engineId];
     const point = {
       x: event.x,
       y: event.y
     };
-    const bodies = global.Matter.Composite.allBodies(engine.world);
-    const touchConstraint = global.Matter.touchConstraint;
+    const bodies = global.MatterReanimated.Composite.allBodies(engine.world);
+    const touchConstraint = global.MatterReanimated.touchConstraint;
     const constraint = touchConstraint.constraint;
 
     // Reset previous body
     constraint.bodyB = touchConstraint.body = null;
-    constraint.pointB = global.Matter.Vector.create(0, 0);
+    constraint.pointB = global.MatterReanimated.Vector.create(0, 0);
 
     // Find new body to drag
     for (let i = 0; i < bodies.length; i++) {
       const body = bodies[i];
-      if (global.Matter.Bounds.contains(body.bounds, point) && global.Matter.Detector.canCollide(body.collisionFilter, touchConstraint.collisionFilter)) {
+      if (global.MatterReanimated.Bounds.contains(body.bounds, point) && global.MatterReanimated.Detector.canCollide(body.collisionFilter, touchConstraint.collisionFilter)) {
         // Check parts (for compound bodies)
         for (let j = body.parts.length > 1 ? 1 : 0; j < body.parts.length; j++) {
           const part = body.parts[j];
-          if (global.Matter.Vertices.contains(part.vertices, point)) {
+          if (global.MatterReanimated.Vertices.contains(part.vertices, point)) {
             constraint.pointA = point;
             constraint.bodyB = touchConstraint.body = body;
             constraint.pointB = {
@@ -122,7 +122,7 @@ const TouchConstraint = ({
             };
             //@ts-ignore
             constraint.angleB = body.angle;
-            global.Matter.Sleeping.set(body, false);
+            global.MatterReanimated.Sleeping.set(body, false);
             break;
           }
         }
@@ -132,21 +132,21 @@ const TouchConstraint = ({
   }).onUpdate(event => {
     'worklet';
 
-    if (!global.Matter || !global.Matter.touchConstraint) return;
-    const constraint = global.Matter.touchConstraint.constraint;
+    if (!global.MatterReanimated || !global.MatterReanimated.touchConstraint) return;
+    const constraint = global.MatterReanimated.touchConstraint.constraint;
     const body = constraint.bodyB;
     if (body) {
       constraint.pointA = {
         x: event.x,
         y: event.y
       };
-      global.Matter.Sleeping.set(body, false);
+      global.MatterReanimated.Sleeping.set(body, false);
     }
   }).onEnd(() => {
     'worklet';
 
-    if (!global.Matter || !global.Matter.touchConstraint) return;
-    const touchConstraint = global.Matter.touchConstraint;
+    if (!global.MatterReanimated || !global.MatterReanimated.touchConstraint) return;
+    const touchConstraint = global.MatterReanimated.touchConstraint;
     const constraint = touchConstraint.constraint;
     const body = constraint.bodyB;
     if (body) {
