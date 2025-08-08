@@ -16,7 +16,7 @@ const initAniamtedDemo = engine => {
     Bodies,
     Composite,
     Constraint
-  } = global.Matter;
+  } = global.MatterReanimated;
 
   // add stiff global constraint
   var body = Bodies.rectangle(200 * scaleX, 150 * scaleY, width * 0.3, 60, {

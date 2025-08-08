@@ -16,7 +16,7 @@ const initConstraints = engine => {
     Bodies,
     Composite,
     Constraint
-  } = global.Matter;
+  } = global.MatterReanimated;
 
   // add stiff global constraint
   var body = Bodies.polygon(150 * scale, 200 * scale, 5, 30 * scale);

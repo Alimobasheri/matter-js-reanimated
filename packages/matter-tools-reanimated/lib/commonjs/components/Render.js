@@ -31,13 +31,13 @@ const Render = ({
   } = (0, _reactNativeReanimated.useFrameCallback)(() => {
     'worklet';
 
-    if (!global.Matter || !(engineId in global)) return;
+    if (!global.MatterReanimated || !(engineId in global)) return;
     if (!global.svgContent) global.svgContent = [];
     if (!global.svgConstraints) global.svgConstraints = [];
     const engine = global[engineId];
     if (!engine || !engine.world) return;
     // Use Composite.allBodies to get all bodies including those in nested composites
-    const bodies = global.Matter.Composite.allBodies(engine.world);
+    const bodies = global.MatterReanimated.Composite.allBodies(engine.world);
 
     // Generate SVG elements for each body - this runs in the UI thread
     global.svgContent = bodies.map(body => ({
@@ -61,7 +61,7 @@ const Render = ({
       circleRadius: body.circleRadius,
       render: body.render
     }));
-    const constraints = global.Matter.Composite.allConstraints(engine.world);
+    const constraints = global.MatterReanimated.Composite.allConstraints(engine.world);
     global.svgConstraints = constraints.map(constraint => ({
       id: constraint.id,
       bodyAId: constraint.bodyA?.id,

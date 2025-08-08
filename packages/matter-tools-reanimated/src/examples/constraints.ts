@@ -13,7 +13,7 @@ export const initConstraints = (engine: any) => {
   const scaleY = height / 600;
   const scale = Math.min(scaleX, scaleY);
 
-  const { Bodies, Composite, Constraint } = global.Matter;
+  const { Bodies, Composite, Constraint } = global.MatterReanimated;
 
   // add stiff global constraint
   var body = Bodies.polygon(150 * scale, 200 * scale, 5, 30 * scale);

@@ -34,13 +34,13 @@ export const SkiaBodies: React.FC<RenderProps> = ({
 
   const picture = useDerivedValue(() => {
     return createPicture((canvas) => {
-      if (!global.Matter || !(engineId in global)) return;
+      if (!global.MatterReanimated || !(engineId in global)) return;
       const engine = (global as any)[engineId];
       if (!engine || !engine.world) return;
 
       const _ = frameTick.value;
 
-      const bodies = global.Matter.Composite.allBodies(engine.world);
+      const bodies = global.MatterReanimated.Composite.allBodies(engine.world);
       canvas.clear(Skia.Color(options.background || 'white'));
 
       for (const body of bodies) {

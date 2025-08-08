@@ -14,7 +14,7 @@ const CustomScreen = () => {
     'worklet';
 
     if (!global.demoEngine) return;
-    global.Matter.Engine.update(global.demoEngine, 16.667 // Use fixed timestep for demos
+    global.MatterReanimated.Engine.update(global.demoEngine, 16.667 // Use fixed timestep for demos
     );
   });
   return initialized ? /*#__PURE__*/React.createElement(_Sign.Sign, null) : null;

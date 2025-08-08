@@ -11,7 +11,7 @@ function useDerivedMatterConstraint(identifier, engineId, process) {
   const frameCallback = (0, _reactNativeReanimated.useFrameCallback)(() => {
     'worklet';
 
-    if (!global.Matter || !(engineId in global)) return;
+    if (!global.MatterReanimated || !(engineId in global)) return;
     const engine = global[engineId];
     if (!engine || !engine.world) return;
     const {

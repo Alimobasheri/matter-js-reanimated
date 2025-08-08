@@ -10,7 +10,7 @@ export const initAniamtedDemo = (engine: Matter.Engine) => {
   const scaleY = height / 600;
   const scale = Math.min(scaleX, scaleY);
 
-  const { Bodies, Composite, Constraint } = global.Matter;
+  const { Bodies, Composite, Constraint } = global.MatterReanimated;
 
   // add stiff global constraint
   var body = Bodies.rectangle(200 * scaleX, 150 * scaleY, width * 0.3, 60, {

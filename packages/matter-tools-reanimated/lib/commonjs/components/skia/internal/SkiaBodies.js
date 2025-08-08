@@ -31,11 +31,11 @@ const SkiaBodies = ({
   });
   const picture = (0, _reactNativeReanimated.useDerivedValue)(() => {
     return (0, _reactNativeSkia.createPicture)(canvas => {
-      if (!global.Matter || !(engineId in global)) return;
+      if (!global.MatterReanimated || !(engineId in global)) return;
       const engine = global[engineId];
       if (!engine || !engine.world) return;
       const _ = frameTick.value;
-      const bodies = global.Matter.Composite.allBodies(engine.world);
+      const bodies = global.MatterReanimated.Composite.allBodies(engine.world);
       canvas.clear(_reactNativeSkia.Skia.Color(options.background || 'white'));
       for (const body of bodies) {
         if (body.render?.visible === false) continue;

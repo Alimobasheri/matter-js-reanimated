@@ -27,7 +27,7 @@ function useMatterBody(bodyId) {
       },
       vertices: []
     };
-    if (!global.Matter || !(bodyId in global)) {
+    if (!global.MatterReanimated || !(bodyId in global)) {
       return defaultState;
     }
     // @ts-ignore

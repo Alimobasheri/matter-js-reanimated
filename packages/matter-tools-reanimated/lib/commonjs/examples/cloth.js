@@ -12,7 +12,7 @@ function createCloth(xx, yy, columns, rows, columnGap, rowGap, crossBrace, parti
     Composites,
     Body,
     Common
-  } = global.Matter;
+  } = global.MatterReanimated;
   const group = Body.nextGroup(true);
   particleOptions = Common.extend({
     inertia: Infinity,
@@ -55,7 +55,7 @@ const initCloth = engine => {
     Composite,
     Body,
     World
-  } = global.Matter;
+  } = global.MatterReanimated;
 
   // Create cloth
   const cloth = createCloth(200 * scale, 200 * scale, 20, 12, 5 * scale, 5 * scale, false, 8 * scale);

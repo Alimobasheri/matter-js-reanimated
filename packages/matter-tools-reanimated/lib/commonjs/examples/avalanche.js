@@ -14,7 +14,7 @@ const initAvalanche = engine => {
     Bodies,
     Composites,
     World
-  } = global.Matter;
+  } = global.MatterReanimated;
 
   // Add bodies
   // Create stack of circles with low friction and restitution

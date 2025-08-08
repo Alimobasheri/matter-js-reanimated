@@ -50,12 +50,15 @@ const processConstraint = (constraint: Matter.Constraint) => {
     const bodyBPosition = constraint.bodyB.position;
     const bodyBAngle = constraint.bodyB.angle;
 
-    const rotatedPoint = global.Matter.Vector.rotate(
+    const rotatedPoint = global.MatterReanimated.Vector.rotate(
       constraint.pointB,
       bodyBAngle
     );
 
-    pointBWorld = global.Matter.Vector.add(bodyBPosition, rotatedPoint);
+    pointBWorld = global.MatterReanimated.Vector.add(
+      bodyBPosition,
+      rotatedPoint
+    );
   }
 
   return {

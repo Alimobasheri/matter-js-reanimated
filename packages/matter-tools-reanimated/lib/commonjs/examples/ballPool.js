@@ -17,7 +17,7 @@ const initBallPool = engine => {
     Bodies,
     Composites,
     World
-  } = global.Matter;
+  } = global.MatterReanimated;
 
   // Add bottom wall and side walls to contain the balls
   World.add(engine.world, [
@@ -42,7 +42,7 @@ const initBallPool = engine => {
   20, 20,
   // columnGap, rowGap (increased spacing)
   (x, y) => {
-    return Bodies.circle(x, y, global.Matter.Common.random(15, 30) * scale,
+    return Bodies.circle(x, y, global.MatterReanimated.Common.random(15, 30) * scale,
     // slightly smaller balls
     {
       restitution: 0.6,

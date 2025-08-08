@@ -31,13 +31,13 @@ const SkiaConstraints = ({
   });
   const picture = (0, _reactNativeReanimated.useDerivedValue)(() => {
     return (0, _reactNativeSkia.createPicture)(canvas => {
-      if (!global.Matter || !(engineId in global)) return;
+      if (!global.MatterReanimated || !(engineId in global)) return;
       const engine = global[engineId];
       if (!engine || !engine.world) return;
       const _ = frameTick.value; // Access the shared value to trigger re-render
 
-      const constraints = global.Matter.Composite.allConstraints(engine.world);
-      const bodies = global.Matter.Composite.allBodies(engine.world);
+      const constraints = global.MatterReanimated.Composite.allConstraints(engine.world);
+      const bodies = global.MatterReanimated.Composite.allBodies(engine.world);
       const strokePaint = _reactNativeSkia.Skia.Paint();
       strokePaint.setStyle(_reactNativeSkia.PaintStyle.Stroke);
       strokePaint.setAntiAlias(true);

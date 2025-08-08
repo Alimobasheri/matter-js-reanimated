@@ -13,7 +13,7 @@ function createCloth(
   constraintOptions: any = {}
 ) {
   'worklet';
-  const { Bodies, Composites, Body, Common } = global.Matter;
+  const { Bodies, Composites, Body, Common } = global.MatterReanimated;
 
   const group = Body.nextGroup(true);
   particleOptions = Common.extend(
@@ -64,7 +64,8 @@ export const initCloth = (engine: any) => {
   const scaleY = height / 600;
   const scale = Math.min(scaleX, scaleY);
 
-  const { Bodies, Composites, Composite, Body, World } = global.Matter;
+  const { Bodies, Composites, Composite, Body, World } =
+    global.MatterReanimated;
 
   // Create cloth
   const cloth = createCloth(

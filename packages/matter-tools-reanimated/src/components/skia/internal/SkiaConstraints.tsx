@@ -35,15 +35,17 @@ export const SkiaConstraints: React.FC<RenderProps> = ({
 
   const picture = useDerivedValue(() => {
     return createPicture((canvas) => {
-      if (!global.Matter || !(engineId in global)) return;
+      if (!global.MatterReanimated || !(engineId in global)) return;
 
       const engine = (global as any)[engineId];
       if (!engine || !engine.world) return;
 
       const _ = frameTick.value; // Access the shared value to trigger re-render
 
-      const constraints = global.Matter.Composite.allConstraints(engine.world);
-      const bodies = global.Matter.Composite.allBodies(engine.world);
+      const constraints = global.MatterReanimated.Composite.allConstraints(
+        engine.world
+      );
+      const bodies = global.MatterReanimated.Composite.allBodies(engine.world);
 
       const strokePaint = Skia.Paint();
       strokePaint.setStyle(PaintStyle.Stroke);

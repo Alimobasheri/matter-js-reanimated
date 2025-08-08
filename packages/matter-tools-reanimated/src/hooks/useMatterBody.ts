@@ -21,7 +21,7 @@ export function useMatterBody(bodyId: string): DerivedValue<MatterBodyState> {
       vertices: [],
     };
 
-    if (!global.Matter || !(bodyId in global)) {
+    if (!global.MatterReanimated || !(bodyId in global)) {
       return defaultState;
     }
     // @ts-ignore

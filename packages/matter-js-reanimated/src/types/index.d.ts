@@ -1,4 +1,3 @@
-/// <reference types="@types/matter-js" />
 import Matter from 'matter-js';
 
 declare function initMatter(): void;

@@ -20,14 +20,14 @@ export const useInitWorklet = (
     if (engineId in global && global.MatterReanimated) {
       //@ts-ignore
       engine = global[engineId] as Matter.Engine;
-      global.Matter.Composite.clear(engine.world, false, true);
+      global.MatterReanimated.Composite.clear(engine.world, false, true);
     }
     if (!global.MatterReanimated) {
       console.warn('Matter.js not initialized! Run initMatter() first.');
       return;
     }
 
-    engine = global.Matter.Engine.create({
+    engine = global.MatterReanimated.Engine.create({
       enableSleeping: false,
       gravity: { x: 0, y: 1, scale: 0.001 },
     });
