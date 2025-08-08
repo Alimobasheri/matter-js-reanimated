@@ -16,9 +16,9 @@ export const useInitWorklet = (
       initMatter();
     }
     let engine: Matter.Engine | undefined;
-    if (engineId in global && global.MatterReanimated) {
+    if (global.MatterReanimated && engineId in global.MatterReanimated) {
       //@ts-ignore
-      engine = global[engineId] as Matter.Engine;
+      engine = (global.MatterReanimated as any)[engineId] as Matter.Engine;
       global.MatterReanimated.Composite.clear(engine.world, false, true);
     }
     if (!global.MatterReanimated) {
@@ -32,7 +32,7 @@ export const useInitWorklet = (
     });
 
     //@ts-ignore
-    global[engineId] = engine;
+    global.MatterReanimated[engineId] = engine;
     if (worklet) {
       worklet(engine);
     }

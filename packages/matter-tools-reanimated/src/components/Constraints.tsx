@@ -32,8 +32,8 @@ export const Constraints: React.FC<RenderProps> = ({ options = {} }) => {
     useFrameCallback(() => {
         'worklet';
         let constraintPath = '';
-        if (Array.isArray(global.svgConstraints)) {
-            for (const constraint of global.svgConstraints) {
+        if (Array.isArray(global.MatterReanimated.svgConstraints)) {
+            for (const constraint of global.MatterReanimated.svgConstraints) {
                 if (!constraint.render.visible) continue;
 
                 let startX = constraint.pointA.x;
@@ -42,7 +42,7 @@ export const Constraints: React.FC<RenderProps> = ({ options = {} }) => {
                 let endY = constraint.pointB.y;
 
                 if (constraint.bodyAId) {
-                    const bodyA = global.svgContent.find(
+                    const bodyA = global.MatterReanimated.svgContent?.find(
                         (b) => b.id === constraint.bodyAId
                     );
                     if (bodyA) {
@@ -52,7 +52,7 @@ export const Constraints: React.FC<RenderProps> = ({ options = {} }) => {
                 }
 
                 if (constraint.bodyBId) {
-                    const bodyB = global.svgContent.find(
+                    const bodyB = global.MatterReanimated.svgContent?.find(
                         (b) => b.id === constraint.bodyBId
                     );
                     if (bodyB) {

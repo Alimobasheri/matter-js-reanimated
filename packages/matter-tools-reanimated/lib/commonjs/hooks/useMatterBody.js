@@ -27,11 +27,10 @@ function useMatterBody(bodyId) {
       },
       vertices: []
     };
-    if (!global.MatterReanimated || !(bodyId in global)) {
+    if (!global.MatterReanimated || !(bodyId in global.MatterReanimated)) {
       return defaultState;
     }
-    // @ts-ignore
-    const body = global[bodyId];
+    const body = global.MatterReanimated[bodyId];
     return {
       position: {
         ...body.position

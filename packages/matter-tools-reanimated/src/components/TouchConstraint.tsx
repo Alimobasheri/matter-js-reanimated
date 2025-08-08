@@ -64,9 +64,10 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
   React.useEffect(() => {
     runOnUI(() => {
       'worklet';
-      if (!global.MatterReanimated || !(engineId in global)) return;
+      if (!global.MatterReanimated || !(engineId in global.MatterReanimated))
+        return;
 
-      const engine = (global as any)[engineId];
+      const engine = (global.MatterReanimated as any)[engineId];
 
       if (!global.MatterReanimated.touchConstraint) {
         const constraint = global.MatterReanimated.Constraint.create({
@@ -99,7 +100,7 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
       runOnUI(() => {
         'worklet';
         if (global.MatterReanimated.touchConstraint) {
-          const engine = (global as any)[engineId];
+          const engine = (global.MatterReanimated as any)[engineId];
           global.MatterReanimated.World.remove(
             engine.world,
             global.MatterReanimated.touchConstraint.constraint
@@ -116,12 +117,12 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
       'worklet';
       if (
         !global.MatterReanimated ||
-        !(engineId in global) ||
+        !(engineId in global.MatterReanimated) ||
         !global.MatterReanimated.touchConstraint
       )
         return;
 
-      const engine = (global as any)[engineId];
+      const engine = (global.MatterReanimated as any)[engineId];
       const point = { x: event.x, y: event.y };
       const bodies = global.MatterReanimated.Composite.allBodies(engine.world);
       const touchConstraint = global.MatterReanimated.touchConstraint;

@@ -45,11 +45,11 @@ export const Bodies: React.FC<RenderProps> = ({ options = {} }) => {
 
   useFrameCallback(() => {
     'worklet';
-    if (!Array.isArray(global.svgContent)) return;
+    if (!Array.isArray(global.MatterReanimated.svgContent)) return;
 
     const newPaths: typeof pathsData.value = {};
 
-    for (const body of global.svgContent) {
+    for (const body of global.MatterReanimated.svgContent) {
       if (body.render?.visible === false) {
         continue;
       }

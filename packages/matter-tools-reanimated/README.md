@@ -414,8 +414,8 @@ export const myCustomPhysicsSetup = (engine: Matter.Engine) => {
   'worklet';
 
   // Access screen dimensions (if set globally, e.g., in the component calling Demo/ReanimatedMatter)
-  const width = global.windowWidth || 800;
-  const height = global.windowHeight || 600;
+  const width = global.MatterReanimated.windowWidth || 800;
+  const height = global.MatterReanimated.windowHeight || 600;
 
   // Access Matter.js modules via `global.MatterReanimated`
   const { Bodies, World, Composite } = global.MatterReanimated;
@@ -452,7 +452,7 @@ Key points for worklets:
 
 - global.MatterReanimated: Access Matter.js modules (Bodies, World, Constraint, etc.) through `global.MatterReanimated`.
 
-- global.windowWidth, global.windowHeight: If you need screen dimensions, pass them from your component to these global variables before the worklet runs. The Demo component and examples often do this.
+- global.MatterReanimated.windowWidth, global.MatterReanimated.windowHeight: If you need screen dimensions, pass them from your component to these global variables before the worklet runs. The Demo component and examples often do this.
 
 No React Native Components/APIs: You cannot directly use React Native components or most React Native APIs (like StyleSheet or useState) inside a worklet because it runs on a different thread. Use hooks like `useDerivedMatterBody` to bridge data back to the React component tree. You can use `react-native-reanimated` built-in hooks like `useDerivedValue` and `useAnimatedStyle`, or `useFrameCallback` to access Matter.js from `global.MatterReanimated`.
 

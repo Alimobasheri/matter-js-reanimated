@@ -21,9 +21,9 @@ const Bodies = ({
   (0, _reactNativeReanimated.useFrameCallback)(() => {
     'worklet';
 
-    if (!Array.isArray(global.svgContent)) return;
+    if (!Array.isArray(global.MatterReanimated.svgContent)) return;
     const newPaths = {};
-    for (const body of global.svgContent) {
+    for (const body of global.MatterReanimated.svgContent) {
       if (body.render?.visible === false) {
         continue;
       }

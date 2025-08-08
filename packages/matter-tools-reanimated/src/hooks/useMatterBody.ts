@@ -20,11 +20,10 @@ export function useMatterBody(bodyId: string): DerivedValue<MatterBodyState> {
       vertices: [],
     };
 
-    if (!global.MatterReanimated || !(bodyId in global)) {
+    if (!global.MatterReanimated || !(bodyId in global.MatterReanimated)) {
       return defaultState;
     }
-    // @ts-ignore
-    const body: Matter.Body = (global as unknown as Global)[bodyId];
+    const body: Matter.Body = (global.MatterReanimated as any)[bodyId];
     return {
       position: { ...body.position },
       angle: body.angle,

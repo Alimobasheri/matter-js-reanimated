@@ -71,8 +71,8 @@ const tickWorklet = (runnerValue, engineId, time) => {
   'worklet';
 
   // Ensure Matter.js and the engine are available in the global scope
-  if (!global.MatterReanimated || !(engineId in global)) return;
-  const engine = global[engineId];
+  if (!global.MatterReanimated || !(engineId in global.MatterReanimated)) return;
+  const engine = global.MatterReanimated[engineId];
   if (!engine || !engine.world) return; // Check for engine and its world property
 
   // Access Matter.js modules from global scope

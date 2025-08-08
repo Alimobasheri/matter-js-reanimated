@@ -1,14 +1,9 @@
-declare global {
-  var windowWidth: number;
-  var windowHeight: number;
-}
-
 export const initAvalanche = (engine: any) => {
   'worklet';
 
   // Get screen dimensions from React Native
-  const width = global.windowWidth || 800;
-  const height = global.windowHeight || 600;
+  const width = global.MatterReanimated.windowWidth || 800;
+  const height = global.MatterReanimated.windowHeight || 600;
 
   const { Bodies, Composites, World } = global.MatterReanimated;
 

@@ -18,8 +18,8 @@ function TestScreen() {
   const exampleWorklet = (0, _react.useCallback)(engine => {
     'worklet';
 
-    global.windowWidth = width;
-    global.windowHeight = height;
+    global.MatterReanimated.windowWidth = width;
+    global.MatterReanimated.windowHeight = height;
     (0, _cloth.initCloth)(engine);
   }, []);
   return /*#__PURE__*/_react.default.createElement(_reactNative.View, {

@@ -11,8 +11,8 @@ function useDerivedMatterBody(identifier, engineId, process) {
   const frameCallback = (0, _reactNativeReanimated.useFrameCallback)(() => {
     'worklet';
 
-    if (!global.MatterReanimated || !(engineId in global)) return;
-    const engine = global[engineId];
+    if (!global.MatterReanimated || !(engineId in global.MatterReanimated)) return;
+    const engine = global.MatterReanimated[engineId];
     if (!engine || !engine.world) return;
     const {
       Matter

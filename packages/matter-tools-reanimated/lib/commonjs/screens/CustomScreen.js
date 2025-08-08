@@ -13,8 +13,8 @@ const CustomScreen = () => {
   (0, _reactNativeReanimated.useFrameCallback)(() => {
     'worklet';
 
-    if (!global.demoEngine) return;
-    global.MatterReanimated.Engine.update(global.demoEngine, 16.667 // Use fixed timestep for demos
+    if (!global.MatterReanimated.demoEngine) return;
+    global.MatterReanimated.Engine.update(global.MatterReanimated.demoEngine, 16.667 // Use fixed timestep for demos
     );
   });
   return initialized ? /*#__PURE__*/React.createElement(_Sign.Sign, null) : null;

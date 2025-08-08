@@ -31,8 +31,8 @@ const SkiaBodies = ({
   });
   const picture = (0, _reactNativeReanimated.useDerivedValue)(() => {
     return (0, _reactNativeSkia.createPicture)(canvas => {
-      if (!global.MatterReanimated || !(engineId in global)) return;
-      const engine = global[engineId];
+      if (!global.MatterReanimated || !(engineId in global.MatterReanimated)) return;
+      const engine = global.MatterReanimated[engineId];
       if (!engine || !engine.world) return;
       const _ = frameTick.value;
       const bodies = global.MatterReanimated.Composite.allBodies(engine.world);

@@ -7,10 +7,10 @@ export const CustomScreen = () => {
   const initialized = useInitWorklet(initAniamtedDemo, 'demoEngine');
   useFrameCallback(() => {
     'worklet';
-    if (!global.demoEngine) return;
+    if (!global.MatterReanimated.demoEngine) return;
 
     global.MatterReanimated.Engine.update(
-      global.demoEngine,
+      global.MatterReanimated.demoEngine,
       16.667 // Use fixed timestep for demos
     );
   });

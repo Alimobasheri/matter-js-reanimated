@@ -13,9 +13,10 @@ export function useDerivedMatterConstraint<T>(
 
   const frameCallback = useFrameCallback(() => {
     'worklet';
-    if (!global.MatterReanimated || !(engineId in global)) return;
+    if (!global.MatterReanimated || !(engineId in global.MatterReanimated))
+      return;
 
-    const engine = (global as any)[engineId];
+    const engine = (global.MatterReanimated as any)[engineId];
     if (!engine || !engine.world) return;
 
     const { Matter } = global;

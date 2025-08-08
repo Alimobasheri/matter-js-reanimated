@@ -22,22 +22,22 @@ const Constraints = ({
     'worklet';
 
     let constraintPath = '';
-    if (Array.isArray(global.svgConstraints)) {
-      for (const constraint of global.svgConstraints) {
+    if (Array.isArray(global.MatterReanimated.svgConstraints)) {
+      for (const constraint of global.MatterReanimated.svgConstraints) {
         if (!constraint.render.visible) continue;
         let startX = constraint.pointA.x;
         let startY = constraint.pointA.y;
         let endX = constraint.pointB.x;
         let endY = constraint.pointB.y;
         if (constraint.bodyAId) {
-          const bodyA = global.svgContent.find(b => b.id === constraint.bodyAId);
+          const bodyA = global.MatterReanimated.svgContent?.find(b => b.id === constraint.bodyAId);
           if (bodyA) {
             startX = bodyA.position.x + constraint.pointA.x;
             startY = bodyA.position.y + constraint.pointA.y;
           }
         }
         if (constraint.bodyBId) {
-          const bodyB = global.svgContent.find(b => b.id === constraint.bodyBId);
+          const bodyB = global.MatterReanimated.svgContent?.find(b => b.id === constraint.bodyBId);
           if (bodyB) {
             endX = bodyB.position.x + constraint.pointB.x;
             endY = bodyB.position.y + constraint.pointB.y;

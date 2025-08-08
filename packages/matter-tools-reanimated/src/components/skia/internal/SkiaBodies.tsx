@@ -34,8 +34,9 @@ export const SkiaBodies: React.FC<RenderProps> = ({
 
   const picture = useDerivedValue(() => {
     return createPicture((canvas) => {
-      if (!global.MatterReanimated || !(engineId in global)) return;
-      const engine = (global as any)[engineId];
+      if (!global.MatterReanimated || !(engineId in global.MatterReanimated))
+        return;
+      const engine = (global.MatterReanimated as any)[engineId];
       if (!engine || !engine.world) return;
 
       const _ = frameTick.value;

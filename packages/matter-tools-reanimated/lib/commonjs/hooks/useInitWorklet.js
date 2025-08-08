@@ -19,9 +19,9 @@ const useInitWorklet = (worklet, engineId = 'defaultEngine') => {
       (0, _matterJsReanimated.default)();
     }
     let engine;
-    if (engineId in global && global.MatterReanimated) {
+    if (global.MatterReanimated && engineId in global.MatterReanimated) {
       //@ts-ignore
-      engine = global[engineId];
+      engine = global.MatterReanimated[engineId];
       global.MatterReanimated.Composite.clear(engine.world, false, true);
     }
     if (!global.MatterReanimated) {
@@ -38,7 +38,7 @@ const useInitWorklet = (worklet, engineId = 'defaultEngine') => {
     });
 
     //@ts-ignore
-    global[engineId] = engine;
+    global.MatterReanimated[engineId] = engine;
     if (worklet) {
       worklet(engine);
     }

@@ -45,8 +45,8 @@ const TouchConstraint = ({
     (0, _reactNativeReanimated.runOnUI)(() => {
       'worklet';
 
-      if (!global.MatterReanimated || !(engineId in global)) return;
-      const engine = global[engineId];
+      if (!global.MatterReanimated || !(engineId in global.MatterReanimated)) return;
+      const engine = global.MatterReanimated[engineId];
       if (!global.MatterReanimated.touchConstraint) {
         const constraint = global.MatterReanimated.Constraint.create({
           pointA: {
@@ -82,7 +82,7 @@ const TouchConstraint = ({
         'worklet';
 
         if (global.MatterReanimated.touchConstraint) {
-          const engine = global[engineId];
+          const engine = global.MatterReanimated[engineId];
           global.MatterReanimated.World.remove(engine.world, global.MatterReanimated.touchConstraint.constraint);
           global.MatterReanimated.touchConstraint = null;
         }
@@ -92,8 +92,8 @@ const TouchConstraint = ({
   const pan = _reactNativeGestureHandler.Gesture.Pan().enabled(enabled).onBegin(event => {
     'worklet';
 
-    if (!global.MatterReanimated || !(engineId in global) || !global.MatterReanimated.touchConstraint) return;
-    const engine = global[engineId];
+    if (!global.MatterReanimated || !(engineId in global.MatterReanimated) || !global.MatterReanimated.touchConstraint) return;
+    const engine = global.MatterReanimated[engineId];
     const point = {
       x: event.x,
       y: event.y

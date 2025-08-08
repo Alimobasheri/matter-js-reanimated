@@ -40,26 +40,22 @@ export interface MatterExample {
 
 type MatterType = MatterReanimated & {
   touchConstraint: TouchConstraintType | null;
+  runner?: MatterReanimated['Runner'] | null;
+  __lastDrawConstraintsTime?: number | null;
+  __lastDrawBodiesTime?: number | null;
+  demoEngine?: any;
+  mouseConstraint?: any;
+  activeDragBody?: any;
+  windowWidth?: number;
+  windowHeight?: number;
+  svgContent?: BodyShape[];
+  svgConstraints?: ConstraintShape[];
+  demoes?: { [key: string]: (engine: any) => void };
+  [key: string]: any;
 };
 
 declare global {
   var MatterReanimated: MatterType;
-  var runner: MatterType['Runner'] | null;
-
-  var __lastDrawConstraintsTime: number | null;
-  var __lastDrawBodiesTime: number | null;
-
-  // UI thread engine instance
-  var demoEngine: any;
-  var mouseConstraint: any;
-  var activeDragBody: any;
-
-  // Window dimensions available in worklets
-  var windowWidth: number;
-  var windowHeight: number;
-
-  var svgContent: BodyShape[];
-  var svgConstraints: ConstraintShape[];
 
   interface MatterBody {
     id: string | number;
@@ -72,8 +68,4 @@ declare global {
     vertices: Array<{ x: number; y: number }>;
     circleRadius?: number;
   }
-
-  var demoes: {
-    [key: string]: (engine: any) => void;
-  };
 }
