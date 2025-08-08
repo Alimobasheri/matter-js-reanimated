@@ -20,3 +20,5 @@ __compare__
 
 .DS_Store
 
+packages/matter-tools-reanimated/lib
+packages/matter-js-reanimated/build

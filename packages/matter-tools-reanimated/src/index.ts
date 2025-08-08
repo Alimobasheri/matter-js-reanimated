@@ -51,7 +51,6 @@ type MatterType = MatterReanimated & {
   svgContent?: BodyShape[];
   svgConstraints?: ConstraintShape[];
   demoes?: { [key: string]: (engine: any) => void };
-  [key: string]: any;
 };
 
 declare global {
