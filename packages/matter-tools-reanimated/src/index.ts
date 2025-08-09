@@ -2,6 +2,11 @@ import { TouchConstraintType } from './components/TouchConstraint';
 import { BodyShape } from './components/Bodies';
 import { ConstraintShape } from './components/Constraints';
 import type { MatterReanimated } from 'matter-js-reanimated';
+
+if (!global.MatterToolsReanimated) {
+  // @ts-ignore
+  global.MatterToolsReanimated = {} as any;
+}
 export { ReanimatedMatter } from './components/ReanimatedMatter';
 export { TouchConstraint } from './components/TouchConstraint';
 export { Render } from './components/Render';
@@ -38,7 +43,7 @@ export interface MatterExample {
   init: (engine: any) => void;
 }
 
-type MatterType = MatterReanimated & {
+export type MatterToolsReanimated = {
   touchConstraint: TouchConstraintType | null;
   runner?: MatterReanimated['Runner'] | null;
   __lastDrawConstraintsTime?: number | null;
@@ -55,7 +60,7 @@ type MatterType = MatterReanimated & {
 };
 
 declare global {
-  var MatterReanimated: MatterType;
+  var MatterToolsReanimated: MatterToolsReanimated;
 
   interface MatterBody {
     id: string | number;

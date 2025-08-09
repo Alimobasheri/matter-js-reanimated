@@ -8,8 +8,8 @@ export default function TestScreen() {
 
   const exampleWorklet = useCallback((engine: Matter.Engine) => {
     'worklet';
-    global.MatterReanimated.windowWidth = width;
-    global.MatterReanimated.windowHeight = height;
+    global.MatterToolsReanimated.windowWidth = width;
+    global.MatterToolsReanimated.windowHeight = height;
     initCloth(engine);
   }, []);
 

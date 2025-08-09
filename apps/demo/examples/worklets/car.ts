@@ -69,7 +69,7 @@ export const initCar = (engine: MatterReanimated.Engine) => {
 
   const { Composite, Bodies, Body, Constraint, World } =
     global.MatterReanimated;
-  const { windowWidth, windowHeight } = global.MatterReanimated;
+  const { windowWidth, windowHeight } = global.MatterToolsReanimated;
 
   const scaleX = windowWidth / 800;
   const scaleY = windowHeight / 600;

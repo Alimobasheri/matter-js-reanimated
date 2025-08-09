@@ -14,9 +14,14 @@ export const useInitWorklet = (
     if (!global.MatterReanimated) {
       initMatter();
     }
+
+    if (!global.MatterToolsReanimated) {
+      global.MatterToolsReanimated = {} as any;
+    }
+
     let engine: Matter.Engine | undefined;
-    if (global.MatterReanimated && engineId in global.MatterReanimated) {
-      engine = global.MatterReanimated[engineId];
+    if (engineId in global.MatterToolsReanimated) {
+      engine = global.MatterToolsReanimated[engineId];
       if (engine)
         global.MatterReanimated.Composite.clear(engine.world, false, true);
     }
@@ -30,7 +35,7 @@ export const useInitWorklet = (
       gravity: { x: 0, y: 1, scale: 0.001 },
     });
 
-    global.MatterReanimated[engineId] = engine;
+    global.MatterToolsReanimated[engineId] = engine;
     if (worklet) {
       worklet(engine);
     }

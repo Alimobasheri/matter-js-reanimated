@@ -13,10 +13,14 @@ export function useDerivedMatterBody<T>(
 
   const frameCallback = useFrameCallback(() => {
     'worklet';
-    if (!global.MatterReanimated || !(engineId in global.MatterReanimated))
+    if (
+      !global.MatterReanimated ||
+      !global.MatterToolsReanimated ||
+      !(engineId in global.MatterToolsReanimated)
+    )
       return;
 
-    const engine = (global.MatterReanimated as any)[engineId];
+    const engine = (global.MatterToolsReanimated as any)[engineId];
     if (!engine || !engine.world) return;
 
     const { Matter } = global;

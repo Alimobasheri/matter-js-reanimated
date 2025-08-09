@@ -3,8 +3,8 @@
 export const initPyramid = (engine: any) => {
   'worklet';
 
-  const width = global.MatterReanimated.windowWidth || 800;
-  const height = global.MatterReanimated.windowHeight || 600;
+  const width = global.MatterToolsReanimated.windowWidth || 800;
+  const height = global.MatterToolsReanimated.windowHeight || 600;
 
   const scaleX = width / 800;
   const scaleY = height / 600;

@@ -2,8 +2,8 @@ export const initBouncingBalls = (engine: any) => {
   'worklet';
 
   // Get screen dimensions from React Native
-  const width = global.MatterReanimated.windowWidth || 800;
-  const height = global.MatterReanimated.windowHeight || 600;
+  const width = global.MatterToolsReanimated.windowWidth || 800;
+  const height = global.MatterToolsReanimated.windowHeight || 600;
 
   // Add ground - positioned at bottom of screen
   const ground = global.MatterReanimated.Bodies.rectangle(

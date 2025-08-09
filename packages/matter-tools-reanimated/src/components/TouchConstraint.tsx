@@ -64,12 +64,16 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
   React.useEffect(() => {
     runOnUI(() => {
       'worklet';
-      if (!global.MatterReanimated || !(engineId in global.MatterReanimated))
+      if (
+        !global.MatterReanimated ||
+        !global.MatterToolsReanimated ||
+        !(engineId in global.MatterToolsReanimated)
+      )
         return;
 
-      const engine = (global.MatterReanimated as any)[engineId];
+      const engine = (global.MatterToolsReanimated as any)[engineId];
 
-      if (!global.MatterReanimated.touchConstraint) {
+      if (!global.MatterToolsReanimated.touchConstraint) {
         const constraint = global.MatterReanimated.Constraint.create({
           pointA: { x: 0, y: 0 },
           pointB: { x: 0, y: 0 },
@@ -81,7 +85,7 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
           label: 'Mouse Constraint',
         });
 
-        global.MatterReanimated.touchConstraint = {
+        global.MatterToolsReanimated.touchConstraint = {
           type: 'touchConstraint',
           constraint: constraint,
           body: null,
@@ -99,13 +103,13 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
     return () => {
       runOnUI(() => {
         'worklet';
-        if (global.MatterReanimated.touchConstraint) {
-          const engine = (global.MatterReanimated as any)[engineId];
+        if (global.MatterToolsReanimated.touchConstraint) {
+          const engine = (global.MatterToolsReanimated as any)[engineId];
           global.MatterReanimated.World.remove(
             engine.world,
-            global.MatterReanimated.touchConstraint.constraint
+            global.MatterToolsReanimated.touchConstraint.constraint
           );
-          global.MatterReanimated.touchConstraint = null;
+          global.MatterToolsReanimated.touchConstraint = null;
         }
       })();
     };
@@ -117,15 +121,16 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
       'worklet';
       if (
         !global.MatterReanimated ||
-        !(engineId in global.MatterReanimated) ||
-        !global.MatterReanimated.touchConstraint
+        !global.MatterToolsReanimated ||
+        !(engineId in global.MatterToolsReanimated) ||
+        !global.MatterToolsReanimated.touchConstraint
       )
         return;
 
-      const engine = (global.MatterReanimated as any)[engineId];
+      const engine = (global.MatterToolsReanimated as any)[engineId];
       const point = { x: event.x, y: event.y };
       const bodies = global.MatterReanimated.Composite.allBodies(engine.world);
-      const touchConstraint = global.MatterReanimated.touchConstraint;
+      const touchConstraint = global.MatterToolsReanimated.touchConstraint;
       const constraint = touchConstraint.constraint;
 
       // Reset previous body
@@ -173,10 +178,10 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
     })
     .onUpdate((event: GestureUpdateEvent<PanGestureHandlerEventPayload>) => {
       'worklet';
-      if (!global.MatterReanimated || !global.MatterReanimated.touchConstraint)
+      if (!global.MatterReanimated || !global.MatterToolsReanimated.touchConstraint)
         return;
 
-      const constraint = global.MatterReanimated.touchConstraint.constraint;
+      const constraint = global.MatterToolsReanimated.touchConstraint.constraint;
       const body = constraint.bodyB;
 
       if (body) {
@@ -189,10 +194,10 @@ export const TouchConstraint: React.FC<TouchConstraintProps> = ({
     })
     .onEnd(() => {
       'worklet';
-      if (!global.MatterReanimated || !global.MatterReanimated.touchConstraint)
+      if (!global.MatterReanimated || !global.MatterToolsReanimated.touchConstraint)
         return;
 
-      const touchConstraint = global.MatterReanimated.touchConstraint;
+      const touchConstraint = global.MatterToolsReanimated.touchConstraint;
       const constraint = touchConstraint.constraint;
       const body = constraint.bodyB;
 
