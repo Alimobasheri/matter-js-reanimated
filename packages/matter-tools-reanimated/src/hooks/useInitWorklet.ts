@@ -1,4 +1,4 @@
-import initMatter, { MatterReanimated } from 'matter-js-reanimated';
+import initMatter, { type MatterReanimated } from 'matter-js-reanimated';
 import { useCallback, useEffect, useState } from 'react';
 import { runOnJS, runOnUI } from 'react-native-reanimated';
 
@@ -19,7 +19,7 @@ export const useInitWorklet = (
       global.MatterToolsReanimated = {} as any;
     }
 
-    let engine: Matter.Engine | undefined;
+    let engine: MatterReanimated.Engine | undefined;
     if (engineId in global.MatterToolsReanimated) {
       engine = global.MatterToolsReanimated[engineId];
       if (engine)

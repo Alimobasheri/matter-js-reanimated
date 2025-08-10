@@ -45,7 +45,6 @@ export interface MatterExample {
 
 export type MatterToolsReanimated = {
   touchConstraint: TouchConstraintType | null;
-  runner?: MatterReanimated['Runner'] | null;
   __lastDrawConstraintsTime?: number | null;
   __lastDrawBodiesTime?: number | null;
   demoEngine?: any;
