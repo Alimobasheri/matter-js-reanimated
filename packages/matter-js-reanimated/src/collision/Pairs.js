@@ -2,7 +2,7 @@ var Pair = require('./Pair');
 var Common = require('../core/Common');
 
 /**
- * The `Matter.Pairs` module contains methods for creating and manipulating collision pair sets.
+ * The `MatterReanimated.Pairs` module contains methods for creating and manipulating collision pair sets.
  *
  * @class Pairs
  */
@@ -10,17 +10,17 @@ var Common = require('../core/Common');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Pairs) {
+    if (global.MatterReanimated && global.MatterReanimated.Pairs) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Pairs = {};
+    global.MatterReanimated.Pairs = {};
 
-    var Pairs = global.Matter.Pairs;
+    var Pairs = global.MatterReanimated.Pairs;
 
     Pair();
     Common();
@@ -32,7 +32,7 @@ var init = function () {
      * @return {pairs} A new pairs structure
      */
     Pairs.create = function (options) {
-        return global.Matter.Common.extend(
+        return global.MatterReanimated.Common.extend(
             {
                 table: {},
                 list: [],
@@ -52,9 +52,9 @@ var init = function () {
      * @param {number} timestamp
      */
     Pairs.update = function (pairs, collisions, timestamp) {
-        var pairUpdate = global.Matter.Pair.update,
-            pairCreate = global.Matter.Pair.create,
-            pairSetActive = global.Matter.Pair.setActive,
+        var pairUpdate = global.MatterReanimated.Pair.update,
+            pairCreate = global.MatterReanimated.Pair.create,
+            pairSetActive = global.MatterReanimated.Pair.setActive,
             pairsTable = pairs.table,
             pairsList = pairs.list,
             pairsListLength = pairsList.length,

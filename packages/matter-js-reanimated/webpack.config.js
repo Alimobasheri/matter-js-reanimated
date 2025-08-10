@@ -19,7 +19,7 @@ module.exports = (env = {}) => {
     const license = fs.readFileSync('LICENSE', 'utf8');
     const resolve = (relativePath) => path.resolve(__dirname, relativePath);
 
-    const banner = `${pkg.name} ${version} by @liabru
+    const banner = `${pkg.name} ${version} by @Alimobasheri
 ${kind ? 'Experimental pre-release build.\n  ' : ''}${pkg.homepage}
 License ${pkg.license}${!minimize ? '\n\n' + license : ''}`;
 
@@ -27,7 +27,7 @@ License ${pkg.license}${!minimize ? '\n\n' + license : ''}`;
         entry: { matter: './src/module/main.js' },
         node: false,
         output: {
-            library: 'Matter',
+            library: 'MatterReanimated',
             libraryTarget: 'umd',
             umdNamedDefine: true,
             globalObject: 'this',

@@ -1,3 +1,12 @@
+import { TouchConstraintType } from './components/TouchConstraint';
+import { BodyShape } from './components/Bodies';
+import { ConstraintShape } from './components/Constraints';
+import type { MatterReanimated } from 'matter-js-reanimated';
+
+if (!global.MatterToolsReanimated) {
+  // @ts-ignore
+  global.MatterToolsReanimated = {} as any;
+}
 export { ReanimatedMatter } from './components/ReanimatedMatter';
 export { TouchConstraint } from './components/TouchConstraint';
 export { Render } from './components/Render';
@@ -8,28 +17,59 @@ export { SkiaRender } from './components/skia/SkiaRender';
 export { SkiaBodies } from './components/skia/SkiaBodies';
 
 export interface MatterToolsOptions {
-    render?: {
-        width?: number;
-        height?: number;
-        background?: string;
-        wireframes?: boolean;
-        showBounds?: boolean;
-        showAxes?: boolean;
-        showPositions?: boolean;
-        showAngleIndicator?: boolean;
+  render?: {
+    width?: number;
+    height?: number;
+    background?: string;
+    wireframes?: boolean;
+    showBounds?: boolean;
+    showAxes?: boolean;
+    showPositions?: boolean;
+    showAngleIndicator?: boolean;
+  };
+  touch?: {
+    constraint?: {
+      stiffness?: number;
+      damping?: number;
     };
-    touch?: {
-        constraint?: {
-            stiffness?: number;
-            damping?: number;
-        };
-        enablePan?: boolean;
-        enablePinch?: boolean;
-        enableRotate?: boolean;
-    };
+    enablePan?: boolean;
+    enablePinch?: boolean;
+    enableRotate?: boolean;
+  };
 }
 
 export interface MatterExample {
-    name: string;
-    init: (engine: any) => void;
+  name: string;
+  init: (engine: any) => void;
+}
+
+export type MatterToolsReanimated = {
+  touchConstraint: TouchConstraintType | null;
+  __lastDrawConstraintsTime?: number | null;
+  __lastDrawBodiesTime?: number | null;
+  demoEngine?: any;
+  mouseConstraint?: any;
+  activeDragBody?: any;
+  windowWidth?: number;
+  windowHeight?: number;
+  svgContent?: BodyShape[];
+  svgConstraints?: ConstraintShape[];
+  demoes?: { [key: string]: (engine: any) => void };
+  [key: string]: any;
+};
+
+declare global {
+  var MatterToolsReanimated: MatterToolsReanimated;
+
+  interface MatterBody {
+    id: string | number;
+    position: { x: number; y: number };
+    angle: number;
+    bounds: {
+      min: { x: number; y: number };
+      max: { x: number; y: number };
+    };
+    vertices: Array<{ x: number; y: number }>;
+    circleRadius?: number;
+  }
 }

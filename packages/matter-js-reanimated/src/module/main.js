@@ -1,4 +1,4 @@
-var Matter = require('../core/Matter');
+var MatterReanimated = require('../core/MatterReanimated');
 
 var Axes = require('../geometry/Axes');
 var Bodies = require('../factory/Bodies');
@@ -23,17 +23,9 @@ var Vector = require('../geometry/Vector');
 var Vertices = require('../geometry/Vertices');
 var World = require('../body/World');
 
-// // temporary back compatibility
-// Matter.Engine.run = Matter.Runner.run;
-// Matter.Common.deprecated(
-//     Matter.Engine,
-//     'run',
-//     'Engine.run ➤ use Matter.Runner.run(engine) instead'
-// );
-
 var initMatter = function () {
     'worklet';
-    Matter();
+    MatterReanimated();
     Axes();
     Bodies();
     Body();

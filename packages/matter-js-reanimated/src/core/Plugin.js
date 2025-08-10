@@ -3,19 +3,19 @@ var Common = require('./Common');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Plugin) {
+    if (global.MatterReanimated && global.MatterReanimated.Plugin) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Plugin = {};
+    global.MatterReanimated.Plugin = {};
 
     Common();
 
-    var Plugin = global.Matter.Plugin;
+    var Plugin = global.MatterReanimated.Plugin;
 
     Plugin._registry = {};
 
@@ -27,7 +27,7 @@ var init = function () {
      */
     Plugin.register = function (plugin) {
         if (!Plugin.isPlugin(plugin)) {
-            global.Matter.Common.warn(
+            global.MatterReanimated.Common.warn(
                 'Plugin.register:',
                 Plugin.toString(plugin),
                 'does not implement all required fields.'
@@ -42,7 +42,7 @@ var init = function () {
                 ).number;
 
             if (pluginVersion > registeredVersion) {
-                global.Matter.Common.warn(
+                global.MatterReanimated.Common.warn(
                     'Plugin.register:',
                     Plugin.toString(registered),
                     'was upgraded to',
@@ -50,14 +50,14 @@ var init = function () {
                 );
                 Plugin._registry[plugin.name] = plugin;
             } else if (pluginVersion < registeredVersion) {
-                global.Matter.Common.warn(
+                global.MatterReanimated.Common.warn(
                     'Plugin.register:',
                     Plugin.toString(registered),
                     'cannot be downgraded to',
                     Plugin.toString(plugin)
                 );
             } else if (plugin !== registered) {
-                global.Matter.Common.warn(
+                global.MatterReanimated.Common.warn(
                     'Plugin.register:',
                     Plugin.toString(plugin),
                     'is already registered to a different plugin object'
@@ -141,7 +141,7 @@ var init = function () {
         module.uses = (module.uses || []).concat(plugins || []);
 
         if (module.uses.length === 0) {
-            global.Matter.Common.warn(
+            global.MatterReanimated.Common.warn(
                 'Plugin.use:',
                 Plugin.toString(module),
                 'does not specify any dependencies to install.'
@@ -151,7 +151,7 @@ var init = function () {
 
         var dependencies = Plugin.dependencies(module),
             sortedDependencies =
-                global.Matter.Common.topologicalSort(dependencies),
+                global.MatterReanimated.Common.topologicalSort(dependencies),
             status = [];
 
         for (var i = 0; i < sortedDependencies.length; i++) {
@@ -171,7 +171,7 @@ var init = function () {
             }
 
             if (!Plugin.isFor(plugin, module)) {
-                global.Matter.Common.warn(
+                global.MatterReanimated.Common.warn(
                     'Plugin.use:',
                     Plugin.toString(plugin),
                     'is for',
@@ -185,7 +185,7 @@ var init = function () {
             if (plugin.install) {
                 plugin.install(module);
             } else {
-                global.Matter.Common.warn(
+                global.MatterReanimated.Common.warn(
                     'Plugin.use:',
                     Plugin.toString(plugin),
                     'does not specify an install function.'
@@ -204,7 +204,7 @@ var init = function () {
         }
 
         if (status.length > 0) {
-            global.Matter.Common.info(status.join('  '));
+            global.MatterReanimated.Common.info(status.join('  '));
         }
     };
 
@@ -225,7 +225,7 @@ var init = function () {
 
         module = Plugin.resolve(module) || module;
 
-        tracked[name] = global.Matter.Common.map(
+        tracked[name] = global.MatterReanimated.Common.map(
             module.uses || [],
             function (dependency) {
                 if (Plugin.isPlugin(dependency)) {
@@ -239,7 +239,7 @@ var init = function () {
                     resolved &&
                     !Plugin.versionSatisfies(resolved.version, parsed.range)
                 ) {
-                    global.Matter.Common.warn(
+                    global.MatterReanimated.Common.warn(
                         'Plugin.dependencies:',
                         Plugin.toString(resolved),
                         'does not satisfy',
@@ -251,7 +251,7 @@ var init = function () {
                     resolved._warned = true;
                     module._warned = true;
                 } else if (!resolved) {
-                    global.Matter.Common.warn(
+                    global.MatterReanimated.Common.warn(
                         'Plugin.dependencies:',
                         Plugin.toString(dependency),
                         'used by',
@@ -280,12 +280,12 @@ var init = function () {
      * @return {object} Parsed dependency.
      */
     Plugin.dependencyParse = function (dependency) {
-        if (global.Matter.Common.isString(dependency)) {
+        if (global.MatterReanimated.Common.isString(dependency)) {
             var pattern =
                 /^[\w-]+(@(\*|[\^~]?\d+\.\d+\.\d+(-[0-9A-Za-z-+]+)?))?$/;
 
             if (!pattern.test(dependency)) {
-                global.Matter.Common.warn(
+                global.MatterReanimated.Common.warn(
                     'Plugin.dependencyParse:',
                     dependency,
                     'is not a valid dependency string.'

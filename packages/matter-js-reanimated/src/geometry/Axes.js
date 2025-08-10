@@ -4,15 +4,15 @@ var Common = require('../core/Common');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Axes) {
+    if (global.MatterReanimated && global.MatterReanimated.Axes) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Axes = {};
+    global.MatterReanimated.Axes = {};
     Vector();
     Common();
 
@@ -22,13 +22,13 @@ var init = function () {
      * @param {vertices} vertices
      * @return {axes} A new axes from the given vertices
      */
-    global.Matter.Axes.fromVertices = function (vertices) {
+    global.MatterReanimated.Axes.fromVertices = function (vertices) {
         var axes = {};
 
         // find the unique axes, using edge normal gradients
         for (var i = 0; i < vertices.length; i++) {
             var j = (i + 1) % vertices.length,
-                normal = global.Matter.Vector.normalise({
+                normal = global.MatterReanimated.Vector.normalise({
                     x: vertices[j].y - vertices[i].y,
                     y: vertices[i].x - vertices[j].x,
                 }),
@@ -39,7 +39,7 @@ var init = function () {
             axes[gradient] = normal;
         }
 
-        return global.Matter.Common.values(axes);
+        return global.MatterReanimated.Common.values(axes);
     };
 
     /**
@@ -48,7 +48,7 @@ var init = function () {
      * @param {axes} axes
      * @param {number} angle
      */
-    global.Matter.Axes.rotate = function (axes, angle) {
+    global.MatterReanimated.Axes.rotate = function (axes, angle) {
         if (angle === 0) return;
 
         var cos = Math.cos(angle),

@@ -1,12 +1,12 @@
 /**
-* The `Matter.Svg` module contains methods for converting SVG images into an array of vector points.
-*
-* To use this module you also need the SVGPathSeg polyfill: https://github.com/progers/pathseg
-*
-* See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
-*
-* @class Svg
-*/
+ * The `MatterReanimated.Svg` module contains methods for converting SVG images into an array of vector points.
+ *
+ * To use this module you also need the SVGPathSeg polyfill: https://github.com/progers/pathseg
+ *
+ * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
+ *
+ * @class Svg
+ */
 
 var Svg = {};
 
@@ -15,8 +15,7 @@ module.exports = Svg;
 var Bounds = require('../geometry/Bounds');
 var Common = require('../core/Common');
 
-(function() {
-
+(function () {
     /**
      * Converts an SVG path into an array of vector points.
      * If the input path forms a concave shape, you must decompose the result into convex parts before use.
@@ -28,20 +27,34 @@ var Common = require('../core/Common');
      * @param {Number} [sampleLength=15]
      * @return {Vector[]} points
      */
-    Svg.pathToVertices = function(path, sampleLength) {
+    Svg.pathToVertices = function (path, sampleLength) {
         if (typeof window !== 'undefined' && !('SVGPathSeg' in window)) {
-            Common.warn('Svg.pathToVertices: SVGPathSeg not defined, a polyfill is required.');
+            Common.warn(
+                'Svg.pathToVertices: SVGPathSeg not defined, a polyfill is required.'
+            );
         }
 
         // https://github.com/wout/svg.topoly.js/blob/master/svg.topoly.js
-        var i, il, total, point, segment, segments, 
-            segmentsQueue, lastSegment, 
-            lastPoint, segmentIndex, points = [],
-            lx, ly, length = 0, x = 0, y = 0;
+        var i,
+            il,
+            total,
+            point,
+            segment,
+            segments,
+            segmentsQueue,
+            lastSegment,
+            lastPoint,
+            segmentIndex,
+            points = [],
+            lx,
+            ly,
+            length = 0,
+            x = 0,
+            y = 0;
 
         sampleLength = sampleLength || 15;
 
-        var addPoint = function(px, py, pathSegType) {
+        var addPoint = function (px, py, pathSegType) {
             // all odd-numbered path types are relative except PATHSEG_CLOSEPATH (1)
             var isRelative = pathSegType % 2 === 1 && pathSegType > 1;
 
@@ -57,7 +70,7 @@ var Common = require('../core/Common');
 
                 var point = {
                     x: lx + px,
-                    y: ly + py
+                    y: ly + py,
                 };
 
                 // set last point
@@ -72,31 +85,29 @@ var Common = require('../core/Common');
             }
         };
 
-        var addSegmentPoint = function(segment) {
+        var addSegmentPoint = function (segment) {
             var segType = segment.pathSegTypeAsLetter.toUpperCase();
 
             // skip path ends
-            if (segType === 'Z') 
-                return;
+            if (segType === 'Z') return;
 
             // map segment to x and y
             switch (segType) {
-
-            case 'M':
-            case 'L':
-            case 'T':
-            case 'C':
-            case 'S':
-            case 'Q':
-                x = segment.x;
-                y = segment.y;
-                break;
-            case 'H':
-                x = segment.x;
-                break;
-            case 'V':
-                y = segment.y;
-                break;
+                case 'M':
+                case 'L':
+                case 'T':
+                case 'C':
+                case 'S':
+                case 'Q':
+                    x = segment.x;
+                    y = segment.y;
+                    break;
+                case 'H':
+                    x = segment.x;
+                    break;
+                case 'V':
+                    y = segment.y;
+                    break;
             }
 
             addPoint(x, y, segment.pathSegType);
@@ -132,16 +143,14 @@ var Common = require('../core/Common');
             // add points in between when curving
             // TODO: adaptive sampling
             switch (segment.pathSegTypeAsLetter.toUpperCase()) {
-
-            case 'C':
-            case 'T':
-            case 'S':
-            case 'Q':
-            case 'A':
-                point = path.getPointAtLength(length);
-                addPoint(point.x, point.y, 0);
-                break;
-
+                case 'C':
+                case 'T':
+                case 'S':
+                case 'Q':
+                case 'A':
+                    point = path.getPointAtLength(length);
+                    addPoint(point.x, point.y, 0);
+                    break;
             }
 
             // increment by sample value
@@ -155,13 +164,21 @@ var Common = require('../core/Common');
         return points;
     };
 
-    Svg._svgPathToAbsolute = function(path) {
+    Svg._svgPathToAbsolute = function (path) {
         // http://phrogz.net/convert-svg-path-to-all-absolute-commands
         // Copyright (c) Gavin Kistner
         // http://phrogz.net/js/_ReuseLicense.txt
         // Modifications: tidy formatting and naming
-        var x0, y0, x1, y1, x2, y2, segs = path.pathSegList,
-            x = 0, y = 0, len = segs.numberOfItems;
+        var x0,
+            y0,
+            x1,
+            y1,
+            x2,
+            y2,
+            segs = path.pathSegList,
+            x = 0,
+            y = 0,
+            len = segs.numberOfItems;
 
         for (var i = 0; i < len; ++i) {
             var seg = segs.getItem(i),
@@ -179,40 +196,93 @@ var Common = require('../core/Common');
                 if ('y' in seg) y += seg.y;
 
                 switch (segType) {
-
-                case 'm':
-                    segs.replaceItem(path.createSVGPathSegMovetoAbs(x, y), i);
-                    break;
-                case 'l':
-                    segs.replaceItem(path.createSVGPathSegLinetoAbs(x, y), i);
-                    break;
-                case 'h':
-                    segs.replaceItem(path.createSVGPathSegLinetoHorizontalAbs(x), i);
-                    break;
-                case 'v':
-                    segs.replaceItem(path.createSVGPathSegLinetoVerticalAbs(y), i);
-                    break;
-                case 'c':
-                    segs.replaceItem(path.createSVGPathSegCurvetoCubicAbs(x, y, x1, y1, x2, y2), i);
-                    break;
-                case 's':
-                    segs.replaceItem(path.createSVGPathSegCurvetoCubicSmoothAbs(x, y, x2, y2), i);
-                    break;
-                case 'q':
-                    segs.replaceItem(path.createSVGPathSegCurvetoQuadraticAbs(x, y, x1, y1), i);
-                    break;
-                case 't':
-                    segs.replaceItem(path.createSVGPathSegCurvetoQuadraticSmoothAbs(x, y), i);
-                    break;
-                case 'a':
-                    segs.replaceItem(path.createSVGPathSegArcAbs(x, y, seg.r1, seg.r2, seg.angle, seg.largeArcFlag, seg.sweepFlag), i);
-                    break;
-                case 'z':
-                case 'Z':
-                    x = x0;
-                    y = y0;
-                    break;
-
+                    case 'm':
+                        segs.replaceItem(
+                            path.createSVGPathSegMovetoAbs(x, y),
+                            i
+                        );
+                        break;
+                    case 'l':
+                        segs.replaceItem(
+                            path.createSVGPathSegLinetoAbs(x, y),
+                            i
+                        );
+                        break;
+                    case 'h':
+                        segs.replaceItem(
+                            path.createSVGPathSegLinetoHorizontalAbs(x),
+                            i
+                        );
+                        break;
+                    case 'v':
+                        segs.replaceItem(
+                            path.createSVGPathSegLinetoVerticalAbs(y),
+                            i
+                        );
+                        break;
+                    case 'c':
+                        segs.replaceItem(
+                            path.createSVGPathSegCurvetoCubicAbs(
+                                x,
+                                y,
+                                x1,
+                                y1,
+                                x2,
+                                y2
+                            ),
+                            i
+                        );
+                        break;
+                    case 's':
+                        segs.replaceItem(
+                            path.createSVGPathSegCurvetoCubicSmoothAbs(
+                                x,
+                                y,
+                                x2,
+                                y2
+                            ),
+                            i
+                        );
+                        break;
+                    case 'q':
+                        segs.replaceItem(
+                            path.createSVGPathSegCurvetoQuadraticAbs(
+                                x,
+                                y,
+                                x1,
+                                y1
+                            ),
+                            i
+                        );
+                        break;
+                    case 't':
+                        segs.replaceItem(
+                            path.createSVGPathSegCurvetoQuadraticSmoothAbs(
+                                x,
+                                y
+                            ),
+                            i
+                        );
+                        break;
+                    case 'a':
+                        segs.replaceItem(
+                            path.createSVGPathSegArcAbs(
+                                x,
+                                y,
+                                seg.r1,
+                                seg.r2,
+                                seg.angle,
+                                seg.largeArcFlag,
+                                seg.sweepFlag
+                            ),
+                            i
+                        );
+                        break;
+                    case 'z':
+                    case 'Z':
+                        x = x0;
+                        y = y0;
+                        break;
                 }
             }
 
@@ -222,5 +292,4 @@ var Common = require('../core/Common');
             }
         }
     };
-
 })();

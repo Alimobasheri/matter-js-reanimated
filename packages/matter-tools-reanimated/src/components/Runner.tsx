@@ -1,6 +1,4 @@
-import Matter from 'matter-js';
-import React, { FC, useEffect } from 'react';
-import { View } from 'react-native';
+import { FC } from 'react';
 import {
   useFrameCallback,
   useSharedValue,
@@ -101,13 +99,18 @@ const tickWorklet = (
   'worklet';
 
   // Ensure Matter.js and the engine are available in the global scope
-  if (!global.Matter || !(engineId in global)) return;
+  if (
+    !global.MatterReanimated ||
+    !global.MatterToolsReanimated ||
+    !(engineId in global.MatterToolsReanimated)
+  )
+    return;
 
-  const engine: Matter.Engine = (global as any)[engineId];
+  const engine: Matter.Engine = (global.MatterToolsReanimated as any)[engineId];
   if (!engine || !engine.world) return; // Check for engine and its world property
 
   // Access Matter.js modules from global scope
-  const { Events, Engine, Common } = global.Matter;
+  const { Events, Engine, Common } = global.MatterReanimated;
 
   const _maxFrameDelta = 1000 / 15;
   const _frameDeltaFallback = 1000 / 60;

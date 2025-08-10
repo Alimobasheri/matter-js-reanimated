@@ -1,19 +1,14 @@
-declare global {
-  var windowWidth: number;
-  var windowHeight: number;
-}
-
 export const initConstraints = (engine: any) => {
   'worklet';
 
-  const width = global.windowWidth || 800;
-  const height = global.windowHeight || 600;
+  const width = global.MatterToolsReanimated.windowWidth || 800;
+  const height = global.MatterToolsReanimated.windowHeight || 600;
 
   const scaleX = width / 800;
   const scaleY = height / 600;
   const scale = Math.min(scaleX, scaleY);
 
-  const { Bodies, Composite, Constraint } = global.Matter;
+  const { Bodies, Composite, Constraint } = global.MatterReanimated;
 
   // add stiff global constraint
   var body = Bodies.polygon(150 * scale, 200 * scale, 5, 30 * scale);

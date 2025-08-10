@@ -41,6 +41,17 @@ npm i matter-js-reanimated
 npm i matter-tools-reanimated matter-js-reanimated react-native-reanimated react-native-gesture-handler react-native-svg
 ```
 
+### TypeScript Setup
+
+If you're using TypeScript, add an ambient declaration file (for example `matter-js-reanimated-env.d.ts`) to reference the global namespaces provided by the packages:
+
+```
+/// <reference types="matter-js-reanimated" />
+/// <reference types="matter-tools-reanimated" />
+```
+
+This ensures that `MatterReanimated` and related helpers are recognized by the TypeScript compiler.
+
 ## Development
 
 ### Installing dependencies

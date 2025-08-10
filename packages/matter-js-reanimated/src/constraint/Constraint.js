@@ -6,7 +6,7 @@ var Axes = require('../geometry/Axes');
 var Common = require('../core/Common');
 
 /**
- * The `Matter.Constraint` module contains methods for creating and manipulating constraints.
+ * The `MatterReanimated.Constraint` module contains methods for creating and manipulating constraints.
  * Constraints are used for specifying that a fixed distance must be maintained between two bodies (or a body and a fixed world-space position).
  * The stiffness of constraints can be modified to create springs or elastic.
  *
@@ -18,17 +18,17 @@ var Common = require('../core/Common');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Constraint) {
+    if (global.MatterReanimated && global.MatterReanimated.Constraint) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Constraint = {};
+    global.MatterReanimated.Constraint = {};
 
-    var Constraint = global.Matter.Constraint;
+    var Constraint = global.MatterReanimated.Constraint;
 
     Vertices();
     Vector();
@@ -63,19 +63,19 @@ var init = function () {
 
         // calculate static length using initial world space points
         var initialPointA = constraint.bodyA
-                ? global.Matter.Vector.add(
+                ? global.MatterReanimated.Vector.add(
                       constraint.bodyA.position,
                       constraint.pointA
                   )
                 : constraint.pointA,
             initialPointB = constraint.bodyB
-                ? global.Matter.Vector.add(
+                ? global.MatterReanimated.Vector.add(
                       constraint.bodyB.position,
                       constraint.pointB
                   )
                 : constraint.pointB,
-            length = global.Matter.Vector.magnitude(
-                global.Matter.Vector.sub(initialPointA, initialPointB)
+            length = global.MatterReanimated.Vector.magnitude(
+                global.MatterReanimated.Vector.sub(initialPointA, initialPointB)
             );
 
         constraint.length =
@@ -84,7 +84,8 @@ var init = function () {
                 : length;
 
         // option defaults
-        constraint.id = constraint.id || global.Matter.Common.nextId();
+        constraint.id =
+            constraint.id || global.MatterReanimated.Common.nextId();
         constraint.label = constraint.label || 'Constraint';
         constraint.type = 'constraint';
         constraint.stiffness =
@@ -115,7 +116,7 @@ var init = function () {
             render.type = 'spring';
         }
 
-        constraint.render = global.Matter.Common.extend(
+        constraint.render = global.MatterReanimated.Common.extend(
             render,
             constraint.render
         );
@@ -155,8 +156,8 @@ var init = function () {
      * @param {number} delta
      */
     Constraint.solveAll = function (constraints, delta) {
-        var timeScale = global.Matter.Common.clamp(
-            delta / global.Matter.Common._baseDelta,
+        var timeScale = global.MatterReanimated.Common.clamp(
+            delta / global.MatterReanimated.Common._baseDelta,
             0,
             1
         );
@@ -209,7 +210,7 @@ var init = function () {
 
         // update reference angle
         if (bodyA && !bodyA.isStatic) {
-            global.Matter.Vector.rotate(
+            global.MatterReanimated.Vector.rotate(
                 pointA,
                 bodyA.angle - constraint.angleA,
                 pointA
@@ -219,7 +220,7 @@ var init = function () {
 
         // update reference angle
         if (bodyB && !bodyB.isStatic) {
-            global.Matter.Vector.rotate(
+            global.MatterReanimated.Vector.rotate(
                 pointB,
                 bodyB.angle - constraint.angleB,
                 pointB
@@ -231,14 +232,23 @@ var init = function () {
             pointBWorld = pointB;
 
         if (bodyA)
-            pointAWorld = global.Matter.Vector.add(bodyA.position, pointA);
+            pointAWorld = global.MatterReanimated.Vector.add(
+                bodyA.position,
+                pointA
+            );
         if (bodyB)
-            pointBWorld = global.Matter.Vector.add(bodyB.position, pointB);
+            pointBWorld = global.MatterReanimated.Vector.add(
+                bodyB.position,
+                pointB
+            );
 
         if (!pointAWorld || !pointBWorld) return;
 
-        var delta = global.Matter.Vector.sub(pointAWorld, pointBWorld),
-            currentLength = global.Matter.Vector.magnitude(delta);
+        var delta = global.MatterReanimated.Vector.sub(
+                pointAWorld,
+                pointBWorld
+            ),
+            currentLength = global.MatterReanimated.Vector.magnitude(delta);
 
         // prevent singularity
         if (currentLength < Constraint._minLength) {
@@ -252,7 +262,10 @@ var init = function () {
                 ? constraint.stiffness * timeScale
                 : constraint.stiffness * timeScale * timeScale,
             damping = constraint.damping * timeScale,
-            force = global.Matter.Vector.mult(delta, difference * stiffness),
+            force = global.MatterReanimated.Vector.mult(
+                delta,
+                difference * stiffness
+            ),
             massTotal =
                 (bodyA ? bodyA.inverseMass : 0) +
                 (bodyB ? bodyB.inverseMass : 0),
@@ -267,25 +280,28 @@ var init = function () {
             relativeVelocity;
 
         if (damping > 0) {
-            var zero = global.Matter.Vector.create();
-            normal = global.Matter.Vector.div(delta, currentLength);
+            var zero = global.MatterReanimated.Vector.create();
+            normal = global.MatterReanimated.Vector.div(delta, currentLength);
 
-            relativeVelocity = global.Matter.Vector.sub(
+            relativeVelocity = global.MatterReanimated.Vector.sub(
                 (bodyB &&
-                    global.Matter.Vector.sub(
+                    global.MatterReanimated.Vector.sub(
                         bodyB.position,
                         bodyB.positionPrev
                     )) ||
                     zero,
                 (bodyA &&
-                    global.Matter.Vector.sub(
+                    global.MatterReanimated.Vector.sub(
                         bodyA.position,
                         bodyA.positionPrev
                     )) ||
                     zero
             );
 
-            normalVelocity = global.Matter.Vector.dot(normal, relativeVelocity);
+            normalVelocity = global.MatterReanimated.Vector.dot(
+                normal,
+                relativeVelocity
+            );
         }
 
         if (bodyA && !bodyA.isStatic) {
@@ -309,7 +325,8 @@ var init = function () {
 
             // apply torque
             torque =
-                (global.Matter.Vector.cross(pointA, force) / resistanceTotal) *
+                (global.MatterReanimated.Vector.cross(pointA, force) /
+                    resistanceTotal) *
                 Constraint._torqueDampen *
                 bodyA.inverseInertia *
                 (1 - constraint.angularStiffness);
@@ -338,7 +355,8 @@ var init = function () {
 
             // apply torque
             torque =
-                (global.Matter.Vector.cross(pointB, force) / resistanceTotal) *
+                (global.MatterReanimated.Vector.cross(pointB, force) /
+                    resistanceTotal) *
                 Constraint._torqueDampen *
                 bodyB.inverseInertia *
                 (1 - constraint.angularStiffness);
@@ -365,13 +383,16 @@ var init = function () {
                 continue;
             }
 
-            global.Matter.Sleeping.set(body, false);
+            global.MatterReanimated.Sleeping.set(body, false);
 
             // update geometry and reset
             for (var j = 0; j < body.parts.length; j++) {
                 var part = body.parts[j];
 
-                global.Matter.Vertices.translate(part.vertices, impulse);
+                global.MatterReanimated.Vertices.translate(
+                    part.vertices,
+                    impulse
+                );
 
                 if (j > 0) {
                     part.position.x += impulse.x;
@@ -379,14 +400,17 @@ var init = function () {
                 }
 
                 if (impulse.angle !== 0) {
-                    global.Matter.Vertices.rotate(
+                    global.MatterReanimated.Vertices.rotate(
                         part.vertices,
                         impulse.angle,
                         body.position
                     );
-                    global.Matter.Axes.rotate(part.axes, impulse.angle);
+                    global.MatterReanimated.Axes.rotate(
+                        part.axes,
+                        impulse.angle
+                    );
                     if (j > 0) {
-                        global.Matter.Vector.rotateAbout(
+                        global.MatterReanimated.Vector.rotateAbout(
                             part.position,
                             impulse.angle,
                             body.position,
@@ -395,7 +419,7 @@ var init = function () {
                     }
                 }
 
-                global.Matter.Bounds.update(
+                global.MatterReanimated.Bounds.update(
                     part.bounds,
                     part.vertices,
                     body.velocity
@@ -505,7 +529,7 @@ var init = function () {
      */
 
     /**
-     * An `Object` that defines the rendering properties to be consumed by the module `Matter.Render`.
+     * An `Object` that defines the rendering properties to be consumed by the module `MatterReanimated.Render`.
      *
      * @property render
      * @type object

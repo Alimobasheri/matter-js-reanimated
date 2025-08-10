@@ -1,7 +1,7 @@
 var Common = require('./Common');
 
 /**
- * The `Matter.Events` module contains methods to fire and listen to events on other objects.
+ * The `MatterReanimated.Events` module contains methods to fire and listen to events on other objects.
  *
  * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
  *
@@ -11,17 +11,17 @@ var Common = require('./Common');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Events) {
+    if (global.MatterReanimated && global.MatterReanimated.Events) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Events = {};
+    global.MatterReanimated.Events = {};
 
-    var Events = global.Matter.Events;
+    var Events = global.MatterReanimated.Events;
 
     Common();
 
@@ -62,7 +62,9 @@ var init = function () {
         // handle Events.off(object, callback)
         if (typeof eventNames === 'function') {
             callback = eventNames;
-            eventNames = global.Matter.Common.keys(object.events).join(' ');
+            eventNames = global.MatterReanimated.Common.keys(
+                object.events
+            ).join(' ');
         }
 
         var names = eventNames.split(' ');
@@ -94,7 +96,7 @@ var init = function () {
 
         var events = object.events;
 
-        if (events && global.Matter.Common.keys(events).length > 0) {
+        if (events && global.MatterReanimated.Common.keys(events).length > 0) {
             if (!event) event = {};
 
             names = eventNames.split(' ');
@@ -104,7 +106,10 @@ var init = function () {
                 callbacks = events[name];
 
                 if (callbacks) {
-                    eventClone = global.Matter.Common.clone(event, false);
+                    eventClone = global.MatterReanimated.Common.clone(
+                        event,
+                        false
+                    );
                     eventClone.name = name;
                     eventClone.source = object;
 

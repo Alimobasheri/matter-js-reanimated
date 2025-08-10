@@ -9,9 +9,9 @@ var Common = require('./Common');
 var Body = require('../body/Body');
 
 /**
- * The `Matter.Engine` module contains methods for creating and manipulating engines.
+ * The `MatterReanimated.Engine` module contains methods for creating and manipulating engines.
  * An engine is a controller that manages updating the simulation of the world.
- * See `Matter.Runner` for an optional game loop utility.
+ * See `MatterReanimated.Runner` for an optional game loop utility.
  *
  * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
  *
@@ -21,17 +21,17 @@ var Body = require('../body/Body');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Engine) {
+    if (global.MatterReanimated && global.MatterReanimated.Engine) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Engine = {};
+    global.MatterReanimated.Engine = {};
 
-    var Engine = global.Matter.Engine;
+    var Engine = global.MatterReanimated.Engine;
 
     Sleeping();
     Resolver();
@@ -77,12 +77,14 @@ var init = function () {
             },
         };
 
-        var engine = global.Matter.Common.extend(defaults, options);
+        var engine = global.MatterReanimated.Common.extend(defaults, options);
 
         engine.world =
-            options.world || global.Matter.Composite.create({ label: 'World' });
-        engine.pairs = options.pairs || global.Matter.Pairs.create();
-        engine.detector = options.detector || global.Matter.Detector.create();
+            options.world ||
+            global.MatterReanimated.Composite.create({ label: 'World' });
+        engine.pairs = options.pairs || global.MatterReanimated.Pairs.create();
+        engine.detector =
+            options.detector || global.MatterReanimated.Detector.create();
         engine.detector.pairs = engine.pairs;
 
         // for temporary back compatibility only
@@ -103,7 +105,7 @@ var init = function () {
      * @param {number} [delta=16.666]
      */
     Engine.update = function (engine, delta) {
-        var startTime = global.Matter.Common.now();
+        var startTime = global.MatterReanimated.Common.now();
 
         var world = engine.world,
             detector = engine.detector,
@@ -113,10 +115,10 @@ var init = function () {
             i;
 
         // warn if high delta
-        if (delta > global.Matter.Engine._deltaMax) {
-            global.Matter.Common.warnOnce(
-                'Matter.Engine.update: delta argument is recommended to be less than or equal to',
-                global.Matter.Engine._deltaMax.toFixed(3),
+        if (delta > global.MatterReanimated.Engine._deltaMax) {
+            global.MatterReanimated.Common.warnOnce(
+                'MatterReanimated.Engine.update: delta argument is recommended to be less than or equal to',
+                global.MatterReanimated.Engine._deltaMax.toFixed(3),
                 'ms.'
             );
         }
@@ -124,7 +126,7 @@ var init = function () {
         delta =
             typeof delta !== 'undefined'
                 ? delta
-                : global.Matter.Common._baseDelta;
+                : global.MatterReanimated.Common._baseDelta;
         delta *= timing.timeScale;
 
         // increment timestamp
@@ -137,55 +139,64 @@ var init = function () {
             delta: delta,
         };
 
-        global.Matter.Events.trigger(engine, 'beforeUpdate', event);
+        global.MatterReanimated.Events.trigger(engine, 'beforeUpdate', event);
 
         // get all bodies and all constraints in the world
-        var allBodies = global.Matter.Composite.allBodies(world),
-            allConstraints = global.Matter.Composite.allConstraints(world);
+        var allBodies = global.MatterReanimated.Composite.allBodies(world),
+            allConstraints =
+                global.MatterReanimated.Composite.allConstraints(world);
 
         // if the world has changed
         if (world.isModified) {
             // update the detector bodies
-            global.Matter.Detector.setBodies(detector, allBodies);
+            global.MatterReanimated.Detector.setBodies(detector, allBodies);
 
             // reset all composite modified flags
-            global.Matter.Composite.setModified(world, false, false, true);
+            global.MatterReanimated.Composite.setModified(
+                world,
+                false,
+                false,
+                true
+            );
         }
 
         // update sleeping if enabled
         if (engine.enableSleeping)
-            global.Matter.Sleeping.update(allBodies, delta);
+            global.MatterReanimated.Sleeping.update(allBodies, delta);
 
         // apply gravity to all bodies
-        global.Matter.Engine._bodiesApplyGravity(allBodies, engine.gravity);
+        global.MatterReanimated.Engine._bodiesApplyGravity(
+            allBodies,
+            engine.gravity
+        );
 
         // update all body position and rotation by integration
         if (delta > 0) {
-            global.Matter.Engine._bodiesUpdate(allBodies, delta);
+            global.MatterReanimated.Engine._bodiesUpdate(allBodies, delta);
         }
 
-        global.Matter.Events.trigger(engine, 'beforeSolve', event);
+        global.MatterReanimated.Events.trigger(engine, 'beforeSolve', event);
 
         // update all constraints (first pass)
-        global.Matter.Constraint.preSolveAll(allBodies);
+        global.MatterReanimated.Constraint.preSolveAll(allBodies);
         for (i = 0; i < engine.constraintIterations; i++) {
-            global.Matter.Constraint.solveAll(allConstraints, delta);
+            global.MatterReanimated.Constraint.solveAll(allConstraints, delta);
         }
-        global.Matter.Constraint.postSolveAll(allBodies);
+        global.MatterReanimated.Constraint.postSolveAll(allBodies);
 
         // find all collisions
-        var collisions = global.Matter.Detector.collisions(detector);
+        var collisions = global.MatterReanimated.Detector.collisions(detector);
 
         // update collision pairs
-        global.Matter.Pairs.update(pairs, collisions, timestamp);
+        global.MatterReanimated.Pairs.update(pairs, collisions, timestamp);
 
         // wake up bodies involved in collisions
         if (engine.enableSleeping)
-            global.Matter.Sleeping.afterCollisions(pairs.list);
+            global.MatterReanimated.Sleeping.afterCollisions(pairs.list);
 
         // trigger collision events
         if (pairs.collisionStart.length > 0) {
-            global.Matter.Events.trigger(engine, 'collisionStart', {
+            global.MatterReanimated.Events.trigger(engine, 'collisionStart', {
                 pairs: pairs.collisionStart,
                 timestamp: timing.timestamp,
                 delta: delta,
@@ -193,41 +204,41 @@ var init = function () {
         }
 
         // iteratively resolve position between collisions
-        var positionDamping = global.Matter.Common.clamp(
+        var positionDamping = global.MatterReanimated.Common.clamp(
             20 / engine.positionIterations,
             0,
             1
         );
 
-        global.Matter.Resolver.preSolvePosition(pairs.list);
+        global.MatterReanimated.Resolver.preSolvePosition(pairs.list);
         for (i = 0; i < engine.positionIterations; i++) {
-            global.Matter.Resolver.solvePosition(
+            global.MatterReanimated.Resolver.solvePosition(
                 pairs.list,
                 delta,
                 positionDamping
             );
         }
-        global.Matter.Resolver.postSolvePosition(allBodies);
+        global.MatterReanimated.Resolver.postSolvePosition(allBodies);
 
         // update all constraints (second pass)
-        global.Matter.Constraint.preSolveAll(allBodies);
+        global.MatterReanimated.Constraint.preSolveAll(allBodies);
         for (i = 0; i < engine.constraintIterations; i++) {
-            global.Matter.Constraint.solveAll(allConstraints, delta);
+            global.MatterReanimated.Constraint.solveAll(allConstraints, delta);
         }
-        global.Matter.Constraint.postSolveAll(allBodies);
+        global.MatterReanimated.Constraint.postSolveAll(allBodies);
 
         // iteratively resolve velocity between collisions
-        global.Matter.Resolver.preSolveVelocity(pairs.list);
+        global.MatterReanimated.Resolver.preSolveVelocity(pairs.list);
         for (i = 0; i < engine.velocityIterations; i++) {
-            global.Matter.Resolver.solveVelocity(pairs.list, delta);
+            global.MatterReanimated.Resolver.solveVelocity(pairs.list, delta);
         }
 
         // update body speed and velocity properties
-        global.Matter.Engine._bodiesUpdateVelocities(allBodies);
+        global.MatterReanimated.Engine._bodiesUpdateVelocities(allBodies);
 
         // trigger collision events
         if (pairs.collisionActive.length > 0) {
-            global.Matter.Events.trigger(engine, 'collisionActive', {
+            global.MatterReanimated.Events.trigger(engine, 'collisionActive', {
                 pairs: pairs.collisionActive,
                 timestamp: timing.timestamp,
                 delta: delta,
@@ -235,7 +246,7 @@ var init = function () {
         }
 
         if (pairs.collisionEnd.length > 0) {
-            global.Matter.Events.trigger(engine, 'collisionEnd', {
+            global.MatterReanimated.Events.trigger(engine, 'collisionEnd', {
                 pairs: pairs.collisionEnd,
                 timestamp: timing.timestamp,
                 delta: delta,
@@ -243,12 +254,13 @@ var init = function () {
         }
 
         // clear force buffers
-        global.Matter.Engine._bodiesClearForces(allBodies);
+        global.MatterReanimated.Engine._bodiesClearForces(allBodies);
 
-        global.Matter.Events.trigger(engine, 'afterUpdate', event);
+        global.MatterReanimated.Events.trigger(engine, 'afterUpdate', event);
 
         // log the time elapsed computing this update
-        engine.timing.lastElapsed = global.Matter.Common.now() - startTime;
+        engine.timing.lastElapsed =
+            global.MatterReanimated.Common.now() - startTime;
 
         return engine;
     };
@@ -260,19 +272,21 @@ var init = function () {
      * @param {engine} engineB
      */
     Engine.merge = function (engineA, engineB) {
-        global.Matter.Common.extend(engineA, engineB);
+        global.MatterReanimated.Common.extend(engineA, engineB);
 
         if (engineB.world) {
             engineA.world = engineB.world;
 
             Engine.clear(engineA);
 
-            var bodies = global.Matter.Composite.allBodies(engineA.world);
+            var bodies = global.MatterReanimated.Composite.allBodies(
+                engineA.world
+            );
 
             for (var i = 0; i < bodies.length; i++) {
                 var body = bodies[i];
-                global.Matter.Sleeping.set(body, false);
-                body.id = global.Matter.Common.nextId();
+                global.MatterReanimated.Sleeping.set(body, false);
+                body.id = global.MatterReanimated.Common.nextId();
             }
         }
     };
@@ -283,7 +297,7 @@ var init = function () {
      * @param {engine} engine
      */
     Engine.clear = function (engine) {
-        global.Matter.Pairs.clear(engine.pairs);
+        global.MatterReanimated.Pairs.clear(engine.pairs);
         Detector.clear(engine.detector);
     };
 
@@ -350,7 +364,7 @@ var init = function () {
 
             if (body.isStatic || body.isSleeping) continue;
 
-            global.Matter.Body.update(body, delta);
+            global.MatterReanimated.Body.update(body, delta);
         }
     };
 
@@ -364,13 +378,13 @@ var init = function () {
         var bodiesLength = bodies.length;
 
         for (var i = 0; i < bodiesLength; i++) {
-            global.Matter.Body.updateVelocities(bodies[i]);
+            global.MatterReanimated.Body.updateVelocities(bodies[i]);
         }
     };
 
     /**
-     * A deprecated alias for `Runner.run`, use `Matter.Runner.run(engine)` instead and see `Matter.Runner` for more information.
-     * @deprecated use Matter.Runner.run(engine) instead
+     * A deprecated alias for `Runner.run`, use `MatterReanimated.Runner.run(engine)` instead and see `MatterReanimated.Runner` for more information.
+     * @deprecated use MatterReanimated.Runner.run(engine) instead
      * @method run
      * @param {engine} engine
      */
@@ -479,7 +493,7 @@ var init = function () {
      */
 
     /**
-     * A flag that specifies whether the engine should allow sleeping via the `Matter.Sleeping` module.
+     * A flag that specifies whether the engine should allow sleeping via the `MatterReanimated.Sleeping` module.
      * Sleeping can improve stability and performance, but often at the expense of accuracy.
      *
      * @property enableSleeping
@@ -534,20 +548,20 @@ var init = function () {
      */
 
     /**
-     * A `Matter.Detector` instance.
+     * A `MatterReanimated.Detector` instance.
      *
      * @property detector
      * @type detector
-     * @default a Matter.Detector instance
+     * @default a MatterReanimated.Detector instance
      */
 
     /**
-     * A `Matter.Grid` instance.
+     * A `MatterReanimated.Grid` instance.
      *
      * @deprecated replaced by `engine.detector`
      * @property grid
      * @type grid
-     * @default a Matter.Grid instance
+     * @default a MatterReanimated.Grid instance
      */
 
     /**
@@ -556,15 +570,15 @@ var init = function () {
      * @deprecated replaced by `engine.detector`
      * @property broadphase
      * @type grid
-     * @default a Matter.Grid instance
+     * @default a MatterReanimated.Grid instance
      */
 
     /**
-     * The root `Matter.Composite` instance that will contain all bodies, constraints and other composites to be simulated by this engine.
+     * The root `MatterReanimated.Composite` instance that will contain all bodies, constraints and other composites to be simulated by this engine.
      *
      * @property world
      * @type composite
-     * @default a Matter.Composite instance
+     * @default a MatterReanimated.Composite instance
      */
 
     /**
