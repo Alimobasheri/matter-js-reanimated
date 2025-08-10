@@ -54,6 +54,17 @@ npm install matter-tools-reanimated
 yarn add matter-tools-reanimated
 ```
 
+### TypeScript Setup
+
+Projects using TypeScript can declare the global namespaces by creating a file like `matter-js-reanimated-env.d.ts` with:
+
+```
+/// <reference types="matter-js-reanimated" />
+/// <reference types="matter-tools-reanimated" />
+```
+
+Adding these references makes `MatterReanimated` and related helpers available to the TypeScript compiler.
+
 ### Peer Dependencies
 
 This library relies on several peer dependencies which you need to install and configure in your project:

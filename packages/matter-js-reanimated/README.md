@@ -20,13 +20,13 @@ A **UI-thread-safe**, functional port of [Matter.js](https://github.com/liabru/m
 
 ## 🧠 Key Differences from Matter.js
 
-- 🔄 All classes rewritten as pure functions
-- 🎭 Runs inside `runOnUI` worklets
-- 🧱 No rendering, no DOM, no Canvas
-- 📦 Headless and side-effect-free
-- ⏱ Manually driven via `useFrameCallback`
-- 🌐 Injected via `global.MatterReanimated` for worklet access
-- 📉 Based on Matter.js core but stripped of deprecated or browser-specific APIs
+-   🔄 All classes rewritten as pure functions
+-   🎭 Runs inside `runOnUI` worklets
+-   🧱 No rendering, no DOM, no Canvas
+-   📦 Headless and side-effect-free
+-   ⏱ Manually driven via `useFrameCallback`
+-   🌐 Injected via `global.MatterReanimated` for worklet access
+-   📉 Based on Matter.js core but stripped of deprecated or browser-specific APIs
 
 ---
 
@@ -35,47 +35,50 @@ A **UI-thread-safe**, functional port of [Matter.js](https://github.com/liabru/m
 ```ts
 // 1. Inject Matter modules on the UI thread (run this ONCE before anything else)
 runOnUI(() => {
-  initMatter(); // defines global.MatterReanimated
+    initMatter(); // defines global.MatterReanimated
 })();
 
 // 2. Ensure global.MatterReanimated is initialized before using it
 // This must be called AFTER the above runOnUI has completed
 runOnUI(() => {
-  'worklet';
+    'worklet';
 
-  if (!global.MatterReanimated) {
-    console.warn('Matter not initialized yet!');
-    return;
-  }
+    if (!global.MatterReanimated) {
+        console.warn('Matter not initialized yet!');
+        return;
+    }
 
-  const engine = global.MatterReanimated.Engine.create();
-  const ball = global.MatterReanimated.Bodies.circle(100, 100, 20);
+    const engine = global.MatterReanimated.Engine.create();
+    const ball = global.MatterReanimated.Bodies.circle(100, 100, 20);
 
-  global.physicsEngine = engine;
-  global.ball = ball;
+    global.physicsEngine = engine;
+    global.ball = ball;
 
-  global.MatterReanimated.World.add(engine.world, [ball]);
+    global.MatterReanimated.World.add(engine.world, [ball]);
 })();
 ```
 
 ```ts
 // 3. Advance physics manually each frame (typically from a frame callback)
 useFrameCallback((frame) => {
-  runOnUI(() => {
-    'worklet';
-    global.MatterReanimated.Engine.update(global.physicsEngine, frame.delta);
-  })();
+    runOnUI(() => {
+        'worklet';
+        global.MatterReanimated.Engine.update(
+            global.physicsEngine,
+            frame.delta
+        );
+    })();
 });
 ```
 
 ```ts
 // 4. Access body position from any UI-thread worklet (e.g., derived value, Skia draw, etc.)
 const position = useDerivedValue(() => {
-  'worklet';
-  return {
-    x: global.ball.position.x,
-    y: global.ball.position.y,
-  };
+    'worklet';
+    return {
+        x: global.ball.position.x,
+        y: global.ball.position.y,
+    };
 });
 ```
 
@@ -85,22 +88,22 @@ const position = useDerivedValue(() => {
 
 ## ✅ What's Implemented
 
-- [x] `Engine`, `World`, `Body`, `Composite`, `Vector`, `Bounds`, `Sleeping`, etc.
-- [x] Gravity, collision resolution, compound bodies, sleeping
-- [x] Worklet-safe structure using `global.MatterReanimated`
-- [x] Hermes-compatible
-- [x] Functional, CommonJS-style output
+-   [x] `Engine`, `World`, `Body`, `Composite`, `Vector`, `Bounds`, `Sleeping`, etc.
+-   [x] Gravity, collision resolution, compound bodies, sleeping
+-   [x] Worklet-safe structure using `global.MatterReanimated`
+-   [x] Hermes-compatible
+-   [x] Functional, CommonJS-style output
 
 ---
 
 ## 🚫 What’s Not Included (Yet)
 
-- ❌ Rendering (Canvas, DOM, WebGL, etc.)
-- ❌ MatterTools, Events, or mouse support
-- ❌ Lifecycle helpers or automatic tick systems
-- ❌ Plugin system
-- ❌ ESM build or tree-shaking support
-- ❌ Declarative React components (`<PhysicsWorld />`, `<RigidBody />`)
+-   ❌ Rendering (Canvas, DOM, WebGL, etc.)
+-   ❌ MatterTools, Events, or mouse support
+-   ❌ Lifecycle helpers or automatic tick systems
+-   ❌ Plugin system
+-   ❌ ESM build or tree-shaking support
+-   ❌ Declarative React components (`<PhysicsWorld />`, `<RigidBody />`)
 
 ✅ For rendering, Demo view, Touch Support Example, `matter-tools-reanimated` is published on NPM!
 
@@ -108,11 +111,11 @@ const position = useDerivedValue(() => {
 
 ## 🧩 Planned Features
 
-- 🧠 Declarative `<RigidBody />`, `<PhysicsWorld />` bindings
-- ⚙️ Skia or SVG bindings via `useBodyTransform()`
-- ⛓ Constraint hooks like `useDistanceConstraint()`
-- 🔁 Deterministic stepping and time scaling
-- 🔌 Worklet-safe plugin registration
+-   🧠 Declarative `<RigidBody />`, `<PhysicsWorld />` bindings
+-   ⚙️ Skia or SVG bindings via `useBodyTransform()`
+-   ⛓ Constraint hooks like `useDistanceConstraint()`
+-   🔁 Deterministic stepping and time scaling
+-   🔌 Worklet-safe plugin registration
 
 ---
 
@@ -122,21 +125,31 @@ const position = useDerivedValue(() => {
 npm i matter-js-reanimated
 ```
 
+### TypeScript Setup
+
+For TypeScript projects, include an ambient declaration file (e.g. `matter-js-reanimated-env.d.ts`) with:
+
+```
+/// <reference types="matter-js-reanimated" />
+```
+
+This enables global typings such as `MatterReanimated` within your worklets.
+
 ---
 
 ## 📦 Build Info
 
-- Output: CommonJS `.js` file (via Matter.js UMD Webpack config)
-- Works on: React Native + Hermes + Reanimated 3
-- No bundler-specific config yet (e.g., Metro plugin)
+-   Output: CommonJS `.js` file (via Matter.js UMD Webpack config)
+-   Works on: React Native + Hermes + Reanimated 3
+-   No bundler-specific config yet (e.g., Metro plugin)
 
 ---
 
 ## 📖 Based On
 
-- Original [Matter.js](https://github.com/liabru/matter-js) by Liam Brummitt
-- Reanimated 3 worklet runtime
-- Custom internal game engine (WIP)
+-   Original [Matter.js](https://github.com/liabru/matter-js) by Liam Brummitt
+-   Reanimated 3 worklet runtime
+-   Custom internal game engine (WIP)
 
 ---
 
