@@ -78,13 +78,6 @@ Follow the installation instructions for each of these libraries in their respec
 
 Here's how to set up a simple physics scene using the Demo component:
 
-```tsx
-// Inject Matter modules on the UI thread before accessing them
-runOnUI(() => {
-  initMatter(); // defines global.MatterReanimated
-})();
-```
-
 `setupWorldWorklet.tsx`:
 
 ```tsx
