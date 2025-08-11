@@ -2,7 +2,7 @@ var Common = require('../core/Common');
 var Collision = require('./Collision');
 
 /**
- * The `Matter.Detector` module contains methods for efficiently detecting collisions between a list of bodies using a broadphase algorithm.
+ * The `MatterReanimated.Detector` module contains methods for efficiently detecting collisions between a list of bodies using a broadphase algorithm.
  *
  * @class Detector
  */
@@ -10,17 +10,17 @@ var Collision = require('./Collision');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Detector) {
+    if (global.MatterReanimated && global.MatterReanimated.Detector) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Detector = {};
+    global.MatterReanimated.Detector = {};
 
-    var Detector = global.Matter.Detector;
+    var Detector = global.MatterReanimated.Detector;
 
     Common();
     Collision();
@@ -38,7 +38,7 @@ var init = function () {
             pairs: null,
         };
 
-        return global.Matter.Common.extend(defaults, options);
+        return global.MatterReanimated.Common.extend(defaults, options);
     };
 
     /**
@@ -75,7 +75,7 @@ var init = function () {
             bodies = detector.bodies,
             bodiesLength = bodies.length,
             canCollide = Detector.canCollide,
-            collides = global.Matter.Collision.collides,
+            collides = global.MatterReanimated.Collision.collides,
             collisions = detector.collisions,
             collisionIndex = 0,
             i,
@@ -198,7 +198,7 @@ var init = function () {
      */
 
     /**
-     * The array of `Matter.Body` between which the detector finds collisions.
+     * The array of `MatterReanimated.Body` between which the detector finds collisions.
      *
      * _Note:_ The order of bodies in this array _is not fixed_ and will be continually managed by the detector.
      * @property bodies
@@ -207,14 +207,14 @@ var init = function () {
      */
 
     /**
-     * The array of `Matter.Collision` found in the last call to `Detector.collisions` on this detector.
+     * The array of `MatterReanimated.Collision` found in the last call to `Detector.collisions` on this detector.
      * @property collisions
      * @type collision[]
      * @default []
      */
 
     /**
-     * Optional. A `Matter.Pairs` object from which previous collision objects may be reused. Intended for internal `Matter.Engine` usage.
+     * Optional. A `MatterReanimated.Pairs` object from which previous collision objects may be reused. Intended for internal `MatterReanimated.Engine` usage.
      * @property pairs
      * @type {pairs|null}
      * @default null

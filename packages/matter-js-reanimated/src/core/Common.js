@@ -1,16 +1,16 @@
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Common) {
+    if (global.MatterReanimated && global.MatterReanimated.Common) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Common = {};
-    var Common = global.Matter.Common;
+    global.MatterReanimated.Common = {};
+    var Common = global.MatterReanimated.Common;
 
     Common._baseDelta = 1000 / 60;
     Common._nextId = 0;
@@ -65,7 +65,7 @@ var init = function () {
     };
 
     Common.values = function (obj) {
-        return global.Matter.Common.keys(obj).map((key) => obj[key]);
+        return global.MatterReanimated.Common.keys(obj).map((key) => obj[key]);
     };
 
     Common.get = function (obj, path, begin, end) {

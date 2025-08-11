@@ -5,7 +5,7 @@ var Bounds = require('../geometry/Bounds');
 var Vector = require('../geometry/Vector');
 
 /**
- * The `Matter.Bodies` module contains factory methods for creating rigid body models
+ * The `MatterReanimated.Bodies` module contains factory methods for creating rigid body models
  * with commonly used body configurations (such as rectangles, circles and other polygons).
  *
  * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
@@ -16,17 +16,17 @@ var Vector = require('../geometry/Vector');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Bodies) {
+    if (global.MatterReanimated && global.MatterReanimated.Bodies) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Bodies = {};
+    global.MatterReanimated.Bodies = {};
 
-    var Bodies = global.Matter.Bodies;
+    var Bodies = global.MatterReanimated.Bodies;
 
     Vertices();
     Common();
@@ -37,7 +37,7 @@ var init = function () {
     /**
      * Creates a new rigid body model with a rectangle hull.
      * The options parameter is an object that specifies any properties you wish to override the defaults.
-     * See the properties section of the `Matter.Body` module for detailed information on what you can pass via the `options` object.
+     * See the properties section of the `MatterReanimated.Body` module for detailed information on what you can pass via the `options` object.
      * @method rectangle
      * @param {number} x
      * @param {number} y
@@ -52,7 +52,7 @@ var init = function () {
         var rectangle = {
             label: 'Rectangle Body',
             position: { x: x, y: y },
-            vertices: global.Matter.Vertices.fromPath(
+            vertices: global.MatterReanimated.Vertices.fromPath(
                 'L 0 0 L ' +
                     width +
                     ' 0 L ' +
@@ -66,7 +66,7 @@ var init = function () {
 
         if (options.chamfer) {
             var chamfer = options.chamfer;
-            rectangle.vertices = global.Matter.Vertices.chamfer(
+            rectangle.vertices = global.MatterReanimated.Vertices.chamfer(
                 rectangle.vertices,
                 chamfer.radius,
                 chamfer.quality,
@@ -76,14 +76,16 @@ var init = function () {
             delete options.chamfer;
         }
 
-        return global.Matter.Body.create(Object.assign(rectangle, options));
+        return global.MatterReanimated.Body.create(
+            Object.assign(rectangle, options)
+        );
     };
 
     /**
      * Creates a new rigid body model with a trapezoid hull.
      * The `slope` is parameterised as a fraction of `width` and must be < 1 to form a valid trapezoid.
      * The options parameter is an object that specifies any properties you wish to override the defaults.
-     * See the properties section of the `Matter.Body` module for detailed information on what you can pass via the `options` object.
+     * See the properties section of the `MatterReanimated.Body` module for detailed information on what you can pass via the `options` object.
      * @method trapezoid
      * @param {number} x
      * @param {number} y
@@ -97,7 +99,7 @@ var init = function () {
         options = options || {};
 
         if (slope >= 1) {
-            global.Matter.Common.warn(
+            global.MatterReanimated.Common.warn(
                 'Bodies.trapezoid: slope parameter must be < 1.'
             );
         }
@@ -130,12 +132,12 @@ var init = function () {
         var trapezoid = {
             label: 'Trapezoid Body',
             position: { x: x, y: y },
-            vertices: global.Matter.Vertices.fromPath(verticesPath),
+            vertices: global.MatterReanimated.Vertices.fromPath(verticesPath),
         };
 
         if (options.chamfer) {
             var chamfer = options.chamfer;
-            trapezoid.vertices = global.Matter.Vertices.chamfer(
+            trapezoid.vertices = global.MatterReanimated.Vertices.chamfer(
                 trapezoid.vertices,
                 chamfer.radius,
                 chamfer.quality,
@@ -145,15 +147,15 @@ var init = function () {
             delete options.chamfer;
         }
 
-        return global.Matter.Body.create(
-            global.Matter.Common.extend({}, trapezoid, options)
+        return global.MatterReanimated.Body.create(
+            global.MatterReanimated.Common.extend({}, trapezoid, options)
         );
     };
 
     /**
      * Creates a new rigid body model with a circle hull.
      * The options parameter is an object that specifies any properties you wish to override the defaults.
-     * See the properties section of the `Matter.Body` module for detailed information on what you can pass via the `options` object.
+     * See the properties section of the `MatterReanimated.Body` module for detailed information on what you can pass via the `options` object.
      * @method circle
      * @param {number} x
      * @param {number} y
@@ -182,14 +184,14 @@ var init = function () {
             y,
             sides,
             radius,
-            global.Matter.Common.extend({}, circle, options)
+            global.MatterReanimated.Common.extend({}, circle, options)
         );
     };
 
     /**
      * Creates a new rigid body model with a regular polygon hull with the given number of sides.
      * The options parameter is an object that specifies any properties you wish to override the defaults.
-     * See the properties section of the `Matter.Body` module for detailed information on what you can pass via the `options` object.
+     * See the properties section of the `MatterReanimated.Body` module for detailed information on what you can pass via the `options` object.
      * @method polygon
      * @param {number} x
      * @param {number} y
@@ -218,12 +220,12 @@ var init = function () {
         var polygon = {
             label: 'Polygon Body',
             position: { x: x, y: y },
-            vertices: global.Matter.Vertices.fromPath(path),
+            vertices: global.MatterReanimated.Vertices.fromPath(path),
         };
 
         if (options.chamfer) {
             var chamfer = options.chamfer;
-            polygon.vertices = global.Matter.Vertices.chamfer(
+            polygon.vertices = global.MatterReanimated.Vertices.chamfer(
                 polygon.vertices,
                 chamfer.radius,
                 chamfer.quality,
@@ -233,8 +235,8 @@ var init = function () {
             delete options.chamfer;
         }
 
-        return global.Matter.Body.create(
-            global.Matter.Common.extend({}, polygon, options)
+        return global.MatterReanimated.Body.create(
+            global.MatterReanimated.Common.extend({}, polygon, options)
         );
     };
 
@@ -258,9 +260,9 @@ var init = function () {
      * In particular some parts may need to be overlapped to avoid collision gaps.
      * Thin parts and sharp points should be avoided or removed where possible.
      *
-     * The options parameter object specifies any `Matter.Body` properties you wish to override the defaults.
+     * The options parameter object specifies any `MatterReanimated.Body` properties you wish to override the defaults.
      *
-     * See the properties section of the `Matter.Body` module for detailed information on what you can pass via the `options` object.
+     * See the properties section of the `MatterReanimated.Body` module for detailed information on what you can pass via the `options` object.
      * @method fromVertices
      * @param {number} x
      * @param {number} y
@@ -282,7 +284,7 @@ var init = function () {
         minimumArea,
         removeDuplicatePoints
     ) {
-        var decomp = global.Matter.Common.getDecomp(),
+        var decomp = global.MatterReanimated.Common.getDecomp(),
             canDecomp,
             body,
             parts,
@@ -312,27 +314,30 @@ var init = function () {
                 : 0.01;
 
         // ensure vertexSets is an array of arrays
-        if (!global.Matter.Common.isArray(vertexSets[0])) {
+        if (!global.MatterReanimated.Common.isArray(vertexSets[0])) {
             vertexSets = [vertexSets];
         }
 
         for (v = 0; v < vertexSets.length; v += 1) {
             vertices = vertexSets[v];
-            isConvex = global.Matter.Vertices.isConvex(vertices);
+            isConvex = global.MatterReanimated.Vertices.isConvex(vertices);
             isConcave = !isConvex;
 
             if (isConcave && !canDecomp) {
-                global.Matter.Common.warnOnce(
+                global.MatterReanimated.Common.warnOnce(
                     "Bodies.fromVertices: Install the 'poly-decomp' library and use Common.setDecomp or provide 'decomp' as a global to decompose concave vertices."
                 );
             }
 
             if (isConvex || !canDecomp) {
                 if (isConvex) {
-                    vertices = global.Matter.Vertices.clockwiseSort(vertices);
+                    vertices =
+                        global.MatterReanimated.Vertices.clockwiseSort(
+                            vertices
+                        );
                 } else {
                     // fallback to convex hull when decomposition is not possible
-                    vertices = global.Matter.Vertices.hull(vertices);
+                    vertices = global.MatterReanimated.Vertices.hull(vertices);
                 }
 
                 parts.push({
@@ -376,13 +381,17 @@ var init = function () {
                     // skip small chunks
                     if (
                         minimumArea > 0 &&
-                        global.Matter.Vertices.area(chunkVertices) < minimumArea
+                        global.MatterReanimated.Vertices.area(chunkVertices) <
+                            minimumArea
                     )
                         continue;
 
                     // create a compound part
                     parts.push({
-                        position: global.Matter.Vertices.centre(chunkVertices),
+                        position:
+                            global.MatterReanimated.Vertices.centre(
+                                chunkVertices
+                            ),
                         vertices: chunkVertices,
                     });
                 }
@@ -391,8 +400,8 @@ var init = function () {
 
         // create body parts
         for (i = 0; i < parts.length; i++) {
-            parts[i] = global.Matter.Body.create(
-                global.Matter.Common.extend(parts[i], options)
+            parts[i] = global.MatterReanimated.Body.create(
+                global.MatterReanimated.Common.extend(parts[i], options)
             );
         }
 
@@ -407,7 +416,7 @@ var init = function () {
                     var partB = parts[j];
 
                     if (
-                        global.Matter.Bounds.overlaps(
+                        global.MatterReanimated.Bounds.overlaps(
                             partA.bounds,
                             partB.bounds
                         )
@@ -419,18 +428,20 @@ var init = function () {
                         for (k = 0; k < partA.vertices.length; k++) {
                             for (z = 0; z < partB.vertices.length; z++) {
                                 // find distances between the vertices
-                                var da = global.Matter.Vector.magnitudeSquared(
-                                        global.Matter.Vector.sub(
-                                            pav[(k + 1) % pav.length],
-                                            pbv[z]
-                                        )
-                                    ),
-                                    db = global.Matter.Vector.magnitudeSquared(
-                                        global.Matter.Vector.sub(
-                                            pav[k],
-                                            pbv[(z + 1) % pbv.length]
-                                        )
-                                    );
+                                var da =
+                                        global.MatterReanimated.Vector.magnitudeSquared(
+                                            global.MatterReanimated.Vector.sub(
+                                                pav[(k + 1) % pav.length],
+                                                pbv[z]
+                                            )
+                                        ),
+                                    db =
+                                        global.MatterReanimated.Vector.magnitudeSquared(
+                                            global.MatterReanimated.Vector.sub(
+                                                pav[k],
+                                                pbv[(z + 1) % pbv.length]
+                                            )
+                                        );
 
                                 // if both vertices are very close, consider the edge concident (internal)
                                 if (
@@ -449,12 +460,15 @@ var init = function () {
 
         if (parts.length > 1) {
             // create the parent body to be returned, that contains generated compound parts
-            body = global.Matter.Body.create(
-                global.Matter.Common.extend({ parts: parts.slice(0) }, options)
+            body = global.MatterReanimated.Body.create(
+                global.MatterReanimated.Common.extend(
+                    { parts: parts.slice(0) },
+                    options
+                )
             );
 
             // offset such that body.position is at the centre off mass
-            global.Matter.Body.setPosition(body, { x: x, y: y });
+            global.MatterReanimated.Body.setPosition(body, { x: x, y: y });
 
             return body;
         } else {

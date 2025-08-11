@@ -1,7 +1,7 @@
 var Contact = require('./Contact');
 
 /**
- * The `Matter.Pair` module contains methods for creating and manipulating collision pairs.
+ * The `MatterReanimated.Pair` module contains methods for creating and manipulating collision pairs.
  *
  * @class Pair
  */
@@ -9,17 +9,17 @@ var Contact = require('./Contact');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Pair) {
+    if (global.MatterReanimated && global.MatterReanimated.Pair) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Pair = {};
+    global.MatterReanimated.Pair = {};
 
-    var Pair = global.Matter.Pair;
+    var Pair = global.MatterReanimated.Pair;
 
     Contact();
 
@@ -40,8 +40,8 @@ var init = function () {
             bodyB: bodyB,
             collision: collision,
             contacts: [
-                global.Matter.Contact.create(),
-                global.Matter.Contact.create(),
+                global.MatterReanimated.Contact.create(),
+                global.MatterReanimated.Contact.create(),
             ],
             contactCount: 0,
             separation: 0,

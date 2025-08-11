@@ -2,11 +2,11 @@ var Vertices = require('../geometry/Vertices');
 var Pair = require('./Pair');
 
 /**
- * The `Matter.Collision` module contains methods for detecting collisions between a given pair of bodies.
+ * The `MatterReanimated.Collision` module contains methods for detecting collisions between a given pair of bodies.
  *
- * For efficient detection between a list of bodies, see `Matter.Detector` and `Matter.Query`.
+ * For efficient detection between a list of bodies, see `MatterReanimated.Detector` and `MatterReanimated.Query`.
  *
- * See `Matter.Engine` for collision events.
+ * See `MatterReanimated.Engine` for collision events.
  *
  * @class Collision
  */
@@ -14,17 +14,17 @@ var Pair = require('./Pair');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Collision) {
+    if (global.MatterReanimated && global.MatterReanimated.Collision) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Collision = {};
+    global.MatterReanimated.Collision = {};
 
-    var Collision = global.Matter.Collision;
+    var Collision = global.MatterReanimated.Collision;
 
     Vertices();
     Pair();
@@ -97,7 +97,9 @@ var init = function () {
         }
 
         // reuse collision records for gc efficiency
-        var pair = pairs && pairs.table[global.Matter.Pair.id(bodyA, bodyB)],
+        var pair =
+                pairs &&
+                pairs.table[global.MatterReanimated.Pair.id(bodyA, bodyB)],
             collision;
 
         if (!pair) {
@@ -155,11 +157,21 @@ var init = function () {
             supportCount = 0;
 
         // find the supports from bodyB that are inside bodyA
-        if (global.Matter.Vertices.contains(bodyA.vertices, supportsB[0])) {
+        if (
+            global.MatterReanimated.Vertices.contains(
+                bodyA.vertices,
+                supportsB[0]
+            )
+        ) {
             supports[supportCount++] = supportsB[0];
         }
 
-        if (global.Matter.Vertices.contains(bodyA.vertices, supportsB[1])) {
+        if (
+            global.MatterReanimated.Vertices.contains(
+                bodyA.vertices,
+                supportsB[1]
+            )
+        ) {
             supports[supportCount++] = supportsB[1];
         }
 
@@ -167,13 +179,21 @@ var init = function () {
         if (supportCount < 2) {
             var supportsA = Collision._findSupports(bodyB, bodyA, normal, -1);
 
-            if (global.Matter.Vertices.contains(bodyB.vertices, supportsA[0])) {
+            if (
+                global.MatterReanimated.Vertices.contains(
+                    bodyB.vertices,
+                    supportsA[0]
+                )
+            ) {
                 supports[supportCount++] = supportsA[0];
             }
 
             if (
                 supportCount < 2 &&
-                global.Matter.Vertices.contains(bodyB.vertices, supportsA[1])
+                global.MatterReanimated.Vertices.contains(
+                    bodyB.vertices,
+                    supportsA[1]
+                )
             ) {
                 supports[supportCount++] = supportsA[1];
             }

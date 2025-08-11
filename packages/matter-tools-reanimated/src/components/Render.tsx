@@ -3,7 +3,6 @@ import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useFrameCallback } from 'react-native-reanimated';
 //@ts-ignore
 import Svg from 'react-native-svg';
-import Matter from 'matter-js';
 import { Bodies } from './Bodies';
 import { Constraints } from './Constraints';
 import { Runner } from './Runner';
@@ -33,17 +32,23 @@ export const Render: React.FC<RenderProps> = ({
 
   const { setActive } = useFrameCallback(() => {
     'worklet';
-    if (!global.Matter || !(engineId in global)) return;
-    if (!global.svgContent) global.svgContent = [];
-    if (!global.svgConstraints) global.svgConstraints = [];
+    if (
+      !global.MatterReanimated ||
+      !global.MatterToolsReanimated ||
+      !(engineId in global.MatterToolsReanimated)
+    )
+      return;
+    if (!global.MatterToolsReanimated.svgContent) global.MatterToolsReanimated.svgContent = [];
+    if (!global.MatterToolsReanimated.svgConstraints)
+      global.MatterToolsReanimated.svgConstraints = [];
 
-    const engine = (global as any)[engineId];
+    const engine = (global.MatterToolsReanimated as any)[engineId];
     if (!engine || !engine.world) return;
     // Use Composite.allBodies to get all bodies including those in nested composites
-    const bodies = global.Matter.Composite.allBodies(engine.world);
+    const bodies = global.MatterReanimated.Composite.allBodies(engine.world);
 
     // Generate SVG elements for each body - this runs in the UI thread
-    global.svgContent = bodies.map((body: Matter.Body) => ({
+    global.MatterToolsReanimated.svgContent = bodies.map((body: Matter.Body) => ({
       id: body.id,
       type: body.circleRadius ? 'circle' : 'polygon',
       position: { ...body.position },
@@ -57,8 +62,11 @@ export const Render: React.FC<RenderProps> = ({
       render: body.render,
     }));
 
-    const constraints = global.Matter.Composite.allConstraints(engine.world);
-    global.svgConstraints = constraints.map((constraint: any) => ({
+    const constraints = global.MatterReanimated.Composite.allConstraints(
+      engine.world
+    );
+    global.MatterToolsReanimated.svgConstraints = constraints.map(
+      (constraint: any) => ({
       id: constraint.id,
       bodyAId: constraint.bodyA?.id,
       bodyBId: constraint.bodyB?.id,

@@ -1,5 +1,3 @@
-import Matter from 'matter-js';
-
 function createCloth(
   xx: number,
   yy: number,
@@ -13,7 +11,7 @@ function createCloth(
   constraintOptions: any = {}
 ) {
   'worklet';
-  const { Bodies, Composites, Body, Common } = global.Matter;
+  const { Bodies, Composites, Body, Common } = global.MatterReanimated;
 
   const group = Body.nextGroup(true);
   particleOptions = Common.extend(
@@ -57,14 +55,15 @@ export const initCloth = (engine: any) => {
   'worklet';
 
   // Get screen dimensions from React Native
-  const width = global.windowWidth || 800;
-  const height = global.windowHeight || 600;
+  const width = global.MatterToolsReanimated.windowWidth || 800;
+  const height = global.MatterToolsReanimated.windowHeight || 600;
 
   const scaleX = width / 800;
   const scaleY = height / 600;
   const scale = Math.min(scaleX, scaleY);
 
-  const { Bodies, Composites, Composite, Body, World } = global.Matter;
+  const { Bodies, Composites, Composite, Body, World } =
+    global.MatterReanimated;
 
   // Create cloth
   const cloth = createCloth(

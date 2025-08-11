@@ -6,8 +6,8 @@ var Bounds = require('../geometry/Bounds');
 var Axes = require('../geometry/Axes');
 
 /**
-* The `Matter.Body` module contains methods for creating and manipulating rigid bodies.
-* For creating bodies with common configurations such as rectangles, circles and other polygons see the module `Matter.Bodies`.
+* The `MatterReanimated.Body` module contains methods for creating and manipulating rigid bodies.
+* For creating bodies with common configurations such as rectangles, circles and other polygons see the module `MatterReanimated.Bodies`.
 *
 * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
 
@@ -17,17 +17,17 @@ var Axes = require('../geometry/Axes');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Body) {
+    if (global.MatterReanimated && global.MatterReanimated.Body) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Body = {};
+    global.MatterReanimated.Body = {};
 
-    var Body = global.Matter.Body;
+    var Body = global.MatterReanimated.Body;
 
     Vertices();
     Vector();
@@ -54,13 +54,13 @@ var init = function () {
      */
     Body.create = function (options) {
         var defaults = {
-            id: global.Matter.Common.nextId(),
+            id: global.MatterReanimated.Common.nextId(),
             type: 'body',
             label: 'Body',
             parts: [],
             plugin: {},
             angle: 0,
-            vertices: global.Matter.Vertices.fromPath(
+            vertices: global.MatterReanimated.Vertices.fromPath(
                 'L 0 0 L 40 0 L 40 40 L 0 40'
             ),
             position: { x: 0, y: 0 },
@@ -118,7 +118,7 @@ var init = function () {
             _original: null,
         };
 
-        var body = global.Matter.Common.extend(defaults, options);
+        var body = global.MatterReanimated.Common.extend(defaults, options);
 
         _initProperties(body, options);
 
@@ -161,10 +161,13 @@ var init = function () {
         options = options || {};
 
         // init required properties (order is important)
-        global.Matter.Body.set(body, {
-            bounds: body.bounds || global.Matter.Bounds.create(body.vertices),
+        global.MatterReanimated.Body.set(body, {
+            bounds:
+                body.bounds ||
+                global.MatterReanimated.Bounds.create(body.vertices),
             positionPrev:
-                body.positionPrev || global.Matter.Vector.clone(body.position),
+                body.positionPrev ||
+                global.MatterReanimated.Vector.clone(body.position),
             anglePrev: body.anglePrev || body.angle,
             vertices: body.vertices,
             parts: body.parts || [body],
@@ -173,12 +176,20 @@ var init = function () {
             parent: body.parent || body,
         });
 
-        global.Matter.Vertices.rotate(body.vertices, body.angle, body.position);
-        global.Matter.Axes.rotate(body.axes, body.angle);
-        global.Matter.Bounds.update(body.bounds, body.vertices, body.velocity);
+        global.MatterReanimated.Vertices.rotate(
+            body.vertices,
+            body.angle,
+            body.position
+        );
+        global.MatterReanimated.Axes.rotate(body.axes, body.angle);
+        global.MatterReanimated.Bounds.update(
+            body.bounds,
+            body.vertices,
+            body.velocity
+        );
 
         // allow options to override the automatically calculated properties
-        global.Matter.Body.set(body, {
+        global.MatterReanimated.Body.set(body, {
             axes: options.axes || body.axes,
             area: options.area || body.area,
             mass: options.mass || body.mass,
@@ -188,7 +199,7 @@ var init = function () {
         // render properties
         var defaultFillStyle = body.isStatic
                 ? '#14151f'
-                : global.Matter.Common.choose([
+                : global.MatterReanimated.Common.choose([
                       '#f19648',
                       '#f5d259',
                       '#f55a3c',
@@ -230,46 +241,49 @@ var init = function () {
             value = settings[property];
             switch (property) {
                 case 'isStatic':
-                    global.Matter.Body.setStatic(body, value);
+                    global.MatterReanimated.Body.setStatic(body, value);
                     break;
                 case 'isSleeping':
-                    global.Matter.Sleeping.set(body, value);
+                    global.MatterReanimated.Sleeping.set(body, value);
                     break;
                 case 'mass':
-                    global.Matter.Body.setMass(body, value);
+                    global.MatterReanimated.Body.setMass(body, value);
                     break;
                 case 'density':
-                    global.Matter.Body.setDensity(body, value);
+                    global.MatterReanimated.Body.setDensity(body, value);
                     break;
                 case 'inertia':
-                    global.Matter.Body.setInertia(body, value);
+                    global.MatterReanimated.Body.setInertia(body, value);
                     break;
                 case 'vertices':
-                    global.Matter.Body.setVertices(body, value);
+                    global.MatterReanimated.Body.setVertices(body, value);
                     break;
                 case 'position':
-                    global.Matter.Body.setPosition(body, value);
+                    global.MatterReanimated.Body.setPosition(body, value);
                     break;
                 case 'angle':
-                    global.Matter.Body.setAngle(body, value);
+                    global.MatterReanimated.Body.setAngle(body, value);
                     break;
                 case 'velocity':
-                    global.Matter.Body.setVelocity(body, value);
+                    global.MatterReanimated.Body.setVelocity(body, value);
                     break;
                 case 'angularVelocity':
-                    global.Matter.Body.setAngularVelocity(body, value);
+                    global.MatterReanimated.Body.setAngularVelocity(
+                        body,
+                        value
+                    );
                     break;
                 case 'speed':
-                    global.Matter.Body.setSpeed(body, value);
+                    global.MatterReanimated.Body.setSpeed(body, value);
                     break;
                 case 'angularSpeed':
-                    global.Matter.Body.setAngularSpeed(body, value);
+                    global.MatterReanimated.Body.setAngularSpeed(body, value);
                     break;
                 case 'parts':
-                    global.Matter.Body.setParts(body, value);
+                    global.MatterReanimated.Body.setParts(body, value);
                     break;
                 case 'centre':
-                    global.Matter.Body.setCentre(body, value);
+                    global.MatterReanimated.Body.setCentre(body, value);
                     break;
                 default:
                     body[property] = value;
@@ -372,7 +386,7 @@ var init = function () {
      * Vertices will be automatically transformed to be orientated around their centre of mass as the origin.
      * They are then automatically translated to world space based on `body.position`.
      *
-     * The `vertices` argument should be passed as an array of `Matter.Vector` points (or a `Matter.Vertices` array).
+     * The `vertices` argument should be passed as an array of `MatterReanimated.Vector` points (or a `MatterReanimated.Vertices` array).
      * Vertices must form a convex hull. Concave vertices must be decomposed into convex parts.
      *
      * @method setVertices
@@ -384,28 +398,41 @@ var init = function () {
         if (vertices[0].body === body) {
             body.vertices = vertices;
         } else {
-            body.vertices = global.Matter.Vertices.create(vertices, body);
+            body.vertices = global.MatterReanimated.Vertices.create(
+                vertices,
+                body
+            );
         }
 
         // update properties
-        body.axes = global.Matter.Axes.fromVertices(body.vertices);
-        body.area = global.Matter.Vertices.area(body.vertices);
-        global.Matter.Body.setMass(body, body.density * body.area);
+        body.axes = global.MatterReanimated.Axes.fromVertices(body.vertices);
+        body.area = global.MatterReanimated.Vertices.area(body.vertices);
+        global.MatterReanimated.Body.setMass(body, body.density * body.area);
 
         // orient vertices around the centre of mass at origin (0, 0)
-        var centre = global.Matter.Vertices.centre(body.vertices);
-        global.Matter.Vertices.translate(body.vertices, centre, -1);
+        var centre = global.MatterReanimated.Vertices.centre(body.vertices);
+        global.MatterReanimated.Vertices.translate(body.vertices, centre, -1);
 
         // update inertia while vertices are at origin (0, 0)
-        global.Matter.Body.setInertia(
+        global.MatterReanimated.Body.setInertia(
             body,
-            global.Matter.Body._inertiaScale *
-                global.Matter.Vertices.inertia(body.vertices, body.mass)
+            global.MatterReanimated.Body._inertiaScale *
+                global.MatterReanimated.Vertices.inertia(
+                    body.vertices,
+                    body.mass
+                )
         );
 
         // update geometry
-        global.Matter.Vertices.translate(body.vertices, body.position);
-        global.Matter.Bounds.update(body.bounds, body.vertices, body.velocity);
+        global.MatterReanimated.Vertices.translate(
+            body.vertices,
+            body.position
+        );
+        global.MatterReanimated.Bounds.update(
+            body.bounds,
+            body.vertices,
+            body.velocity
+        );
     };
 
     /**
@@ -453,13 +480,16 @@ var init = function () {
                 vertices = vertices.concat(parts[i].vertices);
             }
 
-            global.Matter.Vertices.clockwiseSort(vertices);
+            global.MatterReanimated.Vertices.clockwiseSort(vertices);
 
-            var hull = global.Matter.Vertices.hull(vertices),
-                hullCentre = global.Matter.Vertices.centre(hull);
+            var hull = global.MatterReanimated.Vertices.hull(vertices),
+                hullCentre = global.MatterReanimated.Vertices.centre(hull);
 
             Body.setVertices(body, hull);
-            global.Matter.Vertices.translate(body.vertices, hullCentre);
+            global.MatterReanimated.Vertices.translate(
+                body.vertices,
+                hullCentre
+            );
         }
 
         // sum the properties of all compound parts of the parent body
@@ -513,14 +543,14 @@ var init = function () {
      * @param {boolean} [updateVelocity=false]
      */
     Body.setPosition = function (body, position, updateVelocity) {
-        var delta = global.Matter.Vector.sub(position, body.position);
+        var delta = global.MatterReanimated.Vector.sub(position, body.position);
 
         if (updateVelocity) {
             body.positionPrev.x = body.position.x;
             body.positionPrev.y = body.position.y;
             body.velocity.x = delta.x;
             body.velocity.y = delta.y;
-            body.speed = global.Matter.Vector.magnitude(delta);
+            body.speed = global.MatterReanimated.Vector.magnitude(delta);
         } else {
             body.positionPrev.x += delta.x;
             body.positionPrev.y += delta.y;
@@ -530,8 +560,8 @@ var init = function () {
             var part = body.parts[i];
             part.position.x += delta.x;
             part.position.y += delta.y;
-            global.Matter.Vertices.translate(part.vertices, delta);
-            global.Matter.Bounds.update(
+            global.MatterReanimated.Vertices.translate(part.vertices, delta);
+            global.MatterReanimated.Bounds.update(
                 part.bounds,
                 part.vertices,
                 body.velocity
@@ -561,15 +591,19 @@ var init = function () {
         for (var i = 0; i < body.parts.length; i++) {
             var part = body.parts[i];
             part.angle += delta;
-            global.Matter.Vertices.rotate(part.vertices, delta, body.position);
-            global.Matter.Axes.rotate(part.axes, delta);
-            global.Matter.Bounds.update(
+            global.MatterReanimated.Vertices.rotate(
+                part.vertices,
+                delta,
+                body.position
+            );
+            global.MatterReanimated.Axes.rotate(part.axes, delta);
+            global.MatterReanimated.Bounds.update(
                 part.bounds,
                 part.vertices,
                 body.velocity
             );
             if (i > 0) {
-                global.Matter.Vector.rotateAbout(
+                global.MatterReanimated.Vector.rotateAbout(
                     part.position,
                     delta,
                     body.position,
@@ -592,7 +626,7 @@ var init = function () {
         body.positionPrev.y = body.position.y - velocity.y * timeScale;
         body.velocity.x = (body.position.x - body.positionPrev.x) / timeScale;
         body.velocity.y = (body.position.y - body.positionPrev.y) / timeScale;
-        body.speed = global.Matter.Vector.magnitude(body.velocity);
+        body.speed = global.MatterReanimated.Vector.magnitude(body.velocity);
     };
 
     /**
@@ -618,7 +652,7 @@ var init = function () {
      * @return {number} speed
      */
     Body.getSpeed = function (body) {
-        return global.Matter.Vector.magnitude(Body.getVelocity(body));
+        return global.MatterReanimated.Vector.magnitude(Body.getVelocity(body));
     };
 
     /**
@@ -631,8 +665,10 @@ var init = function () {
     Body.setSpeed = function (body, speed) {
         Body.setVelocity(
             body,
-            global.Matter.Vector.mult(
-                global.Matter.Vector.normalise(Body.getVelocity(body)),
+            global.MatterReanimated.Vector.mult(
+                global.MatterReanimated.Vector.normalise(
+                    Body.getVelocity(body)
+                ),
                 speed
             )
         );
@@ -685,7 +721,8 @@ var init = function () {
     Body.setAngularSpeed = function (body, speed) {
         Body.setAngularVelocity(
             body,
-            global.Matter.Common.sign(Body.getAngularVelocity(body)) * speed
+            global.MatterReanimated.Common.sign(Body.getAngularVelocity(body)) *
+                speed
         );
     };
 
@@ -700,7 +737,7 @@ var init = function () {
     Body.translate = function (body, translation, updateVelocity) {
         Body.setPosition(
             body,
-            global.Matter.Vector.add(body.position, translation),
+            global.MatterReanimated.Vector.add(body.position, translation),
             updateVelocity
         );
     };
@@ -754,24 +791,34 @@ var init = function () {
             var part = body.parts[i];
 
             // scale vertices
-            global.Matter.Vertices.scale(part.vertices, scaleX, scaleY, point);
+            global.MatterReanimated.Vertices.scale(
+                part.vertices,
+                scaleX,
+                scaleY,
+                point
+            );
 
             // update properties
-            part.axes = global.Matter.Axes.fromVertices(part.vertices);
-            part.area = global.Matter.Vertices.area(part.vertices);
+            part.axes = global.MatterReanimated.Axes.fromVertices(
+                part.vertices
+            );
+            part.area = global.MatterReanimated.Vertices.area(part.vertices);
             Body.setMass(part, body.density * part.area);
 
             // update inertia (requires vertices to be at origin)
-            global.Matter.Vertices.translate(part.vertices, {
+            global.MatterReanimated.Vertices.translate(part.vertices, {
                 x: -part.position.x,
                 y: -part.position.y,
             });
             Body.setInertia(
                 part,
                 Body._inertiaScale *
-                    global.Matter.Vertices.inertia(part.vertices, part.mass)
+                    global.MatterReanimated.Vertices.inertia(
+                        part.vertices,
+                        part.mass
+                    )
             );
-            global.Matter.Vertices.translate(part.vertices, {
+            global.MatterReanimated.Vertices.translate(part.vertices, {
                 x: part.position.x,
                 y: part.position.y,
             });
@@ -786,7 +833,7 @@ var init = function () {
             part.position.y = point.y + (part.position.y - point.y) * scaleY;
 
             // update bounds
-            global.Matter.Bounds.update(
+            global.MatterReanimated.Bounds.update(
                 part.bounds,
                 part.vertices,
                 body.velocity
@@ -816,7 +863,7 @@ var init = function () {
 
     /**
      * Performs an update by integrating the equations of motion on the `body`.
-     * This is applied every update by `Matter.Engine` automatically.
+     * This is applied every update by `MatterReanimated.Engine` automatically.
      * @method update
      * @param {body} body
      * @param {number} [deltaTime=16.666]
@@ -835,7 +882,7 @@ var init = function () {
         var frictionAir =
                 1 -
                 body.frictionAir *
-                    (deltaTime / global.Matter.Common._baseDelta),
+                    (deltaTime / global.MatterReanimated.Common._baseDelta),
             velocityPrevX =
                 (body.position.x - body.positionPrev.x) * correction,
             velocityPrevY =
@@ -866,7 +913,10 @@ var init = function () {
         for (var i = 0; i < body.parts.length; i++) {
             var part = body.parts[i];
 
-            global.Matter.Vertices.translate(part.vertices, body.velocity);
+            global.MatterReanimated.Vertices.translate(
+                part.vertices,
+                body.velocity
+            );
 
             if (i > 0) {
                 part.position.x += body.velocity.x;
@@ -874,14 +924,17 @@ var init = function () {
             }
 
             if (body.angularVelocity !== 0) {
-                global.Matter.Vertices.rotate(
+                global.MatterReanimated.Vertices.rotate(
                     part.vertices,
                     body.angularVelocity,
                     body.position
                 );
-                global.Matter.Axes.rotate(part.axes, body.angularVelocity);
+                global.MatterReanimated.Axes.rotate(
+                    part.axes,
+                    body.angularVelocity
+                );
                 if (i > 0) {
-                    global.Matter.Vector.rotateAbout(
+                    global.MatterReanimated.Vector.rotateAbout(
                         part.position,
                         body.angularVelocity,
                         body.position,
@@ -890,7 +943,7 @@ var init = function () {
                 }
             }
 
-            global.Matter.Bounds.update(
+            global.MatterReanimated.Bounds.update(
                 part.bounds,
                 part.vertices,
                 body.velocity
@@ -976,13 +1029,13 @@ var init = function () {
             properties.mass += mass;
             properties.area += part.area;
             properties.inertia += part.inertia;
-            properties.centre = global.Matter.Vector.add(
+            properties.centre = global.MatterReanimated.Vector.add(
                 properties.centre,
-                global.Matter.Vector.mult(part.position, mass)
+                global.MatterReanimated.Vector.mult(part.position, mass)
             );
         }
 
-        properties.centre = global.Matter.Vector.div(
+        properties.centre = global.MatterReanimated.Vector.div(
             properties.centre,
             properties.mass
         );
@@ -1120,7 +1173,7 @@ var init = function () {
      * When set the vertices are translated such that `body.position` is at the centre of mass.
      * Many other body properties are automatically calculated from these vertices when set including `density`, `area` and `inertia`.
      *
-     * The module `Matter.Vertices` contains useful methods for working with vertices.
+     * The module `MatterReanimated.Vertices` contains useful methods for working with vertices.
      *
      * @readOnly
      * @property vertices
@@ -1252,7 +1305,7 @@ var init = function () {
      */
 
     /**
-     * A `Number` that defines the length of time during which this body must have near-zero velocity before it is set as sleeping by the `Matter.Sleeping` module (if sleeping is enabled by the engine).
+     * A `Number` that defines the length of time during which this body must have near-zero velocity before it is set as sleeping by the `MatterReanimated.Sleeping` module (if sleeping is enabled by the engine).
      *
      * @property sleepThreshold
      * @type number
@@ -1456,7 +1509,7 @@ var init = function () {
      */
 
     /**
-     * An `Object` that defines the rendering properties to be consumed by the module `Matter.Render`.
+     * An `Object` that defines the rendering properties to be consumed by the module `MatterReanimated.Render`.
      *
      * @property render
      * @type object
@@ -1587,7 +1640,7 @@ var init = function () {
      *
      * See `Vertices.chamfer` for possible parameters this object may hold.
      *
-     * Currently only functions inside `Matter.Bodies` provide a utility using this property as a vertices pre-processing option.
+     * Currently only functions inside `MatterReanimated.Bodies` provide a utility using this property as a vertices pre-processing option.
      *
      * Alternatively consider using `Vertices.chamfer` directly on vertices before passing them to a body creation function.
      *

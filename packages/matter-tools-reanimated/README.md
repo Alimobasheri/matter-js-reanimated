@@ -54,6 +54,17 @@ npm install matter-tools-reanimated
 yarn add matter-tools-reanimated
 ```
 
+### TypeScript Setup
+
+Projects using TypeScript can declare the global namespaces by creating a file like `matter-js-reanimated-env.d.ts` with:
+
+```
+/// <reference types="matter-js-reanimated" />
+/// <reference types="matter-tools-reanimated" />
+```
+
+Adding these references makes `MatterReanimated` and related helpers available to the TypeScript compiler.
+
 ### Peer Dependencies
 
 This library relies on several peer dependencies which you need to install and configure in your project:
@@ -87,8 +98,8 @@ export const setupWorldWorklet = (
   height: number = 800
 ) => {
   'worklet';
-  // Access Matter Modules from `global.Matter`, registered by `matter-js-reanimated`.
-  const { Bodies, Composites, World } = global.Matter;
+  // Access Matter Modules from `global.MatterReanimated`, registered by `matter-js-reanimated`.
+  const { Bodies, Composites, World } = global.MatterReanimated;
 
   // Add bodies
   // Create stack of circles with low friction and restitution
@@ -115,7 +126,7 @@ export const setupWorldWorklet = (
 
   // You can add more custom bodies, constraints, etc., here
   // For example, adding a static ground:
-  // const ground = global.Matter.Bodies.rectangle(width / 2, height - 30, width, 60, { isStatic: true });
+  // const ground = global.MatterReanimated.Bodies.rectangle(width / 2, height - 30, width, 60, { isStatic: true });
   // World.add(engine.world, ground);
 };
 ```
@@ -194,11 +205,15 @@ Usage:
 import { ReanimatedMatter } from 'matter-tools-reanimated';
 import Matter from 'matter-js'; // For type
 
+runOnUI(() => {
+  initMatter(); // defines global.MatterReanimated
+})();
+
 const myPhysicsSetup = (engine: Matter.Engine) => {
   'worklet';
   // Add bodies, constraints, etc. to engine.world
-  const box = global.Matter.Bodies.rectangle(100, 100, 80, 80);
-  global.Matter.World.add(engine.world, box);
+  const box = global.MatterReanimated.Bodies.rectangle(100, 100, 80, 80);
+  global.MatterReanimated.World.add(engine.world, box);
 };
 
 // ...
@@ -394,16 +409,20 @@ A "worklet" in this context is a JavaScript function that you annotate with 'wor
 ```tsx
 import Matter from 'matter-js'; // For types
 
+runOnUI(() => {
+  initMatter(); // defines global.MatterReanimated
+})();
+
 // This function will run on the UI thread.
 export const myCustomPhysicsSetup = (engine: Matter.Engine) => {
   'worklet';
 
   // Access screen dimensions (if set globally, e.g., in the component calling Demo/ReanimatedMatter)
-  const width = global.windowWidth || 800;
-  const height = global.windowHeight || 600;
+  const width = global.MatterToolsReanimated.windowWidth || 800;
+  const height = global.MatterToolsReanimated.windowHeight || 600;
 
-  // Access Matter.js modules via `global.Matter`
-  const { Bodies, World, Composite } = global.Matter;
+  // Access Matter.js modules via `global.MatterReanimated`
+  const { Bodies, World, Composite } = global.MatterReanimated;
 
   // Create bodies
   const ground = Bodies.rectangle(width / 2, height - 30, width, 60, {
@@ -426,7 +445,7 @@ export const myCustomPhysicsSetup = (engine: Matter.Engine) => {
   engine.gravity.scale = 0.001; // Adjust as needed
 
   // You can also add constraints, composites, etc.
-  // const constraint = global.Matter.Constraint.create({ ... });
+  // const constraint = global.MatterReanimated.Constraint.create({ ... });
   // World.add(engine.world, constraint);
 };
 ```
@@ -435,11 +454,11 @@ Key points for worklets:
 
 - 'worklet'; Directive: Must be the first statement in the function body.
 
-- global.Matter: Access Matter.js modules (Bodies, World, Constraint, etc.) through `global.Matter`.
+- global.MatterReanimated: Access Matter.js modules (Bodies, World, Constraint, etc.) through `global.MatterReanimated`.
 
-- global.windowWidth, global.windowHeight: If you need screen dimensions, pass them from your component to these global variables before the worklet runs. The Demo component and examples often do this.
+- global.MatterToolsReanimated.windowWidth, global.MatterToolsReanimated.windowHeight: If you need screen dimensions, pass them from your component to these global variables before the worklet runs. The Demo component and examples often do this.
 
-No React Native Components/APIs: You cannot directly use React Native components or most React Native APIs (like StyleSheet or useState) inside a worklet because it runs on a different thread. Use hooks like `useDerivedMatterBody` to bridge data back to the React component tree. You can use `react-native-reanimated` built-in hooks like `useDerivedValue` and `useAnimatedStyle`, or `useFrameCallback` to access Matter.js from `global.Matter`.
+No React Native Components/APIs: You cannot directly use React Native components or most React Native APIs (like StyleSheet or useState) inside a worklet because it runs on a different thread. Use hooks like `useDerivedMatterBody` to bridge data back to the React component tree. You can use `react-native-reanimated` built-in hooks like `useDerivedValue` and `useAnimatedStyle`, or `useFrameCallback` to access Matter.js from `global.MatterReanimated`.
 
 #### 5. Performance Considerations
 

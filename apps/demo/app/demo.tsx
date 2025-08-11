@@ -43,8 +43,10 @@ export default function DemoScreen() {
   useEffect(() => {
     runOnUI(() => {
       'worklet';
-      global.windowWidth = width - insets.left - insets.right;
-      global.windowHeight = height - insets.top - insets.bottom - headerHeight;
+      global.MatterToolsReanimated.windowWidth =
+        width - insets.left - insets.right;
+      global.MatterToolsReanimated.windowHeight =
+        height - insets.top - insets.bottom - headerHeight;
     })();
   }, [width, height, insets, headerHeight]);
 

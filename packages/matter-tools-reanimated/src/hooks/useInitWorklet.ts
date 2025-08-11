@@ -1,48 +1,50 @@
-import Matter from 'matter-js';
-import initMatter from 'matter-js-reanimated';
+import initMatter, { type MatterReanimated } from 'matter-js-reanimated';
 import { useCallback, useEffect, useState } from 'react';
 import { runOnJS, runOnUI } from 'react-native-reanimated';
 
 export const useInitWorklet = (
-    worklet?: (engine: any) => void,
-    engineId: string = 'defaultEngine'
+  worklet?: (engine: any) => void,
+  engineId: string = 'defaultEngine'
 ) => {
-    const [initialized, setInitialized] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
-    const initUI = useCallback(() => {
-        'worklet';
-        // Only initialize if not already done
-        if (!global.Matter) {
-            //@ts-ignore
-            initMatter();
-        }
-        let engine: Matter.Engine | undefined;
-        if (engineId in global && global.Matter) {
-            //@ts-ignore
-            engine = global[engineId] as Matter.Engine;
-            global.Matter.Composite.clear(engine.world, false, true);
-        }
-        if (!global.Matter) {
-            console.warn('Matter.js not initialized! Run initMatter() first.');
-            return;
-        }
+  const initUI = useCallback(() => {
+    'worklet';
+    // Only initialize if not already done
+    if (!global.MatterReanimated) {
+      initMatter();
+    }
 
-        engine = global.Matter.Engine.create({
-            enableSleeping: false,
-            gravity: { x: 0, y: 1, scale: 0.001 },
-        });
+    if (!global.MatterToolsReanimated) {
+      global.MatterToolsReanimated = {} as any;
+    }
 
-        //@ts-ignore
-        global[engineId] = engine;
-        if (worklet) {
-            worklet(engine);
-        }
-        runOnJS(setInitialized)(true);
-    }, [worklet, engineId]);
+    let engine: MatterReanimated.Engine | undefined;
+    if (engineId in global.MatterToolsReanimated) {
+      engine = global.MatterToolsReanimated[engineId];
+      if (engine)
+        global.MatterReanimated.Composite.clear(engine.world, false, true);
+    }
+    if (!global.MatterReanimated) {
+      console.warn('Matter.js not initialized! Run initMatter() first.');
+      return;
+    }
 
-    useEffect(() => {
-        runOnUI(initUI)();
-    }, [initUI]);
+    engine = global.MatterReanimated.Engine.create({
+      enableSleeping: false,
+      gravity: { x: 0, y: 1, scale: 0.001 },
+    });
 
-    return initialized;
+    global.MatterToolsReanimated[engineId] = engine;
+    if (worklet) {
+      worklet(engine);
+    }
+    runOnJS(setInitialized)(true);
+  }, [worklet, engineId]);
+
+  useEffect(() => {
+    runOnUI(initUI)();
+  }, [initUI]);
+
+  return initialized;
 };

@@ -4,8 +4,6 @@ import { ReanimatedMatter } from './ReanimatedMatter';
 import { Render, RenderProps } from './Render';
 import { TouchConstraint } from './TouchConstraint';
 import { SkiaRender } from './skia/SkiaRender';
-import { Runner } from './Runner';
-import Matter from 'matter-js';
 
 interface DemoProps {
   exampleWorklet: (engine: any) => void;

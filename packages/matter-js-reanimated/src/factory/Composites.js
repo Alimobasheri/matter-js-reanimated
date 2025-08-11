@@ -5,7 +5,7 @@ var Body = require('../body/Body');
 var Bodies = require('./Bodies');
 
 /**
- * The `Matter.Composites` module contains factory methods for creating composite bodies
+ * The `MatterReanimated.Composites` module contains factory methods for creating composite bodies
  * with commonly used configurations (such as stacks and chains).
  *
  * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
@@ -16,17 +16,17 @@ var Bodies = require('./Bodies');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Composites) {
+    if (global.MatterReanimated && global.MatterReanimated.Composites) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Composites = {};
+    global.MatterReanimated.Composites = {};
 
-    var Composites = global.Matter.Composites;
+    var Composites = global.MatterReanimated.Composites;
 
     Composite();
     Constraint();
@@ -34,7 +34,7 @@ var init = function () {
     Body();
     Bodies();
 
-    var deprecated = global.Matter.Common.deprecated;
+    var deprecated = global.MatterReanimated.Common.deprecated;
 
     /**
      * Create a new composite containing bodies created in the callback in a grid arrangement.
@@ -58,7 +58,9 @@ var init = function () {
         rowGap,
         callback
     ) {
-        var stack = global.Matter.Composite.create({ label: 'Stack' }),
+        var stack = global.MatterReanimated.Composite.create({
+                label: 'Stack',
+            }),
             currentX = x,
             currentY = y,
             lastBody,
@@ -83,14 +85,14 @@ var init = function () {
 
                     if (bodyHeight > maxHeight) maxHeight = bodyHeight;
 
-                    global.Matter.Body.translate(body, {
+                    global.MatterReanimated.Body.translate(body, {
                         x: bodyWidth * 0.5,
                         y: bodyHeight * 0.5,
                     });
 
                     currentX = body.bounds.max.x + columnGap;
 
-                    global.Matter.Composite.addBody(stack, body);
+                    global.MatterReanimated.Composite.addBody(stack, body);
 
                     lastBody = body;
                     i += 1;
@@ -142,11 +144,14 @@ var init = function () {
                 pointB: { x: bodyBWidth * xOffsetB, y: bodyBHeight * yOffsetB },
             };
 
-            var constraint = global.Matter.Common.extend(defaults, options);
+            var constraint = global.MatterReanimated.Common.extend(
+                defaults,
+                options
+            );
 
-            global.Matter.Composite.addConstraint(
+            global.MatterReanimated.Composite.addConstraint(
                 composite,
-                global.Matter.Constraint.create(constraint)
+                global.MatterReanimated.Constraint.create(constraint)
             );
         }
 
@@ -177,10 +182,10 @@ var init = function () {
             for (col = 1; col < columns; col++) {
                 bodyA = bodies[col - 1 + row * columns];
                 bodyB = bodies[col + row * columns];
-                global.Matter.Composite.addConstraint(
+                global.MatterReanimated.Composite.addConstraint(
                     composite,
-                    global.Matter.Constraint.create(
-                        global.Matter.Common.extend(
+                    global.MatterReanimated.Constraint.create(
+                        global.MatterReanimated.Common.extend(
                             { bodyA: bodyA, bodyB: bodyB },
                             options
                         )
@@ -192,10 +197,10 @@ var init = function () {
                 for (col = 0; col < columns; col++) {
                     bodyA = bodies[col + (row - 1) * columns];
                     bodyB = bodies[col + row * columns];
-                    global.Matter.Composite.addConstraint(
+                    global.MatterReanimated.Composite.addConstraint(
                         composite,
-                        global.Matter.Constraint.create(
-                            global.Matter.Common.extend(
+                        global.MatterReanimated.Constraint.create(
+                            global.MatterReanimated.Common.extend(
                                 { bodyA: bodyA, bodyB: bodyB },
                                 options
                             )
@@ -204,10 +209,10 @@ var init = function () {
 
                     if (crossBrace && col > 0) {
                         bodyC = bodies[col - 1 + (row - 1) * columns];
-                        global.Matter.Composite.addConstraint(
+                        global.MatterReanimated.Composite.addConstraint(
                             composite,
-                            global.Matter.Constraint.create(
-                                global.Matter.Common.extend(
+                            global.MatterReanimated.Constraint.create(
+                                global.MatterReanimated.Common.extend(
                                     { bodyA: bodyC, bodyB: bodyB },
                                     options
                                 )
@@ -217,10 +222,10 @@ var init = function () {
 
                     if (crossBrace && col < columns - 1) {
                         bodyC = bodies[col + 1 + (row - 1) * columns];
-                        global.Matter.Composite.addConstraint(
+                        global.MatterReanimated.Composite.addConstraint(
                             composite,
-                            global.Matter.Constraint.create(
-                                global.Matter.Common.extend(
+                            global.MatterReanimated.Constraint.create(
+                                global.MatterReanimated.Common.extend(
                                     { bodyA: bodyC, bodyB: bodyB },
                                     options
                                 )
@@ -283,7 +288,7 @@ var init = function () {
 
                 // retroactively fix the first body's position, since width was unknown
                 if (i === 1) {
-                    global.Matter.Body.translate(lastBody, {
+                    global.MatterReanimated.Body.translate(lastBody, {
                         x:
                             (column + (columns % 2 === 1 ? 1 : -1)) *
                             lastBodyWidth,
@@ -317,13 +322,13 @@ var init = function () {
      * @return {composite} A new composite newtonsCradle body
      */
     Composites.newtonsCradle = function (x, y, number, size, length) {
-        var newtonsCradle = global.Matter.Composite.create({
+        var newtonsCradle = global.MatterReanimated.Composite.create({
             label: 'Newtons Cradle',
         });
 
         for (var i = 0; i < number; i++) {
             var separation = 1.9,
-                circle = global.Matter.Bodies.circle(
+                circle = global.MatterReanimated.Bodies.circle(
                     x + i * (size * separation),
                     y + length,
                     size,
@@ -335,13 +340,16 @@ var init = function () {
                         slop: 1,
                     }
                 ),
-                constraint = global.Matter.Constraint.create({
+                constraint = global.MatterReanimated.Constraint.create({
                     pointA: { x: x + i * (size * separation), y: y },
                     bodyB: circle,
                 });
 
-            global.Matter.Composite.addBody(newtonsCradle, circle);
-            global.Matter.Composite.addConstraint(newtonsCradle, constraint);
+            global.MatterReanimated.Composite.addBody(newtonsCradle, circle);
+            global.MatterReanimated.Composite.addConstraint(
+                newtonsCradle,
+                constraint
+            );
         }
 
         return newtonsCradle;
@@ -365,24 +373,30 @@ var init = function () {
      * @return {composite} A new composite car body
      */
     Composites.car = function (x, y, width, height, wheelSize) {
-        var group = global.Matter.Body.nextGroup(true),
+        var group = global.MatterReanimated.Body.nextGroup(true),
             wheelBase = 20,
             wheelAOffset = -width * 0.5 + wheelBase,
             wheelBOffset = width * 0.5 - wheelBase,
             wheelYOffset = 0;
 
-        var car = global.Matter.Composite.create({ label: 'Car' }),
-            body = global.Matter.Bodies.rectangle(x, y, width, height, {
-                collisionFilter: {
-                    group: group,
-                },
-                chamfer: {
-                    radius: height * 0.5,
-                },
-                density: 0.0002,
-            });
+        var car = global.MatterReanimated.Composite.create({ label: 'Car' }),
+            body = global.MatterReanimated.Bodies.rectangle(
+                x,
+                y,
+                width,
+                height,
+                {
+                    collisionFilter: {
+                        group: group,
+                    },
+                    chamfer: {
+                        radius: height * 0.5,
+                    },
+                    density: 0.0002,
+                }
+            );
 
-        var wheelA = global.Matter.Bodies.circle(
+        var wheelA = global.MatterReanimated.Bodies.circle(
             x + wheelAOffset,
             y + wheelYOffset,
             wheelSize,
@@ -394,7 +408,7 @@ var init = function () {
             }
         );
 
-        var wheelB = global.Matter.Bodies.circle(
+        var wheelB = global.MatterReanimated.Bodies.circle(
             x + wheelBOffset,
             y + wheelYOffset,
             wheelSize,
@@ -406,7 +420,7 @@ var init = function () {
             }
         );
 
-        var axelA = global.Matter.Constraint.create({
+        var axelA = global.MatterReanimated.Constraint.create({
             bodyB: body,
             pointB: { x: wheelAOffset, y: wheelYOffset },
             bodyA: wheelA,
@@ -414,7 +428,7 @@ var init = function () {
             length: 0,
         });
 
-        var axelB = global.Matter.Constraint.create({
+        var axelB = global.MatterReanimated.Constraint.create({
             bodyB: body,
             pointB: { x: wheelBOffset, y: wheelYOffset },
             bodyA: wheelB,
@@ -422,11 +436,11 @@ var init = function () {
             length: 0,
         });
 
-        global.Matter.Composite.addBody(car, body);
-        global.Matter.Composite.addBody(car, wheelA);
-        global.Matter.Composite.addBody(car, wheelB);
-        global.Matter.Composite.addConstraint(car, axelA);
-        global.Matter.Composite.addConstraint(car, axelB);
+        global.MatterReanimated.Composite.addBody(car, body);
+        global.MatterReanimated.Composite.addBody(car, wheelA);
+        global.MatterReanimated.Composite.addBody(car, wheelB);
+        global.MatterReanimated.Composite.addConstraint(car, axelA);
+        global.MatterReanimated.Composite.addConstraint(car, axelB);
 
         return car;
     };
@@ -462,11 +476,11 @@ var init = function () {
         particleOptions,
         constraintOptions
     ) {
-        particleOptions = global.Matter.Common.extend(
+        particleOptions = global.MatterReanimated.Common.extend(
             { inertia: Infinity },
             particleOptions
         );
-        constraintOptions = global.Matter.Common.extend(
+        constraintOptions = global.MatterReanimated.Common.extend(
             { stiffness: 0.2, render: { type: 'line', anchors: false } },
             constraintOptions
         );
@@ -479,7 +493,7 @@ var init = function () {
             columnGap,
             rowGap,
             function (stackX, stackY) {
-                return global.Matter.Bodies.circle(
+                return global.MatterReanimated.Bodies.circle(
                     stackX,
                     stackY,
                     particleRadius,

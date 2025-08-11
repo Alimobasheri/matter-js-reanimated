@@ -5,7 +5,7 @@ var Bodies = require('../factory/Bodies');
 var Vertices = require('../geometry/Vertices');
 
 /**
- * The `Matter.Query` module contains methods for performing collision queries.
+ * The `MatterReanimated.Query` module contains methods for performing collision queries.
  *
  * See the included usage [examples](https://github.com/liabru/matter-js/tree/master/examples).
  *
@@ -15,17 +15,17 @@ var Vertices = require('../geometry/Vertices');
 var init = function () {
     'worklet';
 
-    if (global.Matter && global.Matter.Query) {
+    if (global.MatterReanimated && global.MatterReanimated.Query) {
         return;
     }
 
-    if (!global.Matter) {
-        global.Matter = {};
+    if (!global.MatterReanimated) {
+        global.MatterReanimated = {};
     }
 
-    global.Matter.Query = {};
+    global.MatterReanimated.Query = {};
 
-    var Query = global.Matter.Query;
+    var Query = global.MatterReanimated.Query;
 
     Vector();
     Collision();
@@ -44,8 +44,8 @@ var init = function () {
         var collisions = [],
             bodiesLength = bodies.length,
             bounds = body.bounds,
-            collides = global.Matter.Collision.collides,
-            overlaps = global.Matter.Bounds.overlaps;
+            collides = global.MatterReanimated.Collision.collides,
+            overlaps = global.MatterReanimated.Bounds.overlaps;
 
         for (var i = 0; i < bodiesLength; i++) {
             var bodyA = bodies[i],
@@ -83,13 +83,16 @@ var init = function () {
     Query.ray = function (bodies, startPoint, endPoint, rayWidth) {
         rayWidth = rayWidth || 1e-100;
 
-        var rayAngle = global.Matter.Vector.angle(startPoint, endPoint),
-            rayLength = global.Matter.Vector.magnitude(
-                global.Matter.Vector.sub(startPoint, endPoint)
+        var rayAngle = global.MatterReanimated.Vector.angle(
+                startPoint,
+                endPoint
+            ),
+            rayLength = global.MatterReanimated.Vector.magnitude(
+                global.MatterReanimated.Vector.sub(startPoint, endPoint)
             ),
             rayX = (endPoint.x + startPoint.x) * 0.5,
             rayY = (endPoint.y + startPoint.y) * 0.5,
-            ray = global.Matter.Bodies.rectangle(
+            ray = global.MatterReanimated.Bodies.rectangle(
                 rayX,
                 rayY,
                 rayLength,
@@ -119,7 +122,10 @@ var init = function () {
 
         for (var i = 0; i < bodies.length; i++) {
             var body = bodies[i],
-                overlaps = global.Matter.Bounds.overlaps(body.bounds, bounds);
+                overlaps = global.MatterReanimated.Bounds.overlaps(
+                    body.bounds,
+                    bounds
+                );
             if ((overlaps && !outside) || (!overlaps && outside))
                 result.push(body);
         }
@@ -140,7 +146,7 @@ var init = function () {
         for (var i = 0; i < bodies.length; i++) {
             var body = bodies[i];
 
-            if (global.Matter.Bounds.contains(body.bounds, point)) {
+            if (global.MatterReanimated.Bounds.contains(body.bounds, point)) {
                 for (
                     var j = body.parts.length === 1 ? 0 : 1;
                     j < body.parts.length;
@@ -149,8 +155,14 @@ var init = function () {
                     var part = body.parts[j];
 
                     if (
-                        global.Matter.Bounds.contains(part.bounds, point) &&
-                        global.Matter.Vertices.contains(part.vertices, point)
+                        global.MatterReanimated.Bounds.contains(
+                            part.bounds,
+                            point
+                        ) &&
+                        global.MatterReanimated.Vertices.contains(
+                            part.vertices,
+                            point
+                        )
                     ) {
                         result.push(body);
                         break;
